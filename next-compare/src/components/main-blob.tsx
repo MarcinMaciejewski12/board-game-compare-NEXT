@@ -1,17 +1,33 @@
 import Image, { StaticImageData } from "next/image";
+import { cn } from "@/lib/utils";
 
 interface MainBlobProps {
   photoLink: StaticImageData;
+  bgYellowStyleProps: string;
   alt: string;
+  bgWhiteStyleProps: string;
+  imageStyleProps: string;
 }
 
-export default function MainBlob({ photoLink, alt }: Readonly<MainBlobProps>) {
-  console.log(photoLink);
+export default function MainBlob({
+  photoLink,
+  alt,
+  bgYellowStyleProps,
+  bgWhiteStyleProps,
+  imageStyleProps,
+}: Readonly<MainBlobProps>) {
   return (
     <div className="relative overflow-hidden w-screen h-screen">
-      <div className="absolute top-0 right-0 transform translate-x-56 -translate-y-24 rotate-6 w-[1000px] h-[950px] rounded-full bg-buttonAndShadowColor">
-        <div className="transform translate-x-4 translate-y-9 -rotate-12 w-[950px] h-[900px] rounded-full bg-white">
-          <div className="absolute top-1/2 left-96 transform -translate-x-1/2 -translate-y-1/2 rotate-6">
+      <div
+        className={cn(
+          "absolute rounded-full bg-buttonAndShadowColor",
+          bgYellowStyleProps,
+        )}
+      >
+        <div
+          className={cn("transform rounded-full bg-white", bgWhiteStyleProps)}
+        >
+          <div className={cn("absolute top-1/2", imageStyleProps)}>
             <Image
               src={photoLink.src}
               alt={alt}

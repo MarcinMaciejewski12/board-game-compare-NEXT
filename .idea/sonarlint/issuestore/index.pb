@@ -123,8 +123,6 @@ V
 package.json,7/0/7030d0b2f71b999ff89a343de08c414af32fc93a
 A
 package-lock.json,f/a/fa288d1472d29beccb489a676f68739ad365fc47
-Q
-!next-compare/prettierrc.config.js,1/8/18127e16b6a0071d6f329a1247dc995285517acb
 O
 next-compare/prettier.config.js,c/b/cb013766b14b0366a73aa4d95f1b5867abdad445
 H
@@ -667,9 +665,15 @@ Q.idea/sonarlint/securityhotspotstore/6/1/617ad117f46211b769efb5339f4f36912c9bd0
 Q.idea/sonarlint/securityhotspotstore/6/1/615f78897fe7175aa08a87d0233ad3901ae70ec6,9/4/947ce34dc36caedf82832c639bd83bce579416bd
 Y
 )next-compare/src/components/main-blob.tsx,0/2/020a0b95341f4a8bfd66d7e995b5083ba36b42a8
-Z
-*next-compare/src/custom-css/custom-css.css,b/7/b78d5a467390db6fbefd828e5a3f5047f864618f
 Å
 Q.idea/sonarlint/securityhotspotstore/0/2/020a0b95341f4a8bfd66d7e995b5083ba36b42a8,1/6/164d03b79965ace36f89c0291f3c8be722d4def9
 Å
 Q.idea/sonarlint/securityhotspotstore/b/7/b78d5a467390db6fbefd828e5a3f5047f864618f,7/9/79b0f72009843efa7906683de7b0e1c6706479ab
+Å
+Q.idea/sonarlint/securityhotspotstore/1/6/164d03b79965ace36f89c0291f3c8be722d4def9,8/b/8bfc338393507d88efa0248adc2bce7611bca327
+Å
+Q.idea/sonarlint/securityhotspotstore/7/9/79b0f72009843efa7906683de7b0e1c6706479ab,5/6/56866139a26e3439bc3c42a2cf8a4ae63fae9393
+w
+G.idea/sonarlint/issuestore/7/9/79b0f72009843efa7906683de7b0e1c6706479ab,a/a/aad27c64e05aa0a749453aa38ac248b4aef02035
+w
+G.idea/sonarlint/issuestore/1/6/164d03b79965ace36f89c0291f3c8be722d4def9,9/5/95e52b93dc12ec254951c3c0f24617053252b432

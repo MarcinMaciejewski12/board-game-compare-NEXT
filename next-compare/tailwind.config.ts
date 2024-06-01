@@ -20,6 +20,12 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        poppins: ["Poppins", "sans-serif"],
+      },
+      textColor: {
+        default: "#284B63",
+      },
       colors: {
         buttonAndShadowColor: "#E7E393",
         border: "hsl(var(--border))",
