@@ -37,7 +37,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...props}
       >
-        { nameToDisplay }
+        {nameToDisplay}
       </button>
     );
   },

@@ -1,9 +1,11 @@
 "use client";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface BurgerProps {
   navigationIsOpenHandler: (arg: boolean) => void;
+  cls?: string;
 }
 
 const topBlock = {
@@ -21,7 +23,10 @@ const middleBlock = {
   hidden: { opacity: 0 },
 };
 
-export function Burger({ navigationIsOpenHandler }: Readonly<BurgerProps>) {
+export function Burger({
+  navigationIsOpenHandler,
+  cls,
+}: Readonly<BurgerProps>) {
   const [open, setOpen] = useState(false);
 
   const handleClick = () => {
@@ -33,7 +38,7 @@ export function Burger({ navigationIsOpenHandler }: Readonly<BurgerProps>) {
   return (
     <button
       onClick={handleClick}
-      className="flex flex-col justify-between h-4 cursor-pointer"
+      className={cn("flex flex-col justify-between h-4 cursor-pointer", cls)}
     >
       <motion.div
         variants={topBlock}

@@ -5,16 +5,20 @@ import { useState } from "react";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+
+  const isOpenHandler = `h-14 z-10 flex items-center ${isOpen ? "justify-end" : "justify-between"} px-8`;
   function isNavigationOpen(isOpen: boolean) {
     setIsOpen(isOpen);
   }
-  const clickHandler =
-    `h-14 z-10 flex items-center justify-${!isOpen ? "between" : "end"} px-8`;
-
   return (
-    <header className={clickHandler}>
+    <header className={isOpenHandler}>
       {!isOpen && (
-        <Button className='hidden md:block' size="loginSize" variant="default" nameToDisplay="LogIn" />
+        <Button
+          className="opacity-0 sm:opacity-100"
+          size="loginSize"
+          variant="default"
+          nameToDisplay="LogIn"
+        />
       )}
       <Burger navigationIsOpenHandler={isNavigationOpen} />
     </header>
