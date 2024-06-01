@@ -66,6 +66,15 @@
   }
 }
 
+@layer components {
+  .rounded-oval {
+    border-radius: 300px 0px 100px 250px;
+  }
+  .rounded-white {
+    border-radius: 300px 5px 80px 200px;
+  }
+}
+
 @layer base {
   * {
     @apply border-border;

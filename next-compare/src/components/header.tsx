@@ -6,7 +6,7 @@ import { useState } from "react";
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
-  const isOpenHandler = `h-14 z-10 flex items-center ${isOpen ? "justify-end" : "justify-between"} px-8`;
+  const isOpenHandler = `z-10  h-14 flex items-center ${isOpen ? "justify-end" : "justify-between"} px-8`;
   function isNavigationOpen(isOpen: boolean) {
     setIsOpen(isOpen);
   }
@@ -14,7 +14,7 @@ export default function Header() {
     <header className={isOpenHandler}>
       {!isOpen && (
         <Button
-          className="opacity-0 sm:opacity-100"
+          className="opacity-0 sm:opacity-100 z-10"
           size="loginSize"
           variant="default"
           nameToDisplay="LogIn"

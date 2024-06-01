@@ -38,7 +38,10 @@ export function Burger({
   return (
     <button
       onClick={handleClick}
-      className={cn("flex flex-col justify-between h-4 cursor-pointer", cls)}
+      className={cn(
+        "flex z-10 flex-col justify-between h-4 cursor-pointer",
+        cls,
+      )}
     >
       <motion.div
         variants={topBlock}
