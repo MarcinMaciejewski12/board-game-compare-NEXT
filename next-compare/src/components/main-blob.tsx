@@ -2,11 +2,11 @@ import Image, { StaticImageData } from "next/image";
 import { cn } from "@/lib/utils";
 
 interface MainBlobProps {
-  photoLink: StaticImageData;
+  photoLink?: StaticImageData;
   bgYellowStyleProps: string;
-  alt: string;
+  alt?: string;
   bgWhiteStyleProps: string;
-  imageStyleProps: string;
+  imageStyleProps?: string;
 }
 
 export default function MainBlob({
@@ -29,10 +29,10 @@ export default function MainBlob({
         >
           <div className={cn("absolute top-1/2", imageStyleProps)}>
             <Image
-              src={photoLink.src}
-              alt={alt}
-              width={photoLink.width}
-              height={photoLink.height}
+              src={photoLink?.src as string}
+              alt={alt as string}
+              width={photoLink?.width}
+              height={photoLink?.height}
             />
           </div>
         </div>

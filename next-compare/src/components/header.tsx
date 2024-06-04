@@ -14,7 +14,7 @@ export default function Header() {
     <header className={isOpenHandler}>
       {!isOpen && (
         <Button
-          className="opacity-0 sm:opacity-100 z-10"
+          className="opacity-0 text-default sm:opacity-100 z-10"
           size="loginSize"
           variant="default"
           nameToDisplay="LogIn"

@@ -29,8 +29,8 @@ export default function Home() {
             photoLink={friendPlayingBoardgame}
             bgYellowStyleProps="-translate-x-56 w-[1200px] h-[1100px]"
             alt="friends playing boardgame"
-            bgWhiteStyleProps="w-[1150px] h-[1000px] translate-y-9"
-            imageStyleProps="right-96 transform translate-x-64  -translate-y-1/2"
+            bgWhiteStyleProps="w-[1150px] h-[1000px] translate-y-9 z-3"
+            imageStyleProps="right-96 transform translate-x-64 -translate-y-1/2"
           />
         </div>
         <div className="w-1/2 flex items-center justify-center">
@@ -38,6 +38,19 @@ export default function Home() {
             Share moments <br />
             with your community!
           </h1>
+        </div>
+      </div>
+      {/*
+        TODO: finish landing page!
+      */}
+      <div className="bg-red-500 w-full">
+        <div className="h-[300px] bg-orange-500 flex justify-end">
+          <div className="bg-blue-600 relative w-3/5 h-[300px]">
+            <MainBlob
+              bgYellowStyleProps="w-full h-full rounded-none transform -translate-y-1/2"
+              bgWhiteStyleProps=""
+            />
+          </div>
         </div>
       </div>
     </div>
