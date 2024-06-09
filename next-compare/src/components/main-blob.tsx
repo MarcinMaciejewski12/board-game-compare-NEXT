@@ -17,7 +17,7 @@ export default function MainBlob({
   imageStyleProps,
 }: Readonly<MainBlobProps>) {
   return (
-    <div className="relative overflow-hidden w-screen h-screen">
+    <div className="overflow-hidden">
       <div
         className={cn(
           "absolute rounded-full bg-buttonAndShadowColor",
