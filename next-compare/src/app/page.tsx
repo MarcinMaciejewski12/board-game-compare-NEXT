@@ -1,7 +1,5 @@
-import {cn} from "@/lib/utils";
+import LandingPage from "@/components/landing-page";
 
 export default function Home() {
-  return (
-    <h1 className={cn('bg-red-500')}>hello world</h1>
-  );
+  return <LandingPage />;
 }
