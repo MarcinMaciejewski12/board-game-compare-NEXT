@@ -15,12 +15,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  let isopen = true;
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className=" z-50 h-full fixed w-full top-0">
-          <Header />
-        </div>
+        <Header />
         {children}
       </body>
     </html>

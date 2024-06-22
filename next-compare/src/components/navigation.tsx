@@ -7,7 +7,7 @@ interface NavigationProps {
 export function Navigation({ isOpen }: Readonly<NavigationProps>) {
   return (
     <div
-      className={`absolute top-0 w-full h-full z-10 inset-0 gap-28 bg-white transition-opacity duration-300 ${
+      className={`fixed top-0 w-full h-full z-10 inset-0 gap-28 bg-white transition-opacity duration-300 ${
         isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
       } flex flex-col items-center justify-center`}
     >
@@ -27,11 +27,13 @@ export function Navigation({ isOpen }: Readonly<NavigationProps>) {
           </Link>
         </nav>
         <div className="flex gap-5">
-          <Button
-            nameToDisplay="LogIn"
-            variant="default"
-            size="navigationSize"
-          />
+          <Link href={"login"}>
+            <Button
+              nameToDisplay="LogIn"
+              variant="default"
+              size="navigationSize"
+            />
+          </Link>
           <Button
             nameToDisplay="Register"
             variant="withoutBackground"
