@@ -4,14 +4,14 @@ import { Burger } from "@/components/burger";
 import { useState } from "react";
 import { Navigation } from "./navigation";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
-
+  const pathaname = usePathname();
   function isNavigationOpen(isOpen: boolean) {
     setIsOpen(isOpen);
   }
-
   return (
     <>
       <Navigation isOpen={isOpen} />
@@ -20,12 +20,15 @@ export default function Header() {
       >
         {!isOpen && (
           <Link href={"/login"}>
-            <Button
-              className="opacity-0 text-default sm:opacity-100"
-              size="loginSize"
-              variant="default"
-              nameToDisplay="LogIn"
-            />
+            {pathaname === "/login" ||
+              ("/register" && (
+                <Button
+                  className="opacity-0 text-default sm:opacity-100"
+                  size="loginSize"
+                  variant="default"
+                  nameToDisplay="LogIn"
+                />
+              ))}
           </Link>
         )}
         <Burger navigationIsOpenHandler={isNavigationOpen} />
