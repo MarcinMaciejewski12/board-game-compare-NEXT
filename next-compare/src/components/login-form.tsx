@@ -7,7 +7,7 @@ interface FormData {
   login: string;
   password: string;
 }
-
+// TODO: Remove this login form (used Clerk instead of this component)
 export default function LoginForm() {
   const router = useRouter();
   const [formData, setFormData] = useState<FormData>({
