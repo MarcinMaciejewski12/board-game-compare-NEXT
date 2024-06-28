@@ -35,7 +35,7 @@ export function Navigation({ isOpen }: Readonly<NavigationProps>) {
             />
           </Link>
           <Button
-            nameToDisplay="Register"
+            nameToDisplay="Page"
             variant="withoutBackground"
             size="navigationSize"
           />
