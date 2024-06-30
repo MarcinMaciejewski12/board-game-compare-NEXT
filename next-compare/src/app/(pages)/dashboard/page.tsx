@@ -1,3 +1,10 @@
+"use client";
+import { useUser } from "@clerk/nextjs";
+
 export default function Dashboard() {
-  return <h1>user dashboard</h1>;
+  const { isSignedIn, user } = useUser();
+
+  return (
+    <h1>{`Hello ${isSignedIn ? user?.username : "You are not authorized! please sign in!"}`}</h1>
+  );
 }

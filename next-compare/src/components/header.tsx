@@ -14,7 +14,6 @@ export default function Header() {
   function isNavigationOpen(isOpen: boolean) {
     setIsOpen(isOpen);
   }
-  console.log(!!user);
   return (
     <>
       <Navigation isOpen={isOpen} />
