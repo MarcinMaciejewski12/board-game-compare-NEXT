@@ -9,6 +9,7 @@ import { useAuth, useUser } from "@clerk/nextjs";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const { isSignedIn } = useUser();
   const pathaname = usePathname();
   const { user } = useUser();
   function isNavigationOpen(isOpen: boolean) {
@@ -35,7 +36,7 @@ export default function Header() {
                   ))}
               </Link>
             )}
-        <Burger navigationIsOpenHandler={isNavigationOpen} />
+        {!isSignedIn && <Burger navigationIsOpenHandler={isNavigationOpen} />}
       </header>
     </>
   );
