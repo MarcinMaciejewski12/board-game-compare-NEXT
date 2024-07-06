@@ -86,10 +86,7 @@ export default function Dashboard() {
                   </div>
                 </div>
                 <div className="grid-cols-2 flex items-center justify-center">
-                  <Link
-                    href={`/dashboard/scoreboard/${data.uniqueBoardId}`}
-                    passHref
-                  >
+                  <Link href={`/dashboard/scoreboard/${data.uniqueBoardId}`}>
                     <Plus className="w-12 h-12 cursor-pointer" />
                   </Link>
                 </div>
