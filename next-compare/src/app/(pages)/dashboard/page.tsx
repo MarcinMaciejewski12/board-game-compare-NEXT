@@ -5,16 +5,19 @@ import azulPhoto from "@/assets/azul.jpeg";
 import sevenWonders from "@/assets/7wonders.jpeg";
 import Image from "next/image";
 import { Plus } from "lucide-react";
+import Link from "next/link";
 type TODO = any;
 const MOCKED_DATA: TODO = [
   {
     userId: 1,
+    uniqueBoardId: "qP2d531fypsfwefwwq25adhthrhxcvmlpoy",
     gameName: "7 Wonders",
     minPlayers: 3,
     maxPlayers: 7,
     difficulty: 4,
     playtime: "30",
     photoValue: sevenWonders,
+    isSharedToCommunity: false,
     gameScoreBoard: [
       { fieldName: "War", fieldColor: "red" },
       { fieldName: "Coins", fieldColor: "white" },
@@ -27,13 +30,15 @@ const MOCKED_DATA: TODO = [
     ],
   },
   {
-    userId: 2,
+    userId: 1,
+    uniqueBoardId: "asdASFrgqwefRsAwDgwFAdw",
     gameName: "Azul",
     minPlayers: 2,
     maxPlayers: 4,
     difficulty: 2,
     playtime: "40",
     photoValue: azulPhoto,
+    isSharedToCommunity: false,
     gameScoreBoard: [{ fieldName: "Points", fieldColor: "white" }],
   },
 ];
@@ -59,12 +64,14 @@ export default function Dashboard() {
           {/*TODO: mocked data with TODO types, change it when you connect dashboard to database*/}
           {MOCKED_DATA.map((data: TODO) => {
             return (
-              <div className="w-[90%] h-44 bg-white grid grid-cols-[10%,70%,20%] rounded-2xl">
+              <div
+                key={data.uniqueBoardId}
+                className="w-[90%] h-44 bg-white grid grid-cols-[10%,70%,20%] rounded-2xl"
+              >
                 <div className="grid-cols-2 max-h-44 overflow-hidden ">
                   <Image
                     src={data.photoValue}
                     alt={"board game icon"}
-                    objectFit={"fit"}
                     className="object-cover rounded-2xl w-full h-full"
                   />
                 </div>
@@ -79,7 +86,12 @@ export default function Dashboard() {
                   </div>
                 </div>
                 <div className="grid-cols-2 flex items-center justify-center">
-                  <Plus className="w-12 h-12 cursor-pointer" />
+                  <Link
+                    href={`/dashboard/scoreboard/${data.uniqueBoardId}`}
+                    passHref
+                  >
+                    <Plus className="w-12 h-12 cursor-pointer" />
+                  </Link>
                 </div>
               </div>
             );
