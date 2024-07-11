@@ -1,11 +1,16 @@
 "use client";
 import { ChangeEvent, JSX, useState } from "react";
 import { Plus } from "lucide-react";
+import {Button} from "@/components/button";
+import axios from "axios";
+import {auth, getAuth} from "@clerk/nextjs/server";
+import {useUser} from "@clerk/nextjs";
 
 const MOCKED_TABLE = {
   gameName: "7 Wonders",
   minPlayers: 3,
   maxPlayers: 7,
+  uniqueBoardId: "qP2d531fypsfwefwwq25adhthrhxcvmlpoy",
   gameScoreBoard: [
     { fieldName: "War", fieldColor: "red" },
     { fieldName: "Coins", fieldColor: "white" },
@@ -18,6 +23,8 @@ const MOCKED_TABLE = {
 };
 
 export default function Scoreboard() {
+  const { user } = useUser()
+  console.log(user)
   const [playerCount, setPlayerCount] = useState<number>(0);
   const [playerInputs, setPlayerInputs] = useState<
     Array<{ [key: string]: string }>
@@ -38,29 +45,43 @@ export default function Scoreboard() {
       ...newPlayerInputs[playerIndex],
       [fieldName]: value,
     };
-    setPlayerInputs(newPlayerInputs);
+    setTimeout(()=> {
+      setPlayerInputs(newPlayerInputs);
+    },200)
+
   };
+  const sendPlayedGame = async () => {
+    const data = {
+      userId: user?.id,
+      uniqueBoardId: MOCKED_TABLE.uniqueBoardId,
+      gameScoreBoard: JSON.stringify(playerInputs)
+    }
+
+
+  return await axios.post('/api/played-games', {body: data})
+  }
+
 
   return (
-    <div className="w-full h-full overflow-auto">
+    <div className="w-full h-full">
       <header className="h-48 flex items-center justify-center">
         <h1 className="text-[100px] text-default font-extrabold">
           {MOCKED_TABLE.gameName}
         </h1>
       </header>
-      <main className="flex justify-center items-center">
+      <main className="flex w-full justify-center items-center">
         <div
-          className="w-[90vw] max-h-full bg-red-500 overflow-x-auto"
+          className=" w-[90vw] max-h-full bg-red-500 overflow-auto"
           id="players input"
         >
-          <div className="flex items-center">
-            <div className="w-40 border border-black bg-white h-16 flex items-center justify-center p-4">
+          <div className="flex items-center w-[90vw] ">
+            <div className="w-40 min-w-40 border border-black bg-white h-16 flex items-center justify-center p-4">
               <span>
                 Players name / <br />
                 Game fields
               </span>
             </div>
-            <div>
+
               {Array.from({ length: playerCount }).map((_, playerIndex) => (
                 <input
                   key={playerIndex}
@@ -71,16 +92,13 @@ export default function Scoreboard() {
                   }
                 />
               ))}
-            </div>
-            <button onClick={addPlayer}>
-              <Plus className="cursor-pointer" />
-            </button>
+
           </div>
           <div>
             {MOCKED_TABLE.gameScoreBoard.map((item, fieldIndex) => (
               <div key={fieldIndex} className="flex">
                 <div
-                  className={`w-40 border border-black h-16 flex items-center justify-center`}
+                  className={`w-40 min-w-40 border border-black h-16 flex items-center justify-center`}
                   style={{ backgroundColor: item.fieldColor }}
                 >
                   <span>{item.fieldName}</span>
@@ -93,7 +111,7 @@ export default function Scoreboard() {
                     onChange={(e) =>
                       handleInputChange(
                         playerIndex,
-                        item.fieldName,
+                        item.fieldName==='' ? item.fieldColor : item.fieldName,
                         e.target.value,
                       )
                     }
@@ -104,6 +122,19 @@ export default function Scoreboard() {
           </div>
         </div>
       </main>
+      <div className='w-full flex items-center justify-center'>
+        <div className='w-[90vw]'>
+      {!(playerCount >= MOCKED_TABLE.maxPlayers)&& <div className='w-full flex items-center justify-start'>
+        <button className='flex cursor-pointer' onClick={addPlayer}>
+          Add player
+          <Plus className="cursor-pointer"/>
+        </button>
+      </div>}
+      <div className='flex flex-col items-center justify-center'>
+        <Button onClick={()=> sendPlayedGame()} nameToDisplay={'Save scoresheet'} variant="default" size="xl" />
+      </div>
+      </div>
+      </div>
     </div>
   );
 }
