@@ -24,7 +24,7 @@ const MOCKED_TABLE = {
 
 export default function Scoreboard() {
   const { user } = useUser();
-  console.log(user);
+
   const [playerCount, setPlayerCount] = useState<number>(0);
   const [playerInputs, setPlayerInputs] = useState<
     Array<{ [key: string]: string }>
