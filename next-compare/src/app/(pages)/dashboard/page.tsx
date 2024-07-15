@@ -47,7 +47,8 @@ const MOCKED_DATA: TODO = [
 
 export default function Dashboard() {
   const { isSignedIn, user } = useUser();
-  const [userGames, setUserGames] = useState({});
+  const [userGames, setUserGames] = useState<string[]>([]);
+
   useEffect(() => {
     const saveUserInDatabaseOrGetBoardGames = async () => {
       if (isSignedIn) {
@@ -64,13 +65,13 @@ export default function Dashboard() {
           return await axios.post("api/users/save-user", { body: data });
         }
         if (data) {
-          setUserGames(data[0].board_games);
+          setUserGames(JSON.parse(data[0].board_games));
         }
       }
     };
     saveUserInDatabaseOrGetBoardGames();
   }, [isSignedIn, user]);
-  console.log(userGames);
+
   return (
     <div className="p-11">
       <div className="w-full h-36 flex items-end">
