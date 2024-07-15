@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { playedGames } from "@/db/schema";
-import { timestamp } from "drizzle-orm/pg-core/columns/timestamp";
 
 interface PlayedGameRequestData {
   body: {
@@ -15,7 +14,6 @@ export async function POST(req: NextRequest) {
   const body: PlayedGameRequestData = await req.json();
 
   try {
-    console.log("result", body.body);
     const result = await db
       .insert(playedGames)
       .values({
