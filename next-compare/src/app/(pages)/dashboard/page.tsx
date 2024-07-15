@@ -6,6 +6,8 @@ import sevenWonders from "@/assets/7wonders.jpeg";
 import Image from "next/image";
 import { Plus } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import axios from "axios";
 type TODO = any;
 const MOCKED_DATA: TODO = [
   {
@@ -45,7 +47,30 @@ const MOCKED_DATA: TODO = [
 
 export default function Dashboard() {
   const { isSignedIn, user } = useUser();
+  const [userGames, setUserGames] = useState({});
+  useEffect(() => {
+    const saveUserInDatabaseOrGetBoardGames = async () => {
+      if (isSignedIn) {
+        const response = await axios.get(
+          `api/users/get-user?userId=${user.id}`,
+        );
+        const data = await response.data;
 
+        if (user && data.length === 0) {
+          const data = {
+            user_id: user.id,
+            email: user.emailAddresses[0].emailAddress,
+          };
+          return await axios.post("api/users/save-user", { body: data });
+        }
+        if (data) {
+          setUserGames(data[0].board_games);
+        }
+      }
+    };
+    saveUserInDatabaseOrGetBoardGames();
+  }, [isSignedIn, user]);
+  console.log(userGames);
   return (
     <div className="p-11">
       <div className="w-full h-36 flex items-end">

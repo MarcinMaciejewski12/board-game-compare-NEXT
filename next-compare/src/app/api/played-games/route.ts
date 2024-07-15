@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
         created_at: new Date(),
       })
       .returning();
-    console.log(result);
+
     return NextResponse.json(
       { success: true, data: result[0] },
       { status: 201 },
