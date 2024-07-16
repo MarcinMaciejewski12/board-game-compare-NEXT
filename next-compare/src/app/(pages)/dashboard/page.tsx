@@ -84,7 +84,13 @@ export default function Dashboard() {
       </div>
       <div className="w-full max-h-full">
         <div className="flex justify-end p-4">
-          <Button nameToDisplay="Add scoreboard" variant="default" size="xl" />
+          <Link href={"/dashboard/create-score-sheet"}>
+            <Button
+              nameToDisplay="Add scoreboard"
+              variant="default"
+              size="xl"
+            />
+          </Link>
         </div>
         <div className="w-full h-full flex flex-col items-center gap-6">
           {/*TODO: mocked data with TODO types, change it when you connect dashboard to database*/}

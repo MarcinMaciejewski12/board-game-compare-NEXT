@@ -28,6 +28,7 @@ const config = {
       },
       colors: {
         buttonAndShadowColor: "#E7E393",
+        backgroundColor: "#A3C9A8",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
