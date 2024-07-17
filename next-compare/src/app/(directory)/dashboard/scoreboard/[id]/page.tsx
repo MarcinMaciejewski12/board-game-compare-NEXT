@@ -5,6 +5,7 @@ import { Button } from "@/components/button";
 import axios from "axios";
 import { auth, getAuth } from "@clerk/nextjs/server";
 import { useUser } from "@clerk/nextjs";
+import Input from "@/components/input";
 
 const MOCKED_TABLE = {
   gameName: "7 Wonders",
@@ -80,11 +81,11 @@ export default function Scoreboard() {
             </div>
 
             {Array.from({ length: playerCount }).map((_, playerIndex) => (
-              <input
-                key={playerIndex}
-                className="border border-black h-16"
+              <Input
+                index={playerIndex}
+                inputStyle={"border border-black h-16"}
                 placeholder={`Player ${playerIndex + 1} name`}
-                onChange={(e) =>
+                onChangeFunction={(e) =>
                   handleInputChange(playerIndex, "name", e.target.value)
                 }
               />
@@ -100,11 +101,11 @@ export default function Scoreboard() {
                   <span>{item.fieldName}</span>
                 </div>
                 {Array.from({ length: playerCount }).map((_, playerIndex) => (
-                  <input
-                    key={playerIndex}
-                    className="border border-black h-16"
+                  <Input
+                    index={playerIndex}
                     placeholder={`Player ${playerIndex + 1} ${item.fieldName}`}
-                    onChange={(e) =>
+                    inputStyle={"border border-black h-16"}
+                    onChangeFunction={(e) =>
                       handleInputChange(
                         playerIndex,
                         item.fieldName === ""
