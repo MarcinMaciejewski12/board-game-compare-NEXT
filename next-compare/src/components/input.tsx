@@ -5,6 +5,7 @@ interface InputProps {
   index: number;
   inputStyle: string;
   placeholder: string;
+  type: "text" | "number";
   onChangeFunction: (value: ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -13,6 +14,7 @@ export default function Input({
   inputStyle,
   placeholder,
   onChangeFunction,
+  type,
 }: InputProps) {
   return (
     <input
@@ -20,6 +22,7 @@ export default function Input({
       className={cn(`${inputStyle}`)}
       placeholder={placeholder}
       onChange={onChangeFunction}
+      type={type}
     />
   );
 }

@@ -85,6 +85,7 @@ export default function Scoreboard() {
                 index={playerIndex}
                 inputStyle={"border border-black h-16"}
                 placeholder={`Player ${playerIndex + 1} name`}
+                type={"text"}
                 onChangeFunction={(e) =>
                   handleInputChange(playerIndex, "name", e.target.value)
                 }
@@ -105,6 +106,7 @@ export default function Scoreboard() {
                     index={playerIndex}
                     placeholder={`Player ${playerIndex + 1} ${item.fieldName}`}
                     inputStyle={"border border-black h-16"}
+                    type={"number"}
                     onChangeFunction={(e) =>
                       handleInputChange(
                         playerIndex,
