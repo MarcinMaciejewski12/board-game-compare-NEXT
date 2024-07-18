@@ -2,11 +2,11 @@ import { ChangeEvent } from "react";
 import { cn } from "@/lib/utils";
 
 interface InputProps {
-  index: number;
+  index?: number;
   inputStyle: string;
   placeholder: string;
   type: "text" | "number";
-  onChangeFunction: (value: ChangeEvent<HTMLInputElement>) => void;
+  onChangeFunction?: (value: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function Input({
