@@ -26,6 +26,10 @@ const config = {
       textColor: {
         default: "#284B63",
       },
+      boxShadow: {
+        colorPicker:
+          "0 0 0 1px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(0, 0, 0, 0.1)",
+      },
       colors: {
         buttonAndShadowColor: "#E7E393",
         backgroundColor: "#A3C9A8",

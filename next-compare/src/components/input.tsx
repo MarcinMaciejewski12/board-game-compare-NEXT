@@ -7,6 +7,7 @@ interface InputProps {
   placeholder: string;
   type: "text" | "number";
   onChangeFunction?: (value: ChangeEvent<HTMLInputElement>) => void;
+  colorPicker?: string;
 }
 
 export default function Input({
@@ -15,11 +16,13 @@ export default function Input({
   placeholder,
   onChangeFunction,
   type,
+  colorPicker,
 }: InputProps) {
   return (
     <input
+      style={{ backgroundColor: colorPicker }}
       key={index}
-      className={cn(`${inputStyle}`)}
+      className={cn(`p-4 ${inputStyle}`)}
       placeholder={placeholder}
       onChange={onChangeFunction}
       type={type}
