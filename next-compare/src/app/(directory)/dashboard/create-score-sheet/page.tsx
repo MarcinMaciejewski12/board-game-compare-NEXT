@@ -130,14 +130,22 @@ export default function CreateScoreSheet() {
               );
             })}
           </Reorder.Group>
-
-          <Button
-            className="mt-4 min-w-72 "
-            nameToDisplay="Add score field"
-            variant="default"
-            size="lg"
-            onClick={(e) => addGameFieldHandler(e)}
-          />
+          <div className="flex flex-col max-w-72 gap-4 mt-10 mb-10">
+            <Button
+              className="mt-4 min-w-72"
+              nameToDisplay="Add score field"
+              variant="default"
+              size="lg"
+              onClick={(e) => addGameFieldHandler(e)}
+            />
+            {reorderValues.length >= 1 && (
+              <Button
+                nameToDisplay="Save scoresheet"
+                variant="withoutBackground"
+                size="lg"
+              />
+            )}
+          </div>
         </div>
       </main>
     </div>
