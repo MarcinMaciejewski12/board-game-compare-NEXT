@@ -14,6 +14,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
+import axios from "axios";
+import { useUser } from "@clerk/nextjs";
 
 type ReorderValue = {
   id: number;
@@ -31,6 +33,7 @@ interface GameInfo {
 // TODO: REFACTOR NEEDED
 export default function CreateScoreSheet() {
   const [color, setColor] = useState("#fff");
+  const [gameName, setGameName] = useState("");
   const [reorderValues, setReorderValues] = useState<ReorderValue[]>([]);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [gameInfo, setGameInfo] = useState<GameInfo>({
@@ -42,6 +45,8 @@ export default function CreateScoreSheet() {
   });
   const [isAriaChecked, setIsAriaChecked] = useState<boolean>(false);
   const popover = useRef();
+  const { user } = useUser();
+
   const addGameFieldHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
@@ -93,6 +98,11 @@ export default function CreateScoreSheet() {
     );
   };
 
+  const gameNameInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setGameName(value);
+  };
+
   const dialogHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
 
@@ -104,10 +114,17 @@ export default function CreateScoreSheet() {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("gameInfo", gameInfo);
-    console.log("reorder values", reorderValues);
-  };
 
+    const data = {
+      details: gameInfo,
+      gameFields: reorderValues,
+      user_id: user?.id,
+      gameName: gameName,
+    };
+
+    axios.post("/api/new-score-sheet", { body: data });
+  };
+  console.log(gameName);
   return (
     <div className="w-full flex flex-col gap-14 h-full">
       <section>
@@ -116,6 +133,8 @@ export default function CreateScoreSheet() {
             inputStyle="text-[100px] text-default font-extrabold text-center rounded-lg bg-backgroundColor"
             type="text"
             placeholder="Game name"
+            value={gameName}
+            onChange={(e) => gameNameInputChange(e)}
           />
         </header>
       </section>
