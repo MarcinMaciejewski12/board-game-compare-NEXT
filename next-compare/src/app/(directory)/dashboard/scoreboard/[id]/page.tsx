@@ -5,6 +5,7 @@ import { Button } from "@/components/button";
 import axios from "axios";
 import { auth, getAuth } from "@clerk/nextjs/server";
 import { useUser } from "@clerk/nextjs";
+import Input from "@/components/input";
 
 const MOCKED_TABLE = {
   gameName: "7 Wonders",
@@ -24,7 +25,7 @@ const MOCKED_TABLE = {
 
 export default function Scoreboard() {
   const { user } = useUser();
-  console.log(user);
+
   const [playerCount, setPlayerCount] = useState<number>(0);
   const [playerInputs, setPlayerInputs] = useState<
     Array<{ [key: string]: string }>
@@ -40,14 +41,13 @@ export default function Scoreboard() {
     fieldName: string,
     value: string,
   ) => {
+    // TODO: REFACTOR
     const newPlayerInputs = [...playerInputs];
     newPlayerInputs[playerIndex] = {
       ...newPlayerInputs[playerIndex],
       [fieldName]: value,
     };
-    setTimeout(() => {
-      setPlayerInputs(newPlayerInputs);
-    }, 200);
+    setPlayerInputs(newPlayerInputs);
   };
   const sendPlayedGame = async () => {
     const data = {
@@ -80,11 +80,12 @@ export default function Scoreboard() {
             </div>
 
             {Array.from({ length: playerCount }).map((_, playerIndex) => (
-              <input
-                key={playerIndex}
-                className="border border-black h-16"
+              <Input
+                index={playerIndex}
+                inputStyle={"border border-black h-16"}
                 placeholder={`Player ${playerIndex + 1} name`}
-                onChange={(e) =>
+                type={"text"}
+                onChangeFunction={(e) =>
                   handleInputChange(playerIndex, "name", e.target.value)
                 }
               />
@@ -100,11 +101,12 @@ export default function Scoreboard() {
                   <span>{item.fieldName}</span>
                 </div>
                 {Array.from({ length: playerCount }).map((_, playerIndex) => (
-                  <input
-                    key={playerIndex}
-                    className="border border-black h-16"
+                  <Input
+                    index={playerIndex}
                     placeholder={`Player ${playerIndex + 1} ${item.fieldName}`}
-                    onChange={(e) =>
+                    inputStyle={"border border-black h-16"}
+                    type={"number"}
+                    onChangeFunction={(e) =>
                       handleInputChange(
                         playerIndex,
                         item.fieldName === ""

@@ -6,6 +6,8 @@ import sevenWonders from "@/assets/7wonders.jpeg";
 import Image from "next/image";
 import { Plus } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import axios from "axios";
 type TODO = any;
 const MOCKED_DATA: TODO = [
   {
@@ -45,6 +47,30 @@ const MOCKED_DATA: TODO = [
 
 export default function Dashboard() {
   const { isSignedIn, user } = useUser();
+  const [userGames, setUserGames] = useState<string[]>([]);
+
+  useEffect(() => {
+    const saveUserInDatabaseOrGetBoardGames = async () => {
+      if (isSignedIn) {
+        const response = await axios.get(
+          `api/users/get-user?userId=${user.id}`,
+        );
+        const data = await response.data;
+
+        if (user && data.length === 0) {
+          const data = {
+            user_id: user.id,
+            email: user.emailAddresses[0].emailAddress,
+          };
+          return await axios.post("api/users/save-user", { body: data });
+        }
+        if (data) {
+          setUserGames(JSON.parse(data[0].board_games));
+        }
+      }
+    };
+    saveUserInDatabaseOrGetBoardGames();
+  }, [isSignedIn, user]);
 
   return (
     <div className="p-11">
@@ -58,7 +84,13 @@ export default function Dashboard() {
       </div>
       <div className="w-full max-h-full">
         <div className="flex justify-end p-4">
-          <Button nameToDisplay="Add scoreboard" variant="default" size="xl" />
+          <Link href={"/dashboard/create-score-sheet"}>
+            <Button
+              nameToDisplay="Add scoreboard"
+              variant="default"
+              size="xl"
+            />
+          </Link>
         </div>
         <div className="w-full h-full flex flex-col items-center gap-6">
           {/*TODO: mocked data with TODO types, change it when you connect dashboard to database*/}
