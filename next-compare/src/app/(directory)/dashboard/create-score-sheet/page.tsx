@@ -1,122 +1,143 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import Input from "@/components/input";
 import { Reorder } from "framer-motion";
 import { Button } from "@/components/button";
 
 import { HexColorPicker } from "react-colorful";
-export default function CreateScoreSheet() {
-  const [reorderValues, setReorderValues] = useState<
-    { fieldName: string; fieldColor: string }[]
-  >([]);
-  const [color, setColor] = useState("#fff");
+import { X } from "lucide-react";
 
-  const addScoreFieldHandler = (data: {
-    fieldName: string;
-    fieldColor: string;
-  }) => {
-    setReorderValues([...reorderValues, data]);
+type ReorderValue = {
+  id: number;
+  placeholder: string;
+  color: string;
+};
+
+export default function CreateScoreSheet() {
+  const [color, setColor] = useState("#fff");
+  const [reorderValues, setReorderValues] = useState<ReorderValue[]>([]);
+  const [colorPalette, setColorPalette] = useState<boolean | null>(null);
+  const popover = useRef();
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const addGameFieldHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    const newField = {
+      id: reorderValues.length + Number(Math.random().toFixed(4)),
+      placeholder: "Field name",
+      color: "#fff",
+    };
+    setReorderValues((prevState) => [...prevState, newField]);
   };
-  console.log(reorderValues);
+
+  const handleToggle = (index: number) => {
+    if (openIndex === index) {
+      setOpenIndex(null);
+    } else {
+      setColor(reorderValues[index].color);
+      setOpenIndex(index);
+    }
+  };
+
+  const removeReorderItem = (id: number) => {
+    const filterAndRemoveGameField = reorderValues.filter(
+      (item) => item.id !== id,
+    );
+
+    setReorderValues(filterAndRemoveGameField);
+  };
+
+  const handleColorChange = (color: string) => {
+    setColor(color);
+    if (openIndex !== null) {
+      setReorderValues((prevState) =>
+        prevState.map((item, idx) =>
+          idx === openIndex ? { ...item, color } : item,
+        ),
+      );
+    }
+  };
   return (
     <div className="w-full flex flex-col gap-14 h-full">
-      <header className="h-48 flex items-center justify-center">
-        <h1 className="text-[100px] text-default font-extrabold">
+      <section>
+        <header className="flex justify-center">
           <Input
-            inputStyle={
-              "text-center border-2 border-solid border-opacity-30 rounded-lg bg-backgroundColor border-black"
-            }
-            type={"text"}
-            placeholder={"Game name"}
+            inputStyle="text-[100px] text-default font-extrabold text-center rounded-lg bg-backgroundColor"
+            type="text"
+            placeholder="Game name"
           />
-        </h1>
-      </header>
-      <main>
-        <div className="flex w-full flex-col gap-4 h-full justify-center items-center">
-          <div className="w-40 min-w-40 border border-black bg-white h-16 flex items-center justify-center p-4">
-            <span>Game fields</span>
+        </header>
+      </section>
+      <main className="flex items-center justify-center ">
+        <div className="relative">
+          <div className="w-72 border border-black bg-white h-24 flex items-center rounded-lg justify-center p-4 mb-4">
+            <span className="text-2xl text-default">Game fields</span>
           </div>
-          <Reorder.Group values={reorderValues} onReorder={setReorderValues}>
-            {reorderValues.map((item) => {
-              const { fieldName, fieldColor } = item;
+
+          <Reorder.Group
+            onReorder={setReorderValues}
+            values={reorderValues}
+            className="flex min-w-72 min-h-full flex-col gap-4"
+          >
+            {reorderValues.map((reorder, index) => {
               return (
                 <Reorder.Item
-                  key={fieldName}
-                  style={{ backgroundColor: `${fieldColor}` }}
-                  value={fieldName}
+                  value={reorder}
+                  key={reorder.id}
+                  className="flex gap-4 items-center overflow-x-visible"
                 >
-                  <div className="flex w-full flex-col gap-4 h-full justify-center items-center">
-                    <div className="w-40 min-w-40 border border-black bg-white h-16 flex items-center justify-center p-4">
-                      {fieldName}
-                    </div>
+                  <div
+                    style={{ backgroundColor: reorder.color }}
+                    className="w-full bg-white h-24 border border-black rounded-lg flex items-center justify-center"
+                  >
+                    <Input
+                      colorPicker={reorder.color}
+                      placeholder="Field name"
+                      type="text"
+                      inputStyle="w-full focus:outline-none"
+                    />
                   </div>
+                  <div className="relative">
+                    <div className="flex gap-3 items-center">
+                      <div
+                        style={{ backgroundColor: reorder.color }}
+                        onClick={() => {
+                          handleToggle(index);
+                          setColorPalette(!colorPalette);
+                        }}
+                        className="w-[38px] h-[38px] rounded-lg border-[2px] border-white cursor-pointer shadow-colorPicker"
+                      />
+                    </div>
+                    {openIndex === index && (
+                      <div
+                        className="absolute left-0 rounded-[9px] shadow-colorPicker z-50"
+                        //@ts-ignore
+                        ref={popover}
+                      >
+                        <HexColorPicker
+                          color={color}
+                          onChange={handleColorChange}
+                        />
+                      </div>
+                    )}
+                  </div>
+                  <X
+                    className="h-8 w-8 cursor-pointer"
+                    onClick={() => removeReorderItem(reorder.id)}
+                  />
                 </Reorder.Item>
               );
             })}
           </Reorder.Group>
-          <Button nameToDisplay="Add score field" variant="default" size="lg" />
-          {/*<div*/}
-          {/*  onClick={() =>*/}
-          {/*    showColorPalette ? setShowColorPalette(false) : null*/}
-          {/*  }*/}
-          {/*>*/}
-          {/*  <Dialog>*/}
-          {/*    <DialogTrigger>*/}
-          {/*      <Button*/}
-          {/*        nameToDisplay="Add score field"*/}
-          {/*        variant="default"*/}
-          {/*        size="lg"*/}
-          {/*      />*/}
-          {/*    </DialogTrigger>*/}
-          {/*    <DialogContent>*/}
-          {/*      <DialogHeader>*/}
-          {/*        <DialogTitle className="text-white text-2xl font-bold">*/}
-          {/*          Add you're own point field!*/}
-          {/*        </DialogTitle>*/}
-          {/*      </DialogHeader>*/}
-          {/*      <div className="w-full h-52 p-4">*/}
-          {/*        <Input*/}
-          {/*          colorPicker={color}*/}
-          {/*          inputStyle={`w-full h-16 border-[0.5px] border-black border-opacity-30 rounded-lg mb-2`}*/}
-          {/*          type={"text"}*/}
-          {/*          placeholder={"Field Name"}*/}
-          {/*        />*/}
-          {/*        <div className="relative">*/}
-          {/*          <div className="flex gap-3 items-center">*/}
-          {/*            <span className="text-white text-xl">*/}
-          {/*              Choose field color*/}
-          {/*            </span>*/}
-          {/*            <div*/}
-          {/*              style={{ backgroundColor: color }}*/}
-          {/*              onClick={() => setShowColorPalette(!showColorPalette)}*/}
-          {/*              className="w-[28px] h-[28px] rounded-lg border-[2px] border-white cursor-pointer shadow-colorPicker"*/}
-          {/*            />*/}
-          {/*          </div>*/}
-          {/*          {showColorPalette && (*/}
-          {/*            <div*/}
-          {/*              className="absolute left-0 rounded-[9px] shadow-colorPicker"*/}
-          {/*              //@ts-ignore*/}
-          {/*              ref={popover}*/}
-          {/*            >*/}
-          {/*              <HexColorPicker color={color} onChange={setColor} />*/}
-          {/*            </div>*/}
-          {/*          )}*/}
-          {/*        </div>*/}
-          {/*        <Button*/}
-          {/*          nameToDisplay={"Add field"}*/}
-          {/*          size={"default"}*/}
-          {/*          variant="default"*/}
-          {/*          onClick={() =>*/}
-          {/*            addScoreFieldHandler({*/}
-          {/*              fieldName: "asdq",*/}
-          {/*              fieldColor: color ?? "fff",*/}
-          {/*            })*/}
-          {/*          }*/}
-          {/*        />*/}
-          {/*      </div>*/}
-          {/*    </DialogContent>*/}
-          {/*  </Dialog>*/}
-          {/*</div>*/}
+
+          <Button
+            className="mt-4 min-w-72 "
+            nameToDisplay="Add score field"
+            variant="default"
+            size="lg"
+            onClick={(e) => addGameFieldHandler(e)}
+          />
         </div>
       </main>
     </div>
