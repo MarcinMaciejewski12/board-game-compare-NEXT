@@ -41,14 +41,13 @@ export default function Scoreboard() {
     fieldName: string,
     value: string,
   ) => {
+    // TODO: REFACTOR
     const newPlayerInputs = [...playerInputs];
     newPlayerInputs[playerIndex] = {
       ...newPlayerInputs[playerIndex],
       [fieldName]: value,
     };
-    setTimeout(() => {
-      setPlayerInputs(newPlayerInputs);
-    }, 200);
+    setPlayerInputs(newPlayerInputs);
   };
   const sendPlayedGame = async () => {
     const data = {

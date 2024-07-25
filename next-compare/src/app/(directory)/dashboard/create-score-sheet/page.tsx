@@ -6,6 +6,14 @@ import { Button } from "@/components/button";
 
 import { HexColorPicker } from "react-colorful";
 import { X } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox";
 
 type ReorderValue = {
   id: number;
@@ -13,18 +21,32 @@ type ReorderValue = {
   color: string;
 };
 
+interface GameInfo {
+  max_player: number;
+  min_player: number;
+  difficulty: number;
+  playtime: string;
+  isSharedToCommunity: boolean;
+}
+// TODO: REFACTOR NEEDED
 export default function CreateScoreSheet() {
   const [color, setColor] = useState("#fff");
   const [reorderValues, setReorderValues] = useState<ReorderValue[]>([]);
-  const [colorPalette, setColorPalette] = useState<boolean | null>(null);
-  const popover = useRef();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
-
+  const [gameInfo, setGameInfo] = useState<GameInfo>({
+    max_player: 0,
+    min_player: 0,
+    difficulty: 0,
+    playtime: "",
+    isSharedToCommunity: false,
+  });
+  const [isAriaChecked, setIsAriaChecked] = useState<boolean>(false);
+  const popover = useRef();
   const addGameFieldHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     const newField = {
-      id: reorderValues.length + Number(Math.random().toFixed(4)),
+      id: reorderValues.length + Math.floor(Math.random() * 1e11),
       placeholder: "Field name",
       color: "#fff",
     };
@@ -58,6 +80,34 @@ export default function CreateScoreSheet() {
       );
     }
   };
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number,
+  ) => {
+    const newPlaceholder = e.target.value;
+    setReorderValues((prevState) =>
+      prevState.map((item, idx) =>
+        idx === index ? { ...item, placeholder: newPlaceholder } : item,
+      ),
+    );
+  };
+
+  const dialogHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type } = e.target;
+
+    setGameInfo((prevState) => ({
+      ...prevState,
+      [name]: type === "checkbox" ? isAriaChecked : value,
+    }));
+  };
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log("gameInfo", gameInfo);
+    console.log("reorder values", reorderValues);
+  };
+
   return (
     <div className="w-full flex flex-col gap-14 h-full">
       <section>
@@ -79,23 +129,26 @@ export default function CreateScoreSheet() {
             onReorder={setReorderValues}
             values={reorderValues}
             className="flex min-w-72 min-h-full flex-col gap-4"
+            axis="y"
           >
             {reorderValues.map((reorder, index) => {
               return (
                 <Reorder.Item
                   value={reorder}
                   key={reorder.id}
-                  className="flex gap-4 items-center overflow-x-visible"
+                  className="flex gap-4 items-center"
+                  dragListener={!(openIndex === index)}
                 >
                   <div
                     style={{ backgroundColor: reorder.color }}
-                    className="w-full bg-white h-24 border border-black rounded-lg flex items-center justify-center"
+                    className="bg-white h-24 border border-black rounded-lg flex items-center justify-center"
                   >
                     <Input
                       colorPicker={reorder.color}
                       placeholder="Field name"
                       type="text"
-                      inputStyle="w-full focus:outline-none"
+                      inputStyle="w-72 focus:outline-none"
+                      onChangeFunction={(e) => handleInputChange(e, index)}
                     />
                   </div>
                   <div className="relative">
@@ -104,7 +157,6 @@ export default function CreateScoreSheet() {
                         style={{ backgroundColor: reorder.color }}
                         onClick={() => {
                           handleToggle(index);
-                          setColorPalette(!colorPalette);
                         }}
                         className="w-[38px] h-[38px] rounded-lg border-[2px] border-white cursor-pointer shadow-colorPicker"
                       />
@@ -132,19 +184,98 @@ export default function CreateScoreSheet() {
           </Reorder.Group>
           <div className="flex flex-col max-w-72 gap-4 mt-10 mb-10">
             <Button
-              className="mt-4 min-w-72"
+              className="mt-4"
               nameToDisplay="Add score field"
-              variant="default"
+              variant="withoutBackground"
               size="lg"
               onClick={(e) => addGameFieldHandler(e)}
             />
-            {reorderValues.length >= 1 && (
-              <Button
-                nameToDisplay="Save scoresheet"
-                variant="withoutBackground"
-                size="lg"
-              />
-            )}
+            <>
+              {reorderValues.length >= 1 && (
+                <Dialog>
+                  <DialogTrigger>
+                    <Button
+                      className="min-w-72"
+                      nameToDisplay="Save scoresheet"
+                      variant="default"
+                      size="lg"
+                    />
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle className="text-2xl text-default font-bold">
+                        Basic game information
+                      </DialogTitle>
+                    </DialogHeader>
+                    <form onSubmit={(e) => onSubmit(e)}>
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center gap-2">
+                          <Input
+                            label="Min players"
+                            name="min_player"
+                            inputStyle={"border w-32 border-black rounded-lg"}
+                            placeholder={"Min players"}
+                            type="number"
+                            onChange={dialogHandler}
+                          />
+                          <Input
+                            label="Max players"
+                            name="max_player"
+                            inputStyle={"border w-32 border-black rounded-lg"}
+                            placeholder={"Max players"}
+                            type="number"
+                            value={Number(gameInfo.max_player)}
+                            onChange={dialogHandler}
+                          />
+                        </div>
+                        <Input
+                          label="Difficulty"
+                          name="difficulty"
+                          inputStyle={"border border-black rounded-lg w-28"}
+                          placeholder={"Difficulty"}
+                          type="number"
+                          max={10}
+                          value={Number(gameInfo.difficulty)}
+                          onChange={dialogHandler}
+                        />
+                        <Input
+                          label="Playtime"
+                          name="playtime"
+                          inputStyle={"border  border-black rounded-lg"}
+                          placeholder={"Playtime"}
+                          type="text"
+                          value={Number(gameInfo.playtime)}
+                          onChange={dialogHandler}
+                        />
+
+                        <div className="flex gap-1 justify-center items-center">
+                          <input
+                            type="checkbox"
+                            name="isSharedToCommunity"
+                            onChange={(e) => {
+                              setIsAriaChecked(!isAriaChecked);
+                              dialogHandler(e);
+                            }}
+                          />
+                          <span className="text-sm text-default">
+                            Share with community (other gamers could use your
+                            score board!)
+                          </span>
+                        </div>
+                      </div>
+                      <div className="w-full flex justify-end mt-4">
+                        <Button
+                          nameToDisplay={"Save score sheet"}
+                          variant="default"
+                          size="lg"
+                          type="submit"
+                        />
+                      </div>
+                    </form>
+                  </DialogContent>
+                </Dialog>
+              )}
+            </>
           </div>
         </div>
       </main>
