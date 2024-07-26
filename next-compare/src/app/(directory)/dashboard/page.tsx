@@ -64,6 +64,7 @@ export default function Dashboard() {
           };
           return await axios.post("api/users/save-user", { body: data });
         }
+        console.log(data);
         if (data) {
           setUserGames(JSON.parse(data[0].board_games));
         }
