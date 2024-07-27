@@ -10,42 +10,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import useSWR from "swr";
 import { useUserContext } from "@/components/context/user-context/user-context";
-type TODO = any;
-const MOCKED_DATA: TODO = [
-  {
-    userId: 1,
-    uniqueBoardId: "qP2d531fypsfwefwwq25adhthrhxcvmlpoy",
-    gameName: "7 Wonders",
-    minPlayers: 3,
-    maxPlayers: 7,
-    difficulty: 4,
-    playtime: "30",
-    photoValue: sevenWonders,
-    isSharedToCommunity: false,
-    gameScoreBoard: [
-      { fieldName: "War", fieldColor: "red" },
-      { fieldName: "Coins", fieldColor: "white" },
-      { fieldName: "Wonders", fieldColor: "white" },
-      { fieldName: "", fieldColor: "yellow" },
-      { fieldName: "", fieldColor: "purple" },
-      { fieldName: "", fieldColor: "gold" },
-      { fieldName: "", fieldColor: "green" },
-      { fieldName: "", fieldColor: "blue" },
-    ],
-  },
-  {
-    userId: 1,
-    uniqueBoardId: "asdASFrgqwefRsAwDgwFAdw",
-    gameName: "Azul",
-    minPlayers: 2,
-    maxPlayers: 4,
-    difficulty: 2,
-    playtime: "40",
-    photoValue: azulPhoto,
-    isSharedToCommunity: false,
-    gameScoreBoard: [{ fieldName: "Points", fieldColor: "white" }],
-  },
-];
+import DashboardCard from "@/components/dashboard-card";
 
 interface Games {
   createdAt: string;
@@ -65,8 +30,24 @@ interface Games {
 export default function Dashboard() {
   const { isSignedIn, user } = useUser();
   const [userGamesId, setUserGamesId] = useState<string[]>([]);
-  const [games, setGames] = useState<Games[]>([]);
+  const [games, setGames] = useState<Games[]>([
+    {
+      createdAt: "",
+      difficulty: 0,
+      game_name: "",
+      game_score_board: "",
+      id: "",
+      is_shared_to_community: false,
+      max_players: 0,
+      min_players: 0,
+      photo: "",
+      playtime: "",
+      unique_board_id: "",
+      user_id: "",
+    },
+  ]);
   const { setUser } = useUserContext();
+
   useEffect(() => {
     const saveUserInDatabaseOrGetBoardGames = async () => {
       if (isSignedIn) {
@@ -89,7 +70,6 @@ export default function Dashboard() {
       }
     };
 
-    //   TODO: refactor, change it to useSWR!
     if (userGamesId) {
       const getUserGames = async () => {
         const data = await axios.get(
@@ -104,58 +84,39 @@ export default function Dashboard() {
   }, [isSignedIn, user, userGamesId]);
 
   return (
-    <div className="p-11">
-      <div className="w-full h-36 flex items-end">
-        <div className="flex flex-col gap-1">
-          <h1 className="font-extrabold text-4xl  text-default">{`Hello ${isSignedIn ? user?.username : "You are not authorized! please sign in!"}!`}</h1>
-          <p className="font-medium text-2xl  text-default">
-            What did you play this time?
-          </p>
-        </div>
-      </div>
-      <div className="w-full max-h-full">
-        <div className="flex justify-end p-4">
+    <div className="p-24 w-full min-h-[100vh]">
+      <div className="w-full">
+        <div className="flex justify-between items-end pb-7">
+          <div>
+            <h1 className="text-default text-5xl font-bold mb-2">{`Hello ${isSignedIn ? user.username : ""}`}</h1>
+            <span className="text-default text-3xl">
+              What did you play this time?
+            </span>
+          </div>
           <Link href={"/dashboard/create-score-sheet"}>
             <Button
-              nameToDisplay="Add scoreboard"
+              nameToDisplay="Add score board"
               variant="default"
               size="xl"
             />
           </Link>
         </div>
-        <div className="w-full h-full flex flex-col items-center gap-6">
-          {games.map((data: Games) => {
+        <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full h-full">
+          {games.map((data) => {
             return (
-              <div
-                key={data.unique_board_id}
-                className="w-[90%] h-44 bg-white grid grid-cols-[10%,70%,20%] rounded-2xl"
-              >
-                <div className="grid-cols-2 max-h-44 overflow-hidden ">
-                  <Image
-                    src={data.photo}
-                    alt={"board game icon"}
-                    className="object-cover rounded-2xl w-full h-full"
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <div className="h-3/4 flex items-center justify-center">
-                    <h1>{data.game_name}</h1>
-                  </div>
-                  <div className="h-2/4 flex justify-around items-center">
-                    <span>{`players: ${data.min_players}-${data.max_players}`}</span>
-                    <span>{`difficulty: ${data.difficulty}/10`}</span>
-                    <span>{`playtime: ${data.playtime}min`}</span>
-                  </div>
-                </div>
-                <div className="grid-cols-2 flex items-center justify-center">
-                  <Link href={`/dashboard/scoreboard/${data.unique_board_id}`}>
-                    <Plus className="w-12 h-12 cursor-pointer" />
-                  </Link>
-                </div>
-              </div>
+              <DashboardCard
+                unique_board_id={data.unique_board_id}
+                game_name={data.game_name}
+                id={data.id}
+                difficulty={data.difficulty}
+                max_players={data.max_players}
+                min_players={data.min_players}
+                photo={data.photo}
+                playtime={data.playtime}
+              />
             );
           })}
-        </div>
+        </section>
       </div>
     </div>
   );
