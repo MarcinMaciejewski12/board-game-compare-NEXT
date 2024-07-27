@@ -8,6 +8,8 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import useSWR from "swr";
+import { useUserContext } from "@/components/context/user-context/user-context";
 type TODO = any;
 const MOCKED_DATA: TODO = [
   {
@@ -45,10 +47,26 @@ const MOCKED_DATA: TODO = [
   },
 ];
 
+interface Games {
+  createdAt: string;
+  difficulty: number;
+  game_name: string;
+  game_score_board: string;
+  id: string;
+  is_shared_to_community: boolean;
+  max_players: number;
+  min_players: number;
+  photo: string;
+  playtime: string;
+  unique_board_id: string;
+  user_id: string;
+}
+
 export default function Dashboard() {
   const { isSignedIn, user } = useUser();
-  const [userGames, setUserGames] = useState<string[]>([]);
-
+  const [userGamesId, setUserGamesId] = useState<string[]>([]);
+  const [games, setGames] = useState<Games[]>([]);
+  const { setUser } = useUserContext();
   useEffect(() => {
     const saveUserInDatabaseOrGetBoardGames = async () => {
       if (isSignedIn) {
@@ -64,14 +82,26 @@ export default function Dashboard() {
           };
           return await axios.post("api/users/save-user", { body: data });
         }
-        console.log(data);
         if (data) {
-          setUserGames(JSON.parse(data[0].board_games));
+          setUser(data[0]);
+          setUserGamesId(data[0].board_games);
         }
       }
     };
+
+    //   TODO: refactor, change it to useSWR!
+    if (userGamesId) {
+      const getUserGames = async () => {
+        const data = await axios.get(
+          `api/user-games/get-user-games/get-all-user-games?id=${userGamesId}`,
+        );
+        setGames(data.data.result);
+      };
+      getUserGames();
+    }
+
     saveUserInDatabaseOrGetBoardGames();
-  }, [isSignedIn, user]);
+  }, [isSignedIn, user, userGamesId]);
 
   return (
     <div className="p-11">
@@ -94,32 +124,31 @@ export default function Dashboard() {
           </Link>
         </div>
         <div className="w-full h-full flex flex-col items-center gap-6">
-          {/*TODO: mocked data with TODO types, change it when you connect dashboard to database*/}
-          {MOCKED_DATA.map((data: TODO) => {
+          {games.map((data: Games) => {
             return (
               <div
-                key={data.uniqueBoardId}
+                key={data.unique_board_id}
                 className="w-[90%] h-44 bg-white grid grid-cols-[10%,70%,20%] rounded-2xl"
               >
                 <div className="grid-cols-2 max-h-44 overflow-hidden ">
                   <Image
-                    src={data.photoValue}
+                    src={data.photo}
                     alt={"board game icon"}
                     className="object-cover rounded-2xl w-full h-full"
                   />
                 </div>
                 <div className="flex flex-col">
                   <div className="h-3/4 flex items-center justify-center">
-                    <h1>{data.gameName}</h1>
+                    <h1>{data.game_name}</h1>
                   </div>
                   <div className="h-2/4 flex justify-around items-center">
-                    <span>{`players: ${data.minPlayers}-${data.maxPlayers}`}</span>
+                    <span>{`players: ${data.min_players}-${data.max_players}`}</span>
                     <span>{`difficulty: ${data.difficulty}/10`}</span>
                     <span>{`playtime: ${data.playtime}min`}</span>
                   </div>
                 </div>
                 <div className="grid-cols-2 flex items-center justify-center">
-                  <Link href={`/dashboard/scoreboard/${data.uniqueBoardId}`}>
+                  <Link href={`/dashboard/scoreboard/${data.unique_board_id}`}>
                     <Plus className="w-12 h-12 cursor-pointer" />
                   </Link>
                 </div>
