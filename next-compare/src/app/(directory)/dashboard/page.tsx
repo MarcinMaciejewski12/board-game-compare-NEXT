@@ -8,46 +8,45 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import axios from "axios";
-type TODO = any;
-const MOCKED_DATA: TODO = [
-  {
-    userId: 1,
-    uniqueBoardId: "qP2d531fypsfwefwwq25adhthrhxcvmlpoy",
-    gameName: "7 Wonders",
-    minPlayers: 3,
-    maxPlayers: 7,
-    difficulty: 4,
-    playtime: "30",
-    photoValue: sevenWonders,
-    isSharedToCommunity: false,
-    gameScoreBoard: [
-      { fieldName: "War", fieldColor: "red" },
-      { fieldName: "Coins", fieldColor: "white" },
-      { fieldName: "Wonders", fieldColor: "white" },
-      { fieldName: "", fieldColor: "yellow" },
-      { fieldName: "", fieldColor: "purple" },
-      { fieldName: "", fieldColor: "gold" },
-      { fieldName: "", fieldColor: "green" },
-      { fieldName: "", fieldColor: "blue" },
-    ],
-  },
-  {
-    userId: 1,
-    uniqueBoardId: "asdASFrgqwefRsAwDgwFAdw",
-    gameName: "Azul",
-    minPlayers: 2,
-    maxPlayers: 4,
-    difficulty: 2,
-    playtime: "40",
-    photoValue: azulPhoto,
-    isSharedToCommunity: false,
-    gameScoreBoard: [{ fieldName: "Points", fieldColor: "white" }],
-  },
-];
+import useSWR from "swr";
+import { useUserContext } from "@/components/context/user-context/user-context";
+import DashboardCard from "@/components/dashboard-card";
+
+interface Games {
+  createdAt: string;
+  difficulty: number;
+  game_name: string;
+  game_score_board: string;
+  id: string;
+  is_shared_to_community: boolean;
+  max_players: number;
+  min_players: number;
+  photo: string;
+  playtime: string;
+  unique_board_id: string;
+  user_id: string;
+}
 
 export default function Dashboard() {
   const { isSignedIn, user } = useUser();
-  const [userGames, setUserGames] = useState<string[]>([]);
+  const [userGamesId, setUserGamesId] = useState<string[]>([]);
+  const [games, setGames] = useState<Games[]>([
+    {
+      createdAt: "",
+      difficulty: 0,
+      game_name: "",
+      game_score_board: "",
+      id: "",
+      is_shared_to_community: false,
+      max_players: 0,
+      min_players: 0,
+      photo: "",
+      playtime: "",
+      unique_board_id: "",
+      user_id: "",
+    },
+  ]);
+  const { setUser } = useUserContext();
 
   useEffect(() => {
     const saveUserInDatabaseOrGetBoardGames = async () => {
@@ -65,67 +64,59 @@ export default function Dashboard() {
           return await axios.post("api/users/save-user", { body: data });
         }
         if (data) {
-          setUserGames(JSON.parse(data[0].board_games));
+          setUser(data[0]);
+          setUserGamesId(data[0].board_games);
         }
       }
     };
+
+    if (userGamesId) {
+      const getUserGames = async () => {
+        const data = await axios.get(
+          `api/user-games/get-user-games/get-all-user-games?id=${userGamesId}`,
+        );
+        setGames(data.data.result);
+      };
+      getUserGames();
+    }
+
     saveUserInDatabaseOrGetBoardGames();
-  }, [isSignedIn, user]);
+  }, [isSignedIn, user, userGamesId]);
 
   return (
-    <div className="p-11">
-      <div className="w-full h-36 flex items-end">
-        <div className="flex flex-col gap-1">
-          <h1 className="font-extrabold text-4xl  text-default">{`Hello ${isSignedIn ? user?.username : "You are not authorized! please sign in!"}!`}</h1>
-          <p className="font-medium text-2xl  text-default">
-            What did you play this time?
-          </p>
-        </div>
-      </div>
-      <div className="w-full max-h-full">
-        <div className="flex justify-end p-4">
+    <div className="p-24 w-full min-h-[100vh]">
+      <div className="w-full">
+        <div className="flex justify-between items-end pb-7">
+          <div>
+            <h1 className="text-default text-5xl font-bold mb-2">{`Hello ${isSignedIn ? user.username : ""}`}</h1>
+            <span className="text-default text-3xl">
+              What did you play this time?
+            </span>
+          </div>
           <Link href={"/dashboard/create-score-sheet"}>
             <Button
-              nameToDisplay="Add scoreboard"
+              nameToDisplay="Add score board"
               variant="default"
               size="xl"
             />
           </Link>
         </div>
-        <div className="w-full h-full flex flex-col items-center gap-6">
-          {/*TODO: mocked data with TODO types, change it when you connect dashboard to database*/}
-          {MOCKED_DATA.map((data: TODO) => {
+        <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full h-full">
+          {games.map((data) => {
             return (
-              <div
-                key={data.uniqueBoardId}
-                className="w-[90%] h-44 bg-white grid grid-cols-[10%,70%,20%] rounded-2xl"
-              >
-                <div className="grid-cols-2 max-h-44 overflow-hidden ">
-                  <Image
-                    src={data.photoValue}
-                    alt={"board game icon"}
-                    className="object-cover rounded-2xl w-full h-full"
-                  />
-                </div>
-                <div className="flex flex-col">
-                  <div className="h-3/4 flex items-center justify-center">
-                    <h1>{data.gameName}</h1>
-                  </div>
-                  <div className="h-2/4 flex justify-around items-center">
-                    <span>{`players: ${data.minPlayers}-${data.maxPlayers}`}</span>
-                    <span>{`difficulty: ${data.difficulty}/10`}</span>
-                    <span>{`playtime: ${data.playtime}min`}</span>
-                  </div>
-                </div>
-                <div className="grid-cols-2 flex items-center justify-center">
-                  <Link href={`/dashboard/scoreboard/${data.uniqueBoardId}`}>
-                    <Plus className="w-12 h-12 cursor-pointer" />
-                  </Link>
-                </div>
-              </div>
+              <DashboardCard
+                unique_board_id={data.unique_board_id}
+                game_name={data.game_name}
+                id={data.id}
+                difficulty={data.difficulty}
+                max_players={data.max_players}
+                min_players={data.min_players}
+                photo={data.photo}
+                playtime={data.playtime}
+              />
             );
           })}
-        </div>
+        </section>
       </div>
     </div>
   );

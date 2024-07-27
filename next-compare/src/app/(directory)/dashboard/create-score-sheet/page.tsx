@@ -122,7 +122,7 @@ export default function CreateScoreSheet() {
       gameName: gameName,
     };
 
-    axios.post("/api/new-score-sheet", { body: data });
+    axios.post("/api/new-score-sheet", { body: data }).then((res) => {});
   };
   console.log(gameName);
   return (
@@ -166,7 +166,7 @@ export default function CreateScoreSheet() {
                       colorPicker={reorder.color}
                       placeholder="Field name"
                       type="text"
-                      inputStyle="w-72 focus:outline-none"
+                      inputStyle="w-72 focus:outline-none text-center text-2xl"
                       onChangeFunction={(e) => handleInputChange(e, index)}
                     />
                   </div>

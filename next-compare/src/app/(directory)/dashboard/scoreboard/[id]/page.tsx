@@ -1,35 +1,53 @@
 "use client";
-import { ChangeEvent, JSX, useState } from "react";
+import { ChangeEvent, JSX, useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/button";
 import axios from "axios";
 import { auth, getAuth } from "@clerk/nextjs/server";
-import { useUser } from "@clerk/nextjs";
+import { useSession, useUser } from "@clerk/nextjs";
 import Input from "@/components/input";
+import useSWR from "swr";
+import { fetcher } from "@/lib/swr-fetcher/fetcher";
+import { useUserContext } from "@/components/context/user-context/user-context";
+import { usePathname } from "next/navigation";
 
-const MOCKED_TABLE = {
-  gameName: "7 Wonders",
-  minPlayers: 3,
-  maxPlayers: 7,
-  uniqueBoardId: "qP2d531fypsfwefwwq25adhthrhxcvmlpoy",
-  gameScoreBoard: [
-    { fieldName: "War", fieldColor: "red" },
-    { fieldName: "Coins", fieldColor: "white" },
-    { fieldName: "Wonders", fieldColor: "white" },
-    { fieldName: "", fieldColor: "yellow" },
-    { fieldName: "", fieldColor: "purple" },
-    { fieldName: "", fieldColor: "green" },
-    { fieldName: "", fieldColor: "blue" },
-  ],
-};
+interface Data {
+  board_id: string;
+  game_name: string;
+  max_players: number;
+  score_sheet: string;
+}
+
+interface ScoreData {
+  color: string;
+  id: number;
+  placeholder: string;
+}
 
 export default function Scoreboard() {
-  const { user } = useUser();
-
+  const [data, setData] = useState<Data>({
+    board_id: "",
+    game_name: "",
+    max_players: 0,
+    score_sheet: "[]",
+  });
   const [playerCount, setPlayerCount] = useState<number>(0);
   const [playerInputs, setPlayerInputs] = useState<
     Array<{ [key: string]: string }>
   >([]);
+  const { user } = useUserContext();
+  const pathname = usePathname().split("/").pop();
+  const scoreData = JSON.parse(data.score_sheet) as ScoreData[];
+
+  useEffect(() => {
+    const dataHandler = async () => {
+      const data = await axios.get(
+        `/api/user-games/get-user-games/get-particular-game?id=${pathname}`,
+      );
+      setData(data.data[0]);
+    };
+    dataHandler();
+  }, [pathname]);
 
   const addPlayer = () => {
     setPlayerCount(playerCount + 1);
@@ -41,7 +59,6 @@ export default function Scoreboard() {
     fieldName: string,
     value: string,
   ) => {
-    // TODO: REFACTOR
     const newPlayerInputs = [...playerInputs];
     newPlayerInputs[playerIndex] = {
       ...newPlayerInputs[playerIndex],
@@ -49,10 +66,11 @@ export default function Scoreboard() {
     };
     setPlayerInputs(newPlayerInputs);
   };
+
   const sendPlayedGame = async () => {
     const data = {
       user_id: user?.id,
-      unique_board_id: MOCKED_TABLE.uniqueBoardId,
+      unique_board_id: pathname,
       game_score_board: JSON.stringify(playerInputs),
     };
 
@@ -63,7 +81,7 @@ export default function Scoreboard() {
     <div className="w-full h-full">
       <header className="h-48 flex items-center justify-center">
         <h1 className="text-[100px] text-default font-extrabold">
-          {MOCKED_TABLE.gameName}
+          {data?.game_name}
         </h1>
       </header>
       <main className="flex w-full justify-center items-center">
@@ -92,26 +110,24 @@ export default function Scoreboard() {
             ))}
           </div>
           <div>
-            {MOCKED_TABLE.gameScoreBoard.map((item, fieldIndex) => (
-              <div key={fieldIndex} className="flex">
+            {scoreData.map((item, fieldIndex) => (
+              <div key={item.id} className="flex">
                 <div
                   className={`w-40 min-w-40 border border-black h-16 flex items-center justify-center`}
-                  style={{ backgroundColor: item.fieldColor }}
+                  style={{ backgroundColor: item.color }}
                 >
-                  <span>{item.fieldName}</span>
+                  <span>{item.placeholder}</span>
                 </div>
                 {Array.from({ length: playerCount }).map((_, playerIndex) => (
                   <Input
                     index={playerIndex}
-                    placeholder={`Player ${playerIndex + 1} ${item.fieldName}`}
+                    placeholder={`Player ${playerIndex + 1} ${item.placeholder}`}
                     inputStyle={"border border-black h-16"}
                     type={"number"}
                     onChangeFunction={(e) =>
                       handleInputChange(
                         playerIndex,
-                        item.fieldName === ""
-                          ? item.fieldColor
-                          : item.fieldName,
+                        item.placeholder === "" ? item.color : item.placeholder,
                         e.target.value,
                       )
                     }
@@ -124,7 +140,7 @@ export default function Scoreboard() {
       </main>
       <div className="w-full flex items-center justify-center">
         <div className="w-[90vw]">
-          {!(playerCount >= MOCKED_TABLE.maxPlayers) && (
+          {!(playerCount >= data.max_players) && (
             <div className="w-full flex items-center justify-start">
               <button className="flex cursor-pointer" onClick={addPlayer}>
                 Add player
