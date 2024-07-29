@@ -78,7 +78,7 @@ export default function Scoreboard() {
   };
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full p-20">
       <header className="h-48 flex items-center justify-center">
         <h1 className="text-[100px] text-default font-extrabold">
           {data?.game_name}

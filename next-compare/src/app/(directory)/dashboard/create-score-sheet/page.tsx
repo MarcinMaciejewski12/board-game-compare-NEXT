@@ -126,7 +126,7 @@ export default function CreateScoreSheet() {
   };
   console.log(gameName);
   return (
-    <div className="w-full flex flex-col gap-14 h-full">
+    <div className="w-full flex flex-col gap-14 h-full p-20">
       <section>
         <header className="flex justify-center">
           <Input

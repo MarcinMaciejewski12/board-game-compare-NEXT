@@ -30,7 +30,7 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
-  nameToDisplay: string;
+  nameToDisplay?: string;
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -38,7 +38,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         className={cn(
-          "shadow shadow-xl",
+          "shadow-xl",
           buttonVariants({ variant, size, className }),
         )}
         ref={ref}
