@@ -92,7 +92,7 @@ function FrontSide({
             nameToDisplay="+"
             variant="default"
             size="sm"
-            className="text-2xl text-default shadow-xl"
+            className="text-2xl shadow-xl"
           />
         </Link>
       </motion.div>

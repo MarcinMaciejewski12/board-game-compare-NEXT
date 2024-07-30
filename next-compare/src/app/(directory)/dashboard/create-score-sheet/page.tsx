@@ -124,7 +124,7 @@ export default function CreateScoreSheet() {
 
     axios.post("/api/new-score-sheet", { body: data }).then((res) => {});
   };
-  console.log(gameName);
+
   return (
     <div className="w-full flex flex-col gap-14 h-full p-20">
       <section>
