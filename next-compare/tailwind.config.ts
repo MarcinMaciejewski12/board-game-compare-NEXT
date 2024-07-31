@@ -31,8 +31,12 @@ const config = {
           "0 0 0 1px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(0, 0, 0, 0.1)",
       },
       colors: {
-        buttonAndShadowColor: "#E7E393",
-        backgroundColor: "#A3C9A8",
+        buttonAndShadowColor: "#1C5253",
+        // backgroundColor: {
+        //   primary: "hsl(127, 21%, 61%)",
+        //   secondary: "hsl(130, 25%, 71%)",
+        //   tertiary: "hsl(57, 65%, 74%)",
+        // },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -45,6 +49,9 @@ const config = {
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
+        },
+        tertiary: {
+          DEFAULT: "hsl(var(--tertiary))",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -85,6 +92,12 @@ const config = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      height: {
+        defaultHeaderHeight: "4.375rem",
+      },
+      width: {
+        defaultSidebarWidth: "4.375rem",
       },
     },
   },

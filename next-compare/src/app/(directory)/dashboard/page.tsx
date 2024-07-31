@@ -1,14 +1,9 @@
 "use client";
 import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/button";
-import azulPhoto from "@/assets/azul.jpeg";
-import sevenWonders from "@/assets/7wonders.jpeg";
-import Image from "next/image";
-import { Plus } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import useSWR from "swr";
 import { useUserContext } from "@/components/context/user-context/user-context";
 import DashboardCard from "@/components/dashboard-card";
 
@@ -84,36 +79,41 @@ export default function Dashboard() {
   }, [isSignedIn, user, userGamesId]);
 
   return (
-    <div className="p-24 w-full min-h-[100vh]">
-      <div className="w-full">
-        <div className="flex justify-between items-end pb-7">
-          <div>
-            <h1 className="text-default text-5xl font-bold mb-2">{`Hello ${isSignedIn ? user.username : ""}`}</h1>
-            <span className="text-default text-3xl">
-              What did you play this time?
-            </span>
-          </div>
+    <div className="w-full h-full">
+      <div className="ml-10 mt-5">
+        <h1 className="text-default text-5xl font-bold mb-2">{`Hello ${isSignedIn ? user.username : ""}`}</h1>
+        <span className="text-default text-3xl">
+          What did you play this time?
+        </span>
+      </div>
+      <div>
+        <div className="w-full px-10 h-16 items-center flex justify-end">
           <Link href={"/dashboard/create-score-sheet"}>
             <Button
               nameToDisplay="Add score board"
               variant="default"
-              size="xl"
+              size="default"
             />
           </Link>
         </div>
-        <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full h-full">
+      </div>
+      <div className="">
+        <section className="grid gap-4 px-10 w-full h-full overflow-auto grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {games.map((data) => {
             return (
-              <DashboardCard
-                unique_board_id={data.unique_board_id}
-                game_name={data.game_name}
-                id={data.id}
-                difficulty={data.difficulty}
-                max_players={data.max_players}
-                min_players={data.min_players}
-                photo={data.photo}
-                playtime={data.playtime}
-              />
+              <div>
+                <DashboardCard
+                  key={data.id}
+                  unique_board_id={data.unique_board_id}
+                  game_name={data.game_name}
+                  id={data.id}
+                  difficulty={data.difficulty}
+                  max_players={data.max_players}
+                  min_players={data.min_players}
+                  photo={data.photo}
+                  playtime={data.playtime}
+                />
+              </div>
             );
           })}
         </section>

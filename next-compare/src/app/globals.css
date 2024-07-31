@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --background:127.65, 28.85%, 71.37%;
+    --background:127 21% 61%;
     --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
@@ -13,11 +13,13 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 127 21% 61%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
+    --secondary: 130 25% 71%;
     --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --tertiary: 57 65% 74%;
 
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
@@ -33,6 +35,8 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
+
+    --default-header-height: 4.375rem;
   }
 
   .dark {
