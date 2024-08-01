@@ -1,13 +1,10 @@
 "use client";
-import { ChangeEvent, JSX, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/button";
 import axios from "axios";
-import { auth, getAuth } from "@clerk/nextjs/server";
-import { useSession, useUser } from "@clerk/nextjs";
+
 import Input from "@/components/input";
-import useSWR from "swr";
-import { fetcher } from "@/lib/swr-fetcher/fetcher";
 import { useUserContext } from "@/components/context/user-context/user-context";
 import { usePathname } from "next/navigation";
 
@@ -85,11 +82,8 @@ export default function Scoreboard() {
         </h1>
       </header>
       <main className="flex w-full justify-center items-center">
-        <div
-          className=" w-[90vw] max-h-full bg-red-500 overflow-auto"
-          id="players input"
-        >
-          <div className="flex items-center w-[90vw] ">
+        <div className=" max-w-[90vw] max-h-full bg-red-500 overflow-auto">
+          <div className="flex items-center justify-center max-w-[90vw]">
             <div className="w-40 min-w-40 border border-black bg-white h-16 flex items-center justify-center p-4">
               <span>
                 Players name / <br />
@@ -111,7 +105,7 @@ export default function Scoreboard() {
           </div>
           <div>
             {scoreData.map((item, fieldIndex) => (
-              <div key={item.id} className="flex">
+              <div key={item.id} className="flex items-center justify-center">
                 <div
                   className={`w-40 min-w-40 border border-black h-16 flex items-center justify-center`}
                   style={{ backgroundColor: item.color }}
@@ -141,14 +135,17 @@ export default function Scoreboard() {
       <div className="w-full flex items-center justify-center">
         <div className="w-[90vw]">
           {!(playerCount >= data.max_players) && (
-            <div className="w-full flex items-center justify-start">
-              <button className="flex cursor-pointer" onClick={addPlayer}>
-                Add player
-                <Plus className="cursor-pointer" />
-              </button>
+            <div className="w-full flex items-center justify-center mt-4">
+              <Button
+                nameToDisplay="Add player"
+                className="flex font-medium cursor-pointer justify-center  items-center"
+                onClick={addPlayer}
+                size="sm"
+                variant="withoutBackground"
+              />
             </div>
           )}
-          <div className="flex flex-col items-center justify-center">
+          <div className="flex flex-col mt-4 items-center justify-center">
             <Button
               onClick={() => sendPlayedGame()}
               nameToDisplay={"Save scoresheet"}

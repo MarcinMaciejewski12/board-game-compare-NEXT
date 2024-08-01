@@ -24,7 +24,7 @@ const config = {
         poppins: ["Poppins", "sans-serif"],
       },
       textColor: {
-        default: "#284B63",
+        default: "#1C5253",
       },
       boxShadow: {
         colorPicker:

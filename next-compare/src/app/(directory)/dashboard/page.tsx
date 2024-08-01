@@ -80,14 +80,14 @@ export default function Dashboard() {
 
   return (
     <div className="w-full h-full">
-      <div className="ml-10 mt-5">
+      <div className="ml-10 mt-5 mb-5">
         <h1 className="text-default text-5xl font-bold mb-2">{`Hello ${isSignedIn ? user.username : ""}`}</h1>
         <span className="text-default text-3xl">
           What did you play this time?
         </span>
       </div>
       <div>
-        <div className="w-full px-10 h-16 items-center flex justify-end">
+        <div className="w-full px-10 h-16 items-center flex justify-start">
           <Link href={"/dashboard/create-score-sheet"}>
             <Button
               nameToDisplay="Add score board"

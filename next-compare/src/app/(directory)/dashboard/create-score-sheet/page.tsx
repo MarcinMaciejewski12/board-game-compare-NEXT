@@ -126,19 +126,91 @@ export default function CreateScoreSheet() {
   };
 
   return (
-    <div className="w-full flex flex-col gap-14 h-full p-20">
-      <section>
-        <header className="flex justify-center">
-          <Input
-            inputStyle="text-[100px] text-default font-extrabold text-center rounded-lg bg-backgroundColor"
-            type="text"
-            placeholder="Game name"
-            value={gameName}
-            onChange={(e) => gameNameInputChange(e)}
-          />
-        </header>
-      </section>
-      <main className="flex items-center justify-center ">
+    <div className="w-full flex gap-14 p-20 overflow-y-hidden">
+      <div className="w-1/2  flex justify-center p-4">
+        <form onSubmit={(e) => onSubmit(e)}>
+          <div className="flex flex-col gap-4 justify-start items-start w-5/6 ">
+            <section className="flex items-center justify-center gap-4">
+              <span className="text-xl w-[7rem] text-white font-medium">
+                Players:
+              </span>
+              <Input
+                name="min_player"
+                onChange={dialogHandler}
+                inputStyle="max-w-32"
+                type="number"
+                placeholder="Min players"
+              />
+              <span className="text-white font-extrabold">-</span>
+              <Input
+                name="max_player"
+                onChange={dialogHandler}
+                inputStyle="max-w-32"
+                type="number"
+                placeholder="Max players"
+              />
+            </section>
+            <section className="flex items-center justify-center gap-4">
+              <span className="text-xl w-[7rem] text-white font-medium">
+                Difficulty:
+              </span>
+              <Input
+                inputStyle=""
+                type="number"
+                max={10}
+                min={1}
+                placeholder="Difficulty"
+                name="difficulty"
+                value={Number(gameInfo.difficulty)}
+                onChange={dialogHandler}
+              />
+              <span className="text-white">/10</span>
+            </section>
+            <section className="flex items-center justify-center gap-4">
+              <span className="text-xl w-[7rem] text-white font-medium">
+                Playtime:
+              </span>
+              <Input
+                inputStyle=""
+                type="number"
+                placeholder="Playtime"
+                name="playtime"
+                value={Number(gameInfo.playtime)}
+                onChange={dialogHandler}
+              />{" "}
+              <div className="flex items-end h-full">
+                <span className="text-white">min</span>
+              </div>
+            </section>
+            <section>
+              <div className="flex gap-1 justify-center items-center font-medium">
+                <input
+                  type="checkbox"
+                  name="isSharedToCommunity"
+                  onChange={(e) => {
+                    setIsAriaChecked(!isAriaChecked);
+                    dialogHandler(e);
+                  }}
+                />
+                <span className="text-sm text-white">
+                  Share with community (other gamers could use your score
+                  board!)
+                </span>
+              </div>
+            </section>
+            <div className="w-full flex justify-end mt-4">
+              <Button
+                nameToDisplay={"Save score sheet"}
+                variant="default"
+                size="lg"
+                type="submit"
+              />
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <main className="flex items-center justify-center overflow-auto">
         <div className="relative">
           <div className="w-72 border border-black bg-white h-24 flex items-center rounded-lg justify-center p-4 mb-4">
             <span className="text-2xl text-default">Game fields</span>
@@ -209,92 +281,92 @@ export default function CreateScoreSheet() {
               size="lg"
               onClick={(e) => addGameFieldHandler(e)}
             />
-            <>
-              {reorderValues.length >= 1 && (
-                <Dialog>
-                  <DialogTrigger>
-                    <Button
-                      className="min-w-72"
-                      nameToDisplay="Save scoresheet"
-                      variant="default"
-                      size="lg"
-                    />
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle className="text-2xl text-default font-bold">
-                        Basic game information
-                      </DialogTitle>
-                    </DialogHeader>
-                    <form onSubmit={(e) => onSubmit(e)}>
-                      <div className="flex flex-col gap-2">
-                        <div className="flex items-center gap-2">
-                          <Input
-                            label="Min players"
-                            name="min_player"
-                            inputStyle={"border w-32 border-black rounded-lg"}
-                            placeholder={"Min players"}
-                            type="number"
-                            onChange={dialogHandler}
-                          />
-                          <Input
-                            label="Max players"
-                            name="max_player"
-                            inputStyle={"border w-32 border-black rounded-lg"}
-                            placeholder={"Max players"}
-                            type="number"
-                            value={Number(gameInfo.max_player)}
-                            onChange={dialogHandler}
-                          />
-                        </div>
-                        <Input
-                          label="Difficulty"
-                          name="difficulty"
-                          inputStyle={"border border-black rounded-lg w-28"}
-                          placeholder={"Difficulty"}
-                          type="number"
-                          max={10}
-                          value={Number(gameInfo.difficulty)}
-                          onChange={dialogHandler}
-                        />
-                        <Input
-                          label="Playtime"
-                          name="playtime"
-                          inputStyle={"border  border-black rounded-lg"}
-                          placeholder={"Playtime"}
-                          type="text"
-                          value={Number(gameInfo.playtime)}
-                          onChange={dialogHandler}
-                        />
+            {/*<>*/}
+            {/*  {reorderValues.length >= 1 && (*/}
+            {/*    <Dialog>*/}
+            {/*      <DialogTrigger>*/}
+            {/*        <Button*/}
+            {/*          className="min-w-72"*/}
+            {/*          nameToDisplay="Save scoresheet"*/}
+            {/*          variant="default"*/}
+            {/*          size="lg"*/}
+            {/*        />*/}
+            {/*      </DialogTrigger>*/}
+            {/*      <DialogContent>*/}
+            {/*        <DialogHeader>*/}
+            {/*          <DialogTitle className="text-2xl text-default font-bold">*/}
+            {/*            Basic game information*/}
+            {/*          </DialogTitle>*/}
+            {/*        </DialogHeader>*/}
+            {/*        <form onSubmit={(e) => onSubmit(e)}>*/}
+            {/*          <div className="flex flex-col gap-2">*/}
+            {/*            <div className="flex items-center gap-2">*/}
+            {/*              <Input*/}
+            {/*                label="Min players"*/}
+            {/*                name="min_player"*/}
+            {/*                inputStyle={"border w-32 border-black rounded-lg"}*/}
+            {/*                placeholder={"Min players"}*/}
+            {/*                type="number"*/}
+            {/*                onChange={dialogHandler}*/}
+            {/*              />*/}
+            {/*              <Input*/}
+            {/*                label="Max players"*/}
+            {/*                name="max_player"*/}
+            {/*                inputStyle={"border w-32 border-black rounded-lg"}*/}
+            {/*                placeholder={"Max players"}*/}
+            {/*                type="number"*/}
+            {/*                value={Number(gameInfo.max_player)}*/}
+            {/*                onChange={dialogHandler}*/}
+            {/*              />*/}
+            {/*            </div>*/}
+            {/*            <Input*/}
+            {/*              label="Difficulty"*/}
+            {/*              name="difficulty"*/}
+            {/*              inputStyle={"border border-black rounded-lg w-28"}*/}
+            {/*              placeholder={"Difficulty"}*/}
+            {/*              type="number"*/}
+            {/*              max={10}*/}
+            {/*              value={Number(gameInfo.difficulty)}*/}
+            {/*              onChange={dialogHandler}*/}
+            {/*            />*/}
+            {/*            <Input*/}
+            {/*              label="Playtime"*/}
+            {/*              name="playtime"*/}
+            {/*              inputStyle={"border  border-black rounded-lg"}*/}
+            {/*              placeholder={"Playtime"}*/}
+            {/*              type="text"*/}
+            {/*              value={Number(gameInfo.playtime)}*/}
+            {/*              onChange={dialogHandler}*/}
+            {/*            />*/}
 
-                        <div className="flex gap-1 justify-center items-center">
-                          <input
-                            type="checkbox"
-                            name="isSharedToCommunity"
-                            onChange={(e) => {
-                              setIsAriaChecked(!isAriaChecked);
-                              dialogHandler(e);
-                            }}
-                          />
-                          <span className="text-sm text-default">
-                            Share with community (other gamers could use your
-                            score board!)
-                          </span>
-                        </div>
-                      </div>
-                      <div className="w-full flex justify-end mt-4">
-                        <Button
-                          nameToDisplay={"Save score sheet"}
-                          variant="default"
-                          size="lg"
-                          type="submit"
-                        />
-                      </div>
-                    </form>
-                  </DialogContent>
-                </Dialog>
-              )}
-            </>
+            {/*            <div className="flex gap-1 justify-center items-center">*/}
+            {/*              <input*/}
+            {/*                type="checkbox"*/}
+            {/*                name="isSharedToCommunity"*/}
+            {/*                onChange={(e) => {*/}
+            {/*                  setIsAriaChecked(!isAriaChecked);*/}
+            {/*                  dialogHandler(e);*/}
+            {/*                }}*/}
+            {/*              />*/}
+            {/*              <span className="text-sm text-default">*/}
+            {/*                Share with community (other gamers could use your*/}
+            {/*                score board!)*/}
+            {/*              </span>*/}
+            {/*            </div>*/}
+            {/*          </div>*/}
+            {/*          <div className="w-full flex justify-end mt-4">*/}
+            {/*            <Button*/}
+            {/*              nameToDisplay={"Save score sheet"}*/}
+            {/*              variant="default"*/}
+            {/*              size="lg"*/}
+            {/*              type="submit"*/}
+            {/*            />*/}
+            {/*          </div>*/}
+            {/*        </form>*/}
+            {/*      </DialogContent>*/}
+            {/*    </Dialog>*/}
+            {/*  )}*/}
+            {/*</>*/}
           </div>
         </div>
       </main>
