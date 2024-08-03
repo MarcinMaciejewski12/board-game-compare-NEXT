@@ -101,9 +101,9 @@ export default function Dashboard() {
         <section className="grid gap-4 px-10 w-full h-full overflow-auto grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {games.map((data) => {
             return (
-              <div>
+              <div 
+              key={data.id}>
                 <DashboardCard
-                  key={data.id}
                   unique_board_id={data.unique_board_id}
                   game_name={data.game_name}
                   id={data.id}
