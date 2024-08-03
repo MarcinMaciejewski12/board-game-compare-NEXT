@@ -1,6 +1,7 @@
 import { db } from "@/db";
 import { allScoreBoards } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { NextRequest } from "next/server";
 
 export async function GET() {
   try {
@@ -10,6 +11,7 @@ export async function GET() {
       .where(eq(allScoreBoards.is_shared_to_community, true));
 
     console.log(result);
+    
   } catch (e) {
     console.error(e);
   }
