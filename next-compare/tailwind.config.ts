@@ -24,7 +24,7 @@ const config = {
         poppins: ["Poppins", "sans-serif"],
       },
       textColor: {
-        default: "#284B63",
+        default: "#1C5253",
       },
       boxShadow: {
         colorPicker:
@@ -32,11 +32,6 @@ const config = {
       },
       colors: {
         buttonAndShadowColor: "#1C5253",
-        // backgroundColor: {
-        //   primary: "hsl(127, 21%, 61%)",
-        //   secondary: "hsl(130, 25%, 71%)",
-        //   tertiary: "hsl(57, 65%, 74%)",
-        // },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

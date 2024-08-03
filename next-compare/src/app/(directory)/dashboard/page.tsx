@@ -80,14 +80,14 @@ export default function Dashboard() {
 
   return (
     <div className="w-full h-full">
-      <div className="ml-10 mt-5">
+      <div className="ml-10 mt-5 mb-5">
         <h1 className="text-default text-5xl font-bold mb-2">{`Hello ${isSignedIn ? user.username : ""}`}</h1>
         <span className="text-default text-3xl">
           What did you play this time?
         </span>
       </div>
       <div>
-        <div className="w-full px-10 h-16 items-center flex justify-end">
+        <div className="w-full px-10 h-16 items-center flex justify-start">
           <Link href={"/dashboard/create-score-sheet"}>
             <Button
               nameToDisplay="Add score board"
@@ -101,9 +101,9 @@ export default function Dashboard() {
         <section className="grid gap-4 px-10 w-full h-full overflow-auto grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {games.map((data) => {
             return (
-              <div>
+              <div 
+              key={data.id}>
                 <DashboardCard
-                  key={data.id}
                   unique_board_id={data.unique_board_id}
                   game_name={data.game_name}
                   id={data.id}
