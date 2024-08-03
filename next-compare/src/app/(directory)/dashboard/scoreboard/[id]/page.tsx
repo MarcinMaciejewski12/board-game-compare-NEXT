@@ -93,6 +93,7 @@ export default function Scoreboard() {
 
             {Array.from({ length: playerCount }).map((_, playerIndex) => (
               <Input
+              key={playerIndex}
                 index={playerIndex}
                 inputStyle={"border border-black h-16"}
                 placeholder={`Player ${playerIndex + 1} name`}
@@ -114,6 +115,7 @@ export default function Scoreboard() {
                 </div>
                 {Array.from({ length: playerCount }).map((_, playerIndex) => (
                   <Input
+                  key={playerIndex}
                     index={playerIndex}
                     placeholder={`Player ${playerIndex + 1} ${item.placeholder}`}
                     inputStyle={"border border-black h-16"}
