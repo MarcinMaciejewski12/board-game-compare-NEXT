@@ -35,10 +35,13 @@ export async function POST(request: NextRequest) {
         })
         .from(users)
         .where(eq(body.body.user_id, users.user_id));
-
-      const parseUserGames = JSON.parse(userData[0].board_games as string);
-      const updateGamesTable = [...parseUserGames, result[0].unique_board_id];
-
+         
+      const parseUserGames = JSON.parse(userData[0].board_games as string);  
+      const updateGamesTable = [
+        ...parseUserGames,
+        result[0].unique_board_id,
+      ];
+  
       await db
         .update(users)
         .set({ board_games: JSON.stringify(updateGamesTable) })

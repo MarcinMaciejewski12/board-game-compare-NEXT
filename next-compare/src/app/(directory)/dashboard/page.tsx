@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useUserContext } from "@/components/context/user-context/user-context";
 import DashboardCard from "@/components/dashboard-card";
+import { fetcher } from "@/lib/swr-fetcher/fetcher";
+import useSWR from "swr";
 
 interface Games {
   createdAt: string;
@@ -42,42 +44,38 @@ export default function Dashboard() {
     },
   ]);
   const { setUser } = useUserContext();
+  const {data, isLoading} = useSWR(`api/users/get-user?userId=${user ? user.id : null}`,fetcher)
+  const {data: getUserBoardGames, isLoading: userGamesLoading} = useSWR( `api/user-games/get-user-games/get-all-user-games?id=${userGamesId ? userGamesId : null}`,fetcher)
 
+  
   useEffect(() => {
     const saveUserInDatabaseOrGetBoardGames = async () => {
       if (isSignedIn) {
-        const response = await axios.get(
-          `api/users/get-user?userId=${user.id}`,
-        );
-        const data = await response.data;
-
-        if (user && data.length === 0) {
-          const data = {
+        if (user && data?.length === 0 && !isLoading) {
+          const userData = {
             user_id: user.id,
             email: user.emailAddresses[0].emailAddress,
           };
-          return await axios.post("api/users/save-user", { body: data });
+          return await axios.post("api/users/save-user", { body:  userData});
         }
+
         if (data) {
-          setUser(data[0]);
+          setUser(data);
           setUserGamesId(data[0].board_games);
         }
       }
     };
-
-    if (userGamesId) {
-      const getUserGames = async () => {
-        const data = await axios.get(
-          `api/user-games/get-user-games/get-all-user-games?id=${userGamesId}`,
-        );
-        setGames(data.data.result);
-      };
-      getUserGames();
-    }
-
     saveUserInDatabaseOrGetBoardGames();
-  }, [isSignedIn, user, userGamesId]);
+  }, [data,user]);
 
+useEffect(()=>{
+  if(getUserBoardGames) {
+    setGames(getUserBoardGames.data)
+  }
+}, [getUserBoardGames])
+
+
+  if(isLoading) return "Loading"
   return (
     <div className="w-full h-full">
       <div className="ml-10 mt-5 mb-5">
@@ -97,12 +95,11 @@ export default function Dashboard() {
           </Link>
         </div>
       </div>
-      <div className="">
+      <div>
         <section className="grid gap-4 px-10 w-full h-full overflow-auto grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {games.map((data) => {
+          {games?.map((data) => {
             return (
-              <div 
-              key={data.id}>
+              <div key={data.id}>
                 <DashboardCard
                   unique_board_id={data.unique_board_id}
                   game_name={data.game_name}
@@ -115,7 +112,7 @@ export default function Dashboard() {
                 />
               </div>
             );
-          })}
+          }) ?? "Add first scoresheet"}
         </section>
       </div>
     </div>

@@ -1,4 +1,4 @@
-'use server'
+"use server";
 import { db } from "@/db";
 import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
@@ -22,6 +22,6 @@ export async function GET(req: Request) {
     return NextResponse.json(getUser);
   } catch (e) {
     console.error(e);
-    return NextResponse.json({success: false})
+    return NextResponse.json({ success: false });
   }
 }
