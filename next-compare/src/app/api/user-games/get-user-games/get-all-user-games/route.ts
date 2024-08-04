@@ -4,10 +4,10 @@ import { allScoreBoards } from "@/db/schema";
 import { inArray } from "drizzle-orm/sql/expressions/conditions";
 
 export async function GET(req: NextRequest) {
-  try {
-    const { searchParams } = new URL(req.url);
-    const gamesId = JSON.parse(searchParams.get("id") ?? "");
+  const { searchParams } = new URL(req.url);
+  const gamesId = JSON.parse(searchParams.get("id") ?? "");
 
+  try {
     const result = await db
       .select()
       .from(allScoreBoards)
