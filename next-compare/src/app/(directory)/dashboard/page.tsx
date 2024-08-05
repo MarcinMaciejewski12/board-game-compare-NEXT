@@ -8,6 +8,7 @@ import { useUserContext } from "@/components/context/user-context/user-context";
 import DashboardCard from "@/components/dashboard-card";
 import { fetcher } from "@/lib/swr-fetcher/fetcher";
 import useSWR from "swr";
+import { useRouter } from "next/navigation";
 
 interface Games {
   createdAt: string;
@@ -26,6 +27,7 @@ interface Games {
 
 export default function Dashboard() {
   const { isSignedIn, user } = useUser();
+  const router = useRouter()
   const [userGamesId, setUserGamesId] = useState<string[]>([]);
   const [games, setGames] = useState<Games[]>([
     {
@@ -43,11 +45,17 @@ export default function Dashboard() {
       user_id: "",
     },
   ]);
+  if(!isSignedIn)router.push('/')
   const { setUser } = useUserContext();
-  const {data, isLoading} = useSWR(`api/users/get-user?userId=${user ? user.id : null}`,fetcher)
-  const {data: getUserBoardGames, isLoading: userGamesLoading} = useSWR( `api/user-games/get-user-games/get-all-user-games?id=${userGamesId ? userGamesId : null}`,fetcher)
+  const { data, isLoading } = useSWR(
+    `api/users/get-user?userId=${user ? user.id : null}`,
+    fetcher,
+  );
+  const { data: getUserBoardGames, isLoading: userGamesLoading } = useSWR(
+    `api/user-games/get-user-games/get-all-user-games?id=${userGamesId ? userGamesId : null}`,
+    fetcher,
+  );
 
-  
   useEffect(() => {
     const saveUserInDatabaseOrGetBoardGames = async () => {
       if (isSignedIn) {
@@ -56,7 +64,7 @@ export default function Dashboard() {
             user_id: user.id,
             email: user.emailAddresses[0].emailAddress,
           };
-          return await axios.post("api/users/save-user", { body:  userData});
+          return await axios.post("api/users/save-user", { body: userData });
         }
 
         if (data) {
@@ -66,16 +74,15 @@ export default function Dashboard() {
       }
     };
     saveUserInDatabaseOrGetBoardGames();
-  }, [data,user]);
+  }, [data, user]);
 
-useEffect(()=>{
-  if(getUserBoardGames) {
-    setGames(getUserBoardGames.data)
-  }
-}, [getUserBoardGames])
+  useEffect(() => {
+    if (getUserBoardGames) {
+      setGames(getUserBoardGames.data);
+    }
+  }, [getUserBoardGames]);
 
-
-  if(isLoading) return "Loading"
+  if (isLoading) return "Loading";
   return (
     <div className="w-full h-full">
       <div className="ml-10 mt-5 mb-5">

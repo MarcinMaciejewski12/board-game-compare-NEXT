@@ -7,7 +7,6 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const urlId = searchParams.get("userId");
   try {
-   
     if (!urlId) {
       return NextResponse.json({ error: "urlId is required" }, { status: 400 });
     }

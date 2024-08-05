@@ -4,10 +4,12 @@ import "./globals.css";
 import Header from "@/components/header";
 import { ClerkProvider } from "@clerk/nextjs";
 import { UserContextProvider } from "@/components/context/user-context/user-context";
-import Sidebar from "@/components/sidebar";
+import Sidebar from "@/components/sidebars/sidebar";
 import { ArrowLeft } from "lucide-react";
 import { usePathname } from "next/navigation";
 import HeaderArrow from "@/components/header-arrow";
+import { currentUser } from "@clerk/nextjs/server";
+import DefaultSidebar from "@/components/sidebars/default-sidebar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,11 +18,12 @@ export const metadata: Metadata = {
   description: "Compare with friends",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await currentUser();
   //TODO: refactor needed: UGLY CODE
   return (
     <ClerkProvider>
@@ -33,7 +36,7 @@ export default function RootLayout({
                 className="w-defaultSidebarWidth"
                 style={{ height: "calc(100vh - var(--default-header-height))" }}
               >
-                <Sidebar />
+                {user ? <Sidebar /> : <DefaultSidebar />}
               </div>
               <div className="py-5 px-2 rounded-tl-[1rem] overflow-hidden rounded-tr-[1rem] bg-secondary w-full">
                 <HeaderArrow />
