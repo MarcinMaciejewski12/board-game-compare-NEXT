@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
 
       const parseUserGames = JSON.parse(userData[0].board_games as string);
       const updateGamesTable = [...parseUserGames, result[0].unique_board_id];
-
+        console.log(JSON.stringify(updateGamesTable))
       await db
         .update(users)
         .set({ board_games: JSON.stringify(updateGamesTable) })

@@ -51,7 +51,7 @@ export default function Dashboard() {
     `api/users/get-user?userId=${user ? user.id : null}`,
     fetcher,
   );
-  const { data: getUserBoardGames, isLoading: userGamesLoading } = useSWR(
+  const { data: getUserBoardGames } = useSWR(
     `api/user-games/get-user-games/get-all-user-games?id=${userGamesId ? userGamesId : null}`,
     fetcher,
   );
@@ -108,6 +108,7 @@ export default function Dashboard() {
             return (
               <div key={data.id}>
                 <DashboardCard
+                userId={user?.id as string}
                   unique_board_id={data.unique_board_id}
                   game_name={data.game_name}
                   id={data.id}

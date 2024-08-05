@@ -5,7 +5,10 @@ import InfoSign from "@/components/info-sign";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { CircleArrowLeft } from "lucide-react";
+import { CircleArrowLeft, Trash } from "lucide-react";
+import axios from "axios";
+
+
 
 interface DashboardCardProps {
   difficulty?: number;
@@ -18,6 +21,7 @@ interface DashboardCardProps {
   unique_board_id?: string;
   isFlippedState?: boolean;
   setIsFlippedState?: React.Dispatch<React.SetStateAction<boolean>>;
+  userId: string
 }
 
 export default function DashboardCard({
@@ -28,6 +32,7 @@ export default function DashboardCard({
   photo,
   playtime,
   unique_board_id,
+  userId
 }: DashboardCardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -46,6 +51,7 @@ export default function DashboardCard({
           game_name={game_name}
           setIsFlippedState={setIsFlipped}
           isFlippedState={isFlipped}
+          userId=""
         />
       ) : (
         <FrontSide
@@ -53,6 +59,7 @@ export default function DashboardCard({
           unique_board_id={unique_board_id}
           isFlippedState={isFlipped}
           setIsFlippedState={setIsFlipped}
+          userId={userId}
         />
       )}
     </motion.div>
@@ -68,11 +75,20 @@ function FrontSide({
   unique_board_id,
   isFlippedState,
   setIsFlippedState,
+  userId
 }: DashboardCardProps) {
   // TODO: refactor this function to one function in parent component!
   const reverseCardHandler = () => {
     setIsFlippedState!(!isFlippedState);
   };
+
+ async function deleteGameHandler (id: string, userId: string) {
+    try {
+      await axios.post('api/user-games/delete-game', {userId: userId, gameId: id})
+    } catch(e){
+      console.error(e)
+    }
+  }
   return (
     <>
       <motion.div className="w-full h-[80%]">
@@ -87,14 +103,18 @@ function FrontSide({
       </motion.div>
       <motion.div className="w-full flex justify-between items-center p-4 h-[20%] border-t">
         <InfoSign className="w-8 h-8" onClick={() => reverseCardHandler()} />
+          <div className="flex items-center gap-2">
+         
         <Link href={`/dashboard/scoreboard/${unique_board_id}`}>
           <Button
             nameToDisplay="+"
             variant="default"
             size="sm"
-            className="text-2xl shadow-xl"
+            className="text-2xl flex shadow-xl"
           />
         </Link>
+        <Trash color="red" className='cursor-pointer' onClick={()=> deleteGameHandler(unique_board_id as string, userId)} />
+        </div>
       </motion.div>
     </>
   );

@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
       .limit(1);
 
     if (!data) {
-      db.insert(users)
+     await db.insert(users)
         .values({
           user_id: body.body.user_id,
           email: body.body.email,
