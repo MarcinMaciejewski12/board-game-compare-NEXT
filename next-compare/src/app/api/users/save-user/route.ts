@@ -17,6 +17,7 @@ export async function POST(request: Request) {
         premium_user: false,
       })
       .returning();
+      
     return NextResponse.json(
       { success: true, data: result[0] },
       { status: 200 },

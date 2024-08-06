@@ -6,14 +6,6 @@ import { Button } from "@/components/button";
 
 import { HexColorPicker } from "react-colorful";
 import { X } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Checkbox } from "@/components/ui/checkbox";
 import axios from "axios";
 import { useUser } from "@clerk/nextjs";
 
@@ -105,7 +97,7 @@ export default function CreateScoreSheet() {
 
   const dialogHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
-
+    console.log(value);
     setGameInfo((prevState) => ({
       ...prevState,
       [name]: type === "checkbox" ? isAriaChecked : value,
@@ -122,7 +114,7 @@ export default function CreateScoreSheet() {
       gameName: gameName,
     };
 
-    axios.post("/api/new-score-sheet", { body: data }).then((res) => {});
+    axios.post("/api/new-score-sheet", { body: data });
   };
 
   return (
@@ -131,9 +123,17 @@ export default function CreateScoreSheet() {
         <form onSubmit={(e) => onSubmit(e)}>
           <div className="flex flex-col gap-4 justify-start items-start w-5/6 ">
             <section className="flex items-center justify-center gap-4">
+              <Input
+                inputStyle=""
+                value={gameName}
+                placeholder="Game name"
+                type="text"
+                onChange={gameNameInputChange}
+              />
               <span className="text-xl w-[7rem] text-white font-medium">
                 Players:
               </span>
+
               <Input
                 name="min_player"
                 onChange={dialogHandler}
@@ -281,92 +281,6 @@ export default function CreateScoreSheet() {
               size="lg"
               onClick={(e) => addGameFieldHandler(e)}
             />
-            {/*<>*/}
-            {/*  {reorderValues.length >= 1 && (*/}
-            {/*    <Dialog>*/}
-            {/*      <DialogTrigger>*/}
-            {/*        <Button*/}
-            {/*          className="min-w-72"*/}
-            {/*          nameToDisplay="Save scoresheet"*/}
-            {/*          variant="default"*/}
-            {/*          size="lg"*/}
-            {/*        />*/}
-            {/*      </DialogTrigger>*/}
-            {/*      <DialogContent>*/}
-            {/*        <DialogHeader>*/}
-            {/*          <DialogTitle className="text-2xl text-default font-bold">*/}
-            {/*            Basic game information*/}
-            {/*          </DialogTitle>*/}
-            {/*        </DialogHeader>*/}
-            {/*        <form onSubmit={(e) => onSubmit(e)}>*/}
-            {/*          <div className="flex flex-col gap-2">*/}
-            {/*            <div className="flex items-center gap-2">*/}
-            {/*              <Input*/}
-            {/*                label="Min players"*/}
-            {/*                name="min_player"*/}
-            {/*                inputStyle={"border w-32 border-black rounded-lg"}*/}
-            {/*                placeholder={"Min players"}*/}
-            {/*                type="number"*/}
-            {/*                onChange={dialogHandler}*/}
-            {/*              />*/}
-            {/*              <Input*/}
-            {/*                label="Max players"*/}
-            {/*                name="max_player"*/}
-            {/*                inputStyle={"border w-32 border-black rounded-lg"}*/}
-            {/*                placeholder={"Max players"}*/}
-            {/*                type="number"*/}
-            {/*                value={Number(gameInfo.max_player)}*/}
-            {/*                onChange={dialogHandler}*/}
-            {/*              />*/}
-            {/*            </div>*/}
-            {/*            <Input*/}
-            {/*              label="Difficulty"*/}
-            {/*              name="difficulty"*/}
-            {/*              inputStyle={"border border-black rounded-lg w-28"}*/}
-            {/*              placeholder={"Difficulty"}*/}
-            {/*              type="number"*/}
-            {/*              max={10}*/}
-            {/*              value={Number(gameInfo.difficulty)}*/}
-            {/*              onChange={dialogHandler}*/}
-            {/*            />*/}
-            {/*            <Input*/}
-            {/*              label="Playtime"*/}
-            {/*              name="playtime"*/}
-            {/*              inputStyle={"border  border-black rounded-lg"}*/}
-            {/*              placeholder={"Playtime"}*/}
-            {/*              type="text"*/}
-            {/*              value={Number(gameInfo.playtime)}*/}
-            {/*              onChange={dialogHandler}*/}
-            {/*            />*/}
-
-            {/*            <div className="flex gap-1 justify-center items-center">*/}
-            {/*              <input*/}
-            {/*                type="checkbox"*/}
-            {/*                name="isSharedToCommunity"*/}
-            {/*                onChange={(e) => {*/}
-            {/*                  setIsAriaChecked(!isAriaChecked);*/}
-            {/*                  dialogHandler(e);*/}
-            {/*                }}*/}
-            {/*              />*/}
-            {/*              <span className="text-sm text-default">*/}
-            {/*                Share with community (other gamers could use your*/}
-            {/*                score board!)*/}
-            {/*              </span>*/}
-            {/*            </div>*/}
-            {/*          </div>*/}
-            {/*          <div className="w-full flex justify-end mt-4">*/}
-            {/*            <Button*/}
-            {/*              nameToDisplay={"Save score sheet"}*/}
-            {/*              variant="default"*/}
-            {/*              size="lg"*/}
-            {/*              type="submit"*/}
-            {/*            />*/}
-            {/*          </div>*/}
-            {/*        </form>*/}
-            {/*      </DialogContent>*/}
-            {/*    </Dialog>*/}
-            {/*  )}*/}
-            {/*</>*/}
           </div>
         </div>
       </main>
