@@ -12,6 +12,7 @@ export async function POST(request: NextRequest) {
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    
     const data = db
       .select()
       .from(users)
@@ -27,6 +28,7 @@ export async function POST(request: NextRequest) {
           board_games: "[]",
         })
         .returning();
+
       return NextResponse.json(
         { success: true, message: "User saved successfully." },
         { status: 200 },

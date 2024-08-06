@@ -19,7 +19,9 @@ export async function POST(req: NextRequest){
             return games.filter((id: string) => id!== data.gameId)
         }).flat()
        
+        // remove game from users.boardgames array
         await db.update(users).set({board_games: JSON.stringify(parseAndFilterGames)}).where(eq(users.user_id,data.userId)).returning()
+        // delete games from allScoreBoards
         await db.delete(allScoreBoards).where(eq(allScoreBoards.unique_board_id, data.gameId)).returning()
 
         return NextResponse.json({message: 'Games is deleted'}, {status: 201})
