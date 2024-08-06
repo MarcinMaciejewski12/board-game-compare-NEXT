@@ -12,8 +12,7 @@ export default function DefaultSidebar() {
           <Link href={"/favourite"}>
             <BadgeInfo color="white" />
           </Link>
-          <Link href={"/calendar"}>
-          </Link>
+          <Link href={"/calendar"}></Link>
         </div>
       </div>
     </div>

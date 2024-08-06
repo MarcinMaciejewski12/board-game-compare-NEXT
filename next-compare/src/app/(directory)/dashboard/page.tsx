@@ -27,7 +27,7 @@ interface Games {
 
 export default function Dashboard() {
   const { isSignedIn, user } = useUser();
-  const router = useRouter()
+  const router = useRouter();
   const [userGamesId, setUserGamesId] = useState<string[]>([]);
   const [games, setGames] = useState<Games[]>([
     {
@@ -45,7 +45,7 @@ export default function Dashboard() {
       user_id: "",
     },
   ]);
-  if(!isSignedIn)router.push('/')
+  if (!isSignedIn) router.push("/");
   const { setUser } = useUserContext();
   const { data, isLoading } = useSWR(
     `api/users/get-user?userId=${user ? user.id : null}`,
@@ -108,7 +108,7 @@ export default function Dashboard() {
             return (
               <div key={data.id}>
                 <DashboardCard
-                userId={user?.id as string}
+                  userId={user?.id as string}
                   unique_board_id={data.unique_board_id}
                   game_name={data.game_name}
                   id={data.id}
