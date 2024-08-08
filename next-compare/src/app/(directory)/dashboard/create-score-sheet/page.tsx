@@ -58,7 +58,6 @@ export default function CreateScoreSheet() {
       setOpenIndex(index);
     }
   };
-
   const removeReorderItem = (id: number) => {
     const filterAndRemoveGameField = reorderValues.filter(
       (item) => item.id !== id,
@@ -97,7 +96,7 @@ export default function CreateScoreSheet() {
 
   const dialogHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
-    console.log(value);
+
     setGameInfo((prevState) => ({
       ...prevState,
       [name]: type === "checkbox" ? isAriaChecked : value,
@@ -116,7 +115,6 @@ export default function CreateScoreSheet() {
 
     axios.post("/api/new-score-sheet", { body: data });
   };
-
   return (
     <div className="w-full flex gap-14 p-20 overflow-y-hidden">
       <div className="w-1/2  flex justify-center p-4">

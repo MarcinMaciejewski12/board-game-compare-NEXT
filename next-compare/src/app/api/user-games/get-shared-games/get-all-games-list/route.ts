@@ -12,7 +12,8 @@ export async function GET() {
 
     console.log(result);
     return NextResponse.json(
-      { success: true, data: result[0] },
+      { success: true, data: result[0]
+      },
       { status: 201 },
     );
   } catch (e) {
