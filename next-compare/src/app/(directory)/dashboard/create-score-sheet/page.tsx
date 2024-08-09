@@ -111,8 +111,11 @@ export default function CreateScoreSheet() {
       user_id: user?.id,
       gameName: gameName,
     };
-
-    await axios.post("/api/new-score-sheet", { body: data });
+    try {
+      await axios.post("/api/new-score-sheet", data);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
