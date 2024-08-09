@@ -7,6 +7,7 @@ import axios from "axios";
 import Input from "@/components/input";
 import { useUserContext } from "@/components/context/user-context/user-context";
 import { usePathname } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
 
 interface Data {
   board_id: string;
@@ -32,7 +33,7 @@ export default function Scoreboard() {
   const [playerInputs, setPlayerInputs] = useState<
     Array<{ [key: string]: string }>
   >([]);
-  const { user } = useUserContext();
+  const { user } = useUser();
   const pathname = usePathname().split("/").pop();
   const scoreData = JSON.parse(data.score_sheet) as ScoreData[];
 
@@ -71,7 +72,7 @@ export default function Scoreboard() {
       game_score_board: JSON.stringify(playerInputs),
     };
 
-    return await axios.post("/api/played-games", { body: data });
+    return await axios.post("/api/played-games", data);
   };
 
   return (

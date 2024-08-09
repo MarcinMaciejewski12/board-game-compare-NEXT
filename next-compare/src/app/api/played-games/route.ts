@@ -3,23 +3,20 @@ import { db } from "@/db";
 import { playedGames } from "@/db/schema";
 
 interface PlayedGameRequestData {
-  body: {
-    user_id: string;
-    unique_board_id: string;
-    game_score_board: string;
-  };
+  user_id: string;
+  unique_board_id: string;
+  game_score_board: string;
 }
 
 export async function POST(req: NextRequest) {
   const body: PlayedGameRequestData = await req.json();
-
   try {
     const result = await db
       .insert(playedGames)
       .values({
-        user_id: body.body.user_id,
-        game_score_board: body.body.game_score_board,
-        unique_board_id: body.body.unique_board_id,
+        user_id: body.user_id,
+        game_score_board: body.game_score_board,
+        unique_board_id: body.unique_board_id,
         created_at: new Date(),
       })
       .returning();
