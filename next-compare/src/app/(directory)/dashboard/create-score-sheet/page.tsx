@@ -35,7 +35,6 @@ export default function CreateScoreSheet() {
     playtime: "",
     isSharedToCommunity: false,
   });
-  const [isAriaChecked, setIsAriaChecked] = useState<boolean>(false);
   const popover = useRef();
   const { user } = useUser();
 
@@ -103,7 +102,7 @@ export default function CreateScoreSheet() {
     }));
   };
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const data = {
@@ -112,8 +111,8 @@ export default function CreateScoreSheet() {
       user_id: user?.id,
       gameName: gameName,
     };
-    console.log(data);
-    axios.post("/api/new-score-sheet", { body: data });
+
+    await axios.post("/api/new-score-sheet", { body: data });
   };
 
   return (
