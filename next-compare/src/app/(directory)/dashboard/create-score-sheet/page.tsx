@@ -95,11 +95,11 @@ export default function CreateScoreSheet() {
   };
 
   const dialogHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type } = e.target;
+    const { name, value, type, checked } = e.target;
 
     setGameInfo((prevState) => ({
       ...prevState,
-      [name]: type === "checkbox" ? isAriaChecked : value,
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
@@ -112,9 +112,10 @@ export default function CreateScoreSheet() {
       user_id: user?.id,
       gameName: gameName,
     };
-
+    console.log(data);
     axios.post("/api/new-score-sheet", { body: data });
   };
+
   return (
     <div className="w-full flex gap-14 p-20 overflow-y-hidden">
       <div className="w-1/2  flex justify-center p-4">
@@ -184,16 +185,15 @@ export default function CreateScoreSheet() {
               <div className="flex gap-1 justify-center items-center font-medium">
                 <input
                   type="checkbox"
+                  id="checkbox"
                   name="isSharedToCommunity"
-                  onChange={(e) => {
-                    setIsAriaChecked(!isAriaChecked);
-                    dialogHandler(e);
-                  }}
+                  checked={gameInfo.isSharedToCommunity}
+                  onChange={dialogHandler}
                 />
-                <span className="text-sm text-white">
+                <label htmlFor="checkbox" className="text-sm text-white">
                   Share with community (other gamers could use your score
                   board!)
-                </span>
+                </label>
               </div>
             </section>
             <div className="w-full flex justify-end mt-4">

@@ -9,13 +9,8 @@ export async function GET() {
       .select()
       .from(allScoreBoards)
       .where(eq(allScoreBoards.is_shared_to_community, true));
-
     console.log(result);
-    return NextResponse.json(
-      { success: true, data: result[0]
-      },
-      { status: 201 },
-    );
+    return NextResponse.json({ success: true, data: result }, { status: 201 });
   } catch (e) {
     console.error(e);
     return NextResponse.json({ success: false }, { status: 403 });

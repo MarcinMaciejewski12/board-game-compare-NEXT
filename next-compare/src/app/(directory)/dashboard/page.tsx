@@ -10,7 +10,7 @@ import { fetcher } from "@/lib/swr-fetcher/fetcher";
 import useSWR from "swr";
 import { useRouter } from "next/navigation";
 
-interface Games {
+export interface Games {
   createdAt: string;
   difficulty: number;
   game_name: string;
@@ -104,7 +104,7 @@ export default function Dashboard() {
       </div>
       <div>
         <section className="grid gap-4 px-10 w-full h-full overflow-auto grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {games?.map((data) => {
+          {games?.map((data: Games) => {
             return (
               <div key={data.id}>
                 <DashboardCard
