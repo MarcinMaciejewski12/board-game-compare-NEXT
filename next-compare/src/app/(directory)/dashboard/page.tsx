@@ -10,7 +10,7 @@ import { fetcher } from "@/lib/swr-fetcher/fetcher";
 import useSWR from "swr";
 import { useRouter } from "next/navigation";
 
-interface Games {
+export interface Games {
   createdAt: string;
   difficulty: number;
   game_name: string;
@@ -27,7 +27,7 @@ interface Games {
 
 export default function Dashboard() {
   const { isSignedIn, user } = useUser();
-  const router = useRouter()
+  const router = useRouter();
   const [userGamesId, setUserGamesId] = useState<string[]>([]);
   const [games, setGames] = useState<Games[]>([
     {
@@ -45,7 +45,9 @@ export default function Dashboard() {
       user_id: "",
     },
   ]);
-  if(!isSignedIn)router.push('/')
+
+  if (!isSignedIn) router.push("/");
+
   const { setUser } = useUserContext();
   const { data, isLoading } = useSWR(
     `api/users/get-user?userId=${user ? user.id : null}`,
@@ -83,16 +85,17 @@ export default function Dashboard() {
   }, [getUserBoardGames]);
 
   if (isLoading) return "Loading";
+
   return (
     <div className="w-full h-full">
-      <div className="ml-10 mt-5 mb-5">
+      <div className="">
         <h1 className="text-default text-5xl font-bold mb-2">{`Hello ${isSignedIn ? user.username : ""}`}</h1>
         <span className="text-default text-3xl">
           What did you play this time?
         </span>
       </div>
       <div>
-        <div className="w-full px-10 h-16 items-center flex justify-start">
+        <div className="w-full h-16 items-center flex justify-start">
           <Link href={"/dashboard/create-score-sheet"}>
             <Button
               nameToDisplay="Add score board"
@@ -102,27 +105,25 @@ export default function Dashboard() {
           </Link>
         </div>
       </div>
-      <div>
-        <section className="grid gap-4 px-10 w-full h-full overflow-auto grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {games?.map((data) => {
-            return (
-              <div key={data.id}>
-                <DashboardCard
+      <section className="grid gap-2 mb-2 w-full h-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        {games?.map((data: Games) => {
+          return (
+            <div key={data.id}>
+              <DashboardCard
                 userId={user?.id as string}
-                  unique_board_id={data.unique_board_id}
-                  game_name={data.game_name}
-                  id={data.id}
-                  difficulty={data.difficulty}
-                  max_players={data.max_players}
-                  min_players={data.min_players}
-                  photo={data.photo}
-                  playtime={data.playtime}
-                />
-              </div>
-            );
-          }) ?? "Add first scoresheet"}
-        </section>
-      </div>
+                unique_board_id={data.unique_board_id}
+                game_name={data.game_name}
+                id={data.id}
+                difficulty={data.difficulty}
+                max_players={data.max_players}
+                min_players={data.min_players}
+                photo={data.photo}
+                playtime={data.playtime}
+              />
+            </div>
+          );
+        }) ?? "Add first scoresheet"}
+      </section>
     </div>
   );
 }

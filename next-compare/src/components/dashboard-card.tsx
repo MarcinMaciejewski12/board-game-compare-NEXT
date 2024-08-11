@@ -8,8 +8,6 @@ import { useState } from "react";
 import { CircleArrowLeft, Trash } from "lucide-react";
 import axios from "axios";
 
-
-
 interface DashboardCardProps {
   difficulty?: number;
   game_name?: string;
@@ -21,7 +19,7 @@ interface DashboardCardProps {
   unique_board_id?: string;
   isFlippedState?: boolean;
   setIsFlippedState?: React.Dispatch<React.SetStateAction<boolean>>;
-  userId: string
+  userId: string;
 }
 
 export default function DashboardCard({
@@ -32,7 +30,7 @@ export default function DashboardCard({
   photo,
   playtime,
   unique_board_id,
-  userId
+  userId,
 }: DashboardCardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -75,18 +73,21 @@ function FrontSide({
   unique_board_id,
   isFlippedState,
   setIsFlippedState,
-  userId
+  userId,
 }: DashboardCardProps) {
   // TODO: refactor this function to one function in parent component!
   const reverseCardHandler = () => {
     setIsFlippedState!(!isFlippedState);
   };
 
- async function deleteGameHandler (id: string, userId: string) {
+  async function deleteGameHandler(id: string, userId: string) {
     try {
-      await axios.post('api/user-games/delete-game', {userId: userId, gameId: id})
-    } catch(e){
-      console.error(e)
+      await axios.post("api/user-games/delete-game", {
+        userId: userId,
+        gameId: id,
+      });
+    } catch (e) {
+      console.error(e);
     }
   }
   return (
@@ -103,17 +104,20 @@ function FrontSide({
       </motion.div>
       <motion.div className="w-full flex justify-between items-center p-4 h-[20%] border-t">
         <InfoSign className="w-8 h-8" onClick={() => reverseCardHandler()} />
-          <div className="flex items-center gap-2">
-         
-        <Link href={`/dashboard/scoreboard/${unique_board_id}`}>
-          <Button
-            nameToDisplay="+"
-            variant="default"
-            size="sm"
-            className="text-2xl flex shadow-xl"
+        <div className="flex items-center gap-2">
+          <Link href={`/dashboard/scoreboard/${unique_board_id}`}>
+            <Button
+              nameToDisplay="+"
+              variant="default"
+              size="sm"
+              className="text-2xl flex shadow-xl"
+            />
+          </Link>
+          <Trash
+            color="red"
+            className="cursor-pointer"
+            onClick={() => deleteGameHandler(unique_board_id as string, userId)}
           />
-        </Link>
-        <Trash color="red" className='cursor-pointer' onClick={()=> deleteGameHandler(unique_board_id as string, userId)} />
         </div>
       </motion.div>
     </>

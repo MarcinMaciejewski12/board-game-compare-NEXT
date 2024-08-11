@@ -14,17 +14,17 @@ export async function POST(request: NextRequest) {
     const result = await db
       .insert(allScoreBoards)
       .values({
-        user_id: body.body.user_id,
+        user_id: body.user_id,
         created_at: new Date(),
-        game_name: body.body.gameName,
-        min_players: Number(body.body.details.min_player),
-        max_players: Number(body.body.details.max_player),
-        difficulty: Number(body.body.details.difficulty),
-        playtime: body.body.details.playtime,
+        game_name: body.gameName,
+        min_players: Number(body.details.min_player),
+        max_players: Number(body.details.max_player),
+        difficulty: Number(body.details.difficulty),
+        playtime: body.details.playtime,
         photo: "",
-        is_shared_to_community: body.body.details.isSharedToCommunity,
+        is_shared_to_community: body.details.isSharedToCommunity,
         unique_board_id: uid(),
-        game_score_board: JSON.stringify(body.body.gameFields),
+        game_score_board: JSON.stringify(body.gameFields),
       })
       .returning();
 
@@ -34,15 +34,15 @@ export async function POST(request: NextRequest) {
           board_games: users.board_games,
         })
         .from(users)
-        .where(eq(body.body.user_id, users.user_id));
+        .where(eq(body.user_id, users.user_id));
 
       const parseUserGames = JSON.parse(userData[0].board_games as string);
       const updateGamesTable = [...parseUserGames, result[0].unique_board_id];
-        console.log(JSON.stringify(updateGamesTable))
+
       await db
         .update(users)
         .set({ board_games: JSON.stringify(updateGamesTable) })
-        .where(eq(users.user_id, body.body.user_id))
+        .where(eq(users.user_id, body.user_id))
         .returning();
     }
 

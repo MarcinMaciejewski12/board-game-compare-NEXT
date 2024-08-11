@@ -35,7 +35,6 @@ export default function CreateScoreSheet() {
     playtime: "",
     isSharedToCommunity: false,
   });
-  const [isAriaChecked, setIsAriaChecked] = useState<boolean>(false);
   const popover = useRef();
   const { user } = useUser();
 
@@ -58,7 +57,6 @@ export default function CreateScoreSheet() {
       setOpenIndex(index);
     }
   };
-
   const removeReorderItem = (id: number) => {
     const filterAndRemoveGameField = reorderValues.filter(
       (item) => item.id !== id,
@@ -96,15 +94,15 @@ export default function CreateScoreSheet() {
   };
 
   const dialogHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type } = e.target;
-    console.log(value);
+    const { name, value, type, checked } = e.target;
+
     setGameInfo((prevState) => ({
       ...prevState,
-      [name]: type === "checkbox" ? isAriaChecked : value,
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const data = {
@@ -113,8 +111,11 @@ export default function CreateScoreSheet() {
       user_id: user?.id,
       gameName: gameName,
     };
-
-    axios.post("/api/new-score-sheet", { body: data });
+    try {
+      await axios.post("/api/new-score-sheet", data);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
@@ -186,16 +187,15 @@ export default function CreateScoreSheet() {
               <div className="flex gap-1 justify-center items-center font-medium">
                 <input
                   type="checkbox"
+                  id="checkbox"
                   name="isSharedToCommunity"
-                  onChange={(e) => {
-                    setIsAriaChecked(!isAriaChecked);
-                    dialogHandler(e);
-                  }}
+                  checked={gameInfo.isSharedToCommunity}
+                  onChange={dialogHandler}
                 />
-                <span className="text-sm text-white">
+                <label htmlFor="checkbox" className="text-sm text-white">
                   Share with community (other gamers could use your score
                   board!)
-                </span>
+                </label>
               </div>
             </section>
             <div className="w-full flex justify-end mt-4">
