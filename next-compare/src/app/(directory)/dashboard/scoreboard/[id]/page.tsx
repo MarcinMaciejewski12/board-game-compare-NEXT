@@ -1,11 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Plus } from "lucide-react";
 import { Button } from "@/components/button";
 import axios from "axios";
-
 import Input from "@/components/input";
-import { useUserContext } from "@/components/context/user-context/user-context";
 import { usePathname } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 
@@ -76,15 +73,15 @@ export default function Scoreboard() {
   };
 
   return (
-    <div className="w-full h-full p-20">
+    <div className="w-full h-full">
       <header className="h-48 flex items-center justify-center">
         <h1 className="text-[100px] text-default font-extrabold">
           {data?.game_name}
         </h1>
       </header>
-      <main className="flex w-full justify-center items-center">
-        <div className=" max-w-[90vw] max-h-full bg-red-500 overflow-auto">
-          <div className="flex items-center justify-center max-w-[90vw]">
+      <main className="flex max-w-[90vw] justify-center items-center">
+        <div className="max-h-full overflow-auto">
+          <div className="flex items-center justify-center">
             <div className="w-40 min-w-40 border border-black bg-white h-16 flex items-center justify-center p-4">
               <span>
                 Players name / <br />

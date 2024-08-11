@@ -6,7 +6,7 @@ import { Games } from "@/app/(directory)/dashboard/page";
 import { useUser } from "@clerk/nextjs";
 
 export default function GamesList() {
-  const { data, isLoading } = useSWR(
+  const { data } = useSWR(
     "/api/user-games/get-shared-games/get-all-games-list",
     fetcher,
   );
