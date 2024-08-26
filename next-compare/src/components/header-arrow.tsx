@@ -6,7 +6,7 @@ export default function HeaderArrow() {
   const pathnameLength = usePathname().split("/").length;
   const router = useRouter();
   return (
-    <div className="mt-5">
+    <div className="mt-5 mb-5">
       {pathnameLength > 2 && (
         <div className="px-2">
           <ArrowLeft

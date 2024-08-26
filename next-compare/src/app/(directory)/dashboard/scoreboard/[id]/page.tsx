@@ -34,6 +34,7 @@ export default function Scoreboard() {
   const pathname = usePathname().split("/").pop();
   const scoreData = JSON.parse(data.score_sheet) as ScoreData[];
 
+  // TODO: change useeffect to useswr!!
   useEffect(() => {
     const dataHandler = async () => {
       const data = await axios.get(
@@ -74,8 +75,8 @@ export default function Scoreboard() {
 
   return (
     <div className="w-full h-full">
-      <header className="h-48 flex items-center justify-center">
-        <h1 className="text-[100px] text-default font-extrabold">
+      <header className="flex items-center justify-center">
+        <h1 className="text-[72px] text-default font-extrabold">
           {data?.game_name}
         </h1>
       </header>
