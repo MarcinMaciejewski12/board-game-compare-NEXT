@@ -8,7 +8,6 @@ import Sidebar from "@/components/sidebars/sidebar";
 import HeaderArrow from "@/components/header-arrow";
 import { currentUser } from "@clerk/nextjs/server";
 import DefaultSidebar from "@/components/sidebars/default-sidebar";
-import { usePathname } from "next/navigation";
 
 const inter = Inter({ subsets: ["latin"] });
 

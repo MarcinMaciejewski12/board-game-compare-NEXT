@@ -13,7 +13,7 @@ export default function GamesList() {
   const { user } = useUser();
 
   return (
-    <section className="grid gap-4 px-10 w-full h-full overflow-auto grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <section className="grid gap-2 w-full h-full overflow-auto grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       {data?.data.map((data: Games) => {
         return (
           <div key={data.id}>

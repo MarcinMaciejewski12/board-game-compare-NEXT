@@ -84,7 +84,7 @@ export default function Dashboard() {
     }
   }, [getUserBoardGames]);
 
-  if (isLoading) return "Loading";
+  if (isLoading) return "Loading...";
 
   return (
     <div className="w-full h-full">

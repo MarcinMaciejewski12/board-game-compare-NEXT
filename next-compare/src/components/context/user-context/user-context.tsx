@@ -15,7 +15,7 @@ interface InitialState {
   setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
 }
 
-interface ContexProps {
+interface ContextProps {
   children: React.ReactNode;
 }
 
@@ -26,7 +26,7 @@ const initialState: InitialState = {
 
 const UserContext = createContext<InitialState>(initialState);
 
-export function UserContextProvider({ children }: ContexProps) {
+export function UserContextProvider({ children }: ContextProps) {
   const [user, setUser] = useState<User>();
   return (
     <UserContext.Provider value={{ user, setUser }}>

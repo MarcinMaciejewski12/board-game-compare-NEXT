@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/button";
 import axios from "axios";
-import Input from "@/components/input";
+import { Input } from "@/components/input";
 import { usePathname } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 
@@ -34,6 +34,7 @@ export default function Scoreboard() {
   const pathname = usePathname().split("/").pop();
   const scoreData = JSON.parse(data.score_sheet) as ScoreData[];
 
+  // TODO: change useeffect to useswr!!
   useEffect(() => {
     const dataHandler = async () => {
       const data = await axios.get(
@@ -74,8 +75,8 @@ export default function Scoreboard() {
 
   return (
     <div className="w-full h-full">
-      <header className="h-48 flex items-center justify-center">
-        <h1 className="text-[100px] text-default font-extrabold">
+      <header className="flex items-center justify-center">
+        <h1 className="text-[72px] text-default font-extrabold">
           {data?.game_name}
         </h1>
       </header>
@@ -92,11 +93,9 @@ export default function Scoreboard() {
             {Array.from({ length: playerCount }).map((_, playerIndex) => (
               <Input
                 key={playerIndex}
-                index={playerIndex}
-                inputStyle={"border border-black h-16"}
                 placeholder={`Player ${playerIndex + 1} name`}
                 type={"text"}
-                onChangeFunction={(e) =>
+                onChange={(e) =>
                   handleInputChange(playerIndex, "name", e.target.value)
                 }
               />
@@ -114,11 +113,9 @@ export default function Scoreboard() {
                 {Array.from({ length: playerCount }).map((_, playerIndex) => (
                   <Input
                     key={playerIndex}
-                    index={playerIndex}
                     placeholder={`Player ${playerIndex + 1} ${item.placeholder}`}
-                    inputStyle={"border border-black h-16"}
                     type={"number"}
-                    onChangeFunction={(e) =>
+                    onChange={(e) =>
                       handleInputChange(
                         playerIndex,
                         item.placeholder === "" ? item.color : item.placeholder,
