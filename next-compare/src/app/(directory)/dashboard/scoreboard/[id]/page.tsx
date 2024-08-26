@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/button";
 import axios from "axios";
-import Input from "@/components/input";
+import { Input } from "@/components/input";
 import { usePathname } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 
@@ -93,11 +93,9 @@ export default function Scoreboard() {
             {Array.from({ length: playerCount }).map((_, playerIndex) => (
               <Input
                 key={playerIndex}
-                index={playerIndex}
-                inputStyle={"border border-black h-16"}
                 placeholder={`Player ${playerIndex + 1} name`}
                 type={"text"}
-                onChangeFunction={(e) =>
+                onChange={(e) =>
                   handleInputChange(playerIndex, "name", e.target.value)
                 }
               />
@@ -115,11 +113,9 @@ export default function Scoreboard() {
                 {Array.from({ length: playerCount }).map((_, playerIndex) => (
                   <Input
                     key={playerIndex}
-                    index={playerIndex}
                     placeholder={`Player ${playerIndex + 1} ${item.placeholder}`}
-                    inputStyle={"border border-black h-16"}
                     type={"number"}
-                    onChangeFunction={(e) =>
+                    onChange={(e) =>
                       handleInputChange(
                         playerIndex,
                         item.placeholder === "" ? item.color : item.placeholder,

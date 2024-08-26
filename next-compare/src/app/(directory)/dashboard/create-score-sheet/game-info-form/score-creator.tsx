@@ -3,14 +3,9 @@ import { Input } from "@/components/input";
 import { HexColorPicker } from "react-colorful";
 import { X } from "lucide-react";
 import { Button } from "@/components/button";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { useScoreSheetMultiContext } from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";
 
-type ReorderValue = {
-  id: number;
-  placeholder: string;
-  color: string;
-};
 export default function ScoreCreator() {
   const popover = useRef();
   const {
