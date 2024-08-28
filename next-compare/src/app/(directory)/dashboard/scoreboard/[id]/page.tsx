@@ -80,52 +80,57 @@ export default function Scoreboard() {
           {data?.game_name}
         </h1>
       </header>
-      <main className="flex max-w-[90vw] justify-center items-center">
-        <div className="max-h-full overflow-auto">
-          <div className="flex items-center justify-center">
-            <div className="w-40 min-w-40 border border-black bg-white h-16 flex items-center justify-center p-4">
-              <span>
-                Players name / <br />
-                Game fields
-              </span>
-            </div>
-
-            {Array.from({ length: playerCount }).map((_, playerIndex) => (
-              <Input
-                key={playerIndex}
-                placeholder={`Player ${playerIndex + 1} name`}
-                type={"text"}
-                onChange={(e) =>
-                  handleInputChange(playerIndex, "name", e.target.value)
-                }
-              />
-            ))}
-          </div>
+      <main className="flex justify-center items-center">
+        <div className="max-h-full w-full overflow-auto">
           <div>
-            {scoreData.map((item, fieldIndex) => (
-              <div key={item.id} className="flex items-center justify-center">
-                <div
-                  className={`w-40 min-w-40 border border-black h-16 flex items-center justify-center`}
-                  style={{ backgroundColor: item.color }}
-                >
-                  <span>{item.placeholder}</span>
-                </div>
-                {Array.from({ length: playerCount }).map((_, playerIndex) => (
-                  <Input
-                    key={playerIndex}
-                    placeholder={`Player ${playerIndex + 1} ${item.placeholder}`}
-                    type={"number"}
-                    onChange={(e) =>
-                      handleInputChange(
-                        playerIndex,
-                        item.placeholder === "" ? item.color : item.placeholder,
-                        e.target.value,
-                      )
-                    }
-                  />
-                ))}
+            <div className="flex items-center justify-center">
+              <div className="w-40 min-w-40 border border-black bg-white h-16 flex items-center justify-center p-4">
+                <span>
+                  Players name / <br />
+                  Game fields
+                </span>
               </div>
-            ))}
+              {Array.from({ length: playerCount }).map((_, playerIndex) => (
+                <Input
+                  className="flex-shrink-0 lg:h-16"
+                  key={playerIndex}
+                  placeholder={`Player ${playerIndex + 1} name`}
+                  type={"text"}
+                  onChange={(e) =>
+                    handleInputChange(playerIndex, "name", e.target.value)
+                  }
+                />
+              ))}
+            </div>
+            <div>
+              {scoreData.map((item, fieldIndex) => (
+                <div key={item.id} className="flex items-center justify-center">
+                  <div
+                    className={`w-40 min-w-40 border border-black h-16 flex items-center justify-center`}
+                    style={{ backgroundColor: item.color }}
+                  >
+                    <span>{item.placeholder}</span>
+                  </div>
+                  {Array.from({ length: playerCount }).map((_, playerIndex) => (
+                    <Input
+                      className="flex-shrink-0 lg:h-16"
+                      key={playerIndex}
+                      placeholder={`Player ${playerIndex + 1} ${item.placeholder}`}
+                      type={"number"}
+                      onChange={(e) =>
+                        handleInputChange(
+                          playerIndex,
+                          item.placeholder === ""
+                            ? item.color
+                            : item.placeholder,
+                          e.target.value,
+                        )
+                      }
+                    />
+                  ))}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </main>

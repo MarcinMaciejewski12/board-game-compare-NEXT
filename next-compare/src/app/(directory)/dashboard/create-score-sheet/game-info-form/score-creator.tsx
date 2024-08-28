@@ -6,7 +6,15 @@ import { Button } from "@/components/button";
 import React, { useRef } from "react";
 import { useScoreSheetMultiContext } from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";
 
-export default function ScoreCreator() {
+interface ScoreCreatorProps {
+  submitStep: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
+  prevStep: () => void;
+}
+
+export default function ScoreCreator({
+  submitStep,
+  prevStep,
+}: ScoreCreatorProps) {
   const popover = useRef();
   const {
     openIndex,
@@ -16,6 +24,7 @@ export default function ScoreCreator() {
     reorderValues,
     setReorderValues,
   } = useScoreSheetMultiContext();
+
   const handleToggle = (index: number) => {
     if (openIndex === index) {
       setOpenIndex(null);
@@ -68,16 +77,15 @@ export default function ScoreCreator() {
   };
 
   return (
-    <main className="flex items-center justify-center overflow-auto">
-      <div className="relative">
+    <main>
+      <div>
         <div className="w-72 border border-black bg-white h-24 flex items-center rounded-lg justify-center p-4 mb-4">
           <span className="text-2xl text-default">Game fields</span>
         </div>
-
         <Reorder.Group
           onReorder={setReorderValues}
           values={reorderValues}
-          className="flex min-w-72 min-h-full flex-col gap-4"
+          className="flex min-h-full flex-col gap-4"
           axis="y"
         >
           {reorderValues.map((reorder, index) => {
@@ -85,15 +93,15 @@ export default function ScoreCreator() {
               <Reorder.Item
                 value={reorder}
                 key={reorder.id}
-                className="flex gap-4 items-center"
+                className="flex gap-4 w-full items-center"
                 dragListener={!(openIndex === index)}
               >
                 <div
                   style={{ backgroundColor: reorder.color }}
-                  className="bg-white h-24 border border-black rounded-lg flex items-center justify-center"
+                  className="bg-white h-24  border border-black rounded-lg flex items-center justify-center"
                 >
                   <Input
-                    className={`bg-${reorder.color}`}
+                    className={`bg-${reorder.color} border-none`}
                     placeholder="Field name"
                     type="text"
                     onChange={(e) => handleInputChange(e, index)}
@@ -137,6 +145,14 @@ export default function ScoreCreator() {
             variant="withoutBackground"
             size="lg"
             onClick={(e) => addGameFieldHandler(e)}
+          />
+          <Button
+            className="mt-4"
+            nameToDisplay="Save score board"
+            variant="default"
+            size="lg"
+            //@ts-ignore
+            onClick={(e) => submitStep(e)}
           />
         </div>
       </div>
