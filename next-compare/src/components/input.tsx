@@ -5,7 +5,7 @@ import { cva, VariantProps } from "class-variance-authority";
 const inputVariants = cva("", {
   variants: {
     variant: {
-      default: "h-12 min-w-48 p-2",
+      default: "h-12 min-w-48 p-2 border rounded",
     },
   },
 });
@@ -28,7 +28,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
         <input
           className={cn(
-            "border rounded",
+            "border border-black",
             inputVariants({ variant, className }),
           )}
           ref={ref}

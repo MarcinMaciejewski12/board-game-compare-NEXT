@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { CircleArrowLeft, Trash } from "lucide-react";
 import axios from "axios";
+import { mutate } from "swr";
 
 interface DashboardCardProps {
   difficulty?: number;
@@ -86,6 +87,9 @@ function FrontSide({
         userId: userId,
         gameId: id,
       });
+      // await mutate(
+      //   `api/user-games/get-user-games/get-all-user-games?id=${userId ?? ""}`,
+      // );
     } catch (e) {
       console.error(e);
     }
