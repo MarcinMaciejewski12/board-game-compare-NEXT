@@ -3,7 +3,7 @@ import { Input } from "@/components/input";
 import { HexColorPicker } from "react-colorful";
 import { X } from "lucide-react";
 import { Button } from "@/components/button";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useScoreSheetMultiContext } from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";
 
 interface ScoreCreatorProps {
@@ -15,7 +15,7 @@ export default function ScoreCreator({
   submitStep,
   prevStep,
 }: ScoreCreatorProps) {
-  const popover = useRef();
+  const popover = useRef<HTMLDivElement>(null);
   const {
     openIndex,
     setOpenIndex,
@@ -44,6 +44,19 @@ export default function ScoreCreator({
       );
     }
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (popover.current && !popover.current.contains(event.target as Node)) {
+        setOpenIndex(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -89,6 +102,7 @@ export default function ScoreCreator({
           axis="y"
         >
           {reorderValues.map((reorder, index) => {
+            console.log(reorder.color);
             return (
               <Reorder.Item
                 value={reorder}
@@ -101,7 +115,8 @@ export default function ScoreCreator({
                   className="bg-white h-24  border border-black rounded-lg flex items-center justify-center"
                 >
                   <Input
-                    className={`bg-${reorder.color} border-none`}
+                    style={{ backgroundColor: reorder.color }}
+                    className="border-none"
                     placeholder="Field name"
                     type="text"
                     onChange={(e) => handleInputChange(e, index)}

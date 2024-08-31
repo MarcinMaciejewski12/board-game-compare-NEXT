@@ -37,8 +37,8 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
   };
   // TODO: needed to add validation info for user
   return (
-    <motion.div className="w-[40vw] h-[70vh] bg-white flex justify-center rounded shadow-xl p-4">
-      <div className="flex flex-col items-center justify-around w-full">
+    <motion.div className="w-[40vw] h-[70vh] bg-white flex justify-center rounded shadow-xl p-8">
+      <div className="flex flex-col justify-between items-center w-full">
         <h1 className="text-default font-bold text-xl">
           Basic game information
         </h1>
@@ -89,7 +89,6 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
                 placeholder="Difficulty"
                 name="difficulty"
                 variant="default"
-                value={Number(gameInfo?.difficulty)}
                 onChange={dialogHandler}
                 required
               />
@@ -102,7 +101,6 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
                 type="number"
                 placeholder="Playtime"
                 name="playtime"
-                value={Number(gameInfo?.playtime)}
                 onChange={dialogHandler}
                 required
               />
@@ -121,14 +119,14 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
               </label>
             </div>
           </div>
-          <Button
-            nameToDisplay={"Go to creator"}
-            size="lg"
-            variant="default"
-            onClick={nextStepValidation}
-            type="button"
-          />
         </form>
+        <Button
+          nameToDisplay={"Go to creator"}
+          size="lg"
+          variant="default"
+          onClick={nextStepValidation}
+          type="button"
+        />
       </div>
     </motion.div>
   );
