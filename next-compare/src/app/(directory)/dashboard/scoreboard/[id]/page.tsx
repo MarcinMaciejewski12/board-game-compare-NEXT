@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/button";
 import axios from "axios";
 import { Input } from "@/components/input";
-import { usePathname } from "next/navigation";
+import { redirect, usePathname, useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
+import useSWR from "swr";
+import { fetcher } from "@/lib/swr-fetcher/fetcher";
 
 interface Data {
   board_id: string;
@@ -33,8 +35,7 @@ export default function Scoreboard() {
   const { user } = useUser();
   const pathname = usePathname().split("/").pop();
   const scoreData = JSON.parse(data.score_sheet) as ScoreData[];
-
-  // TODO: change useeffect to useswr!!
+  const router = useRouter();
   useEffect(() => {
     const dataHandler = async () => {
       const data = await axios.get(
@@ -70,7 +71,12 @@ export default function Scoreboard() {
       game_score_board: JSON.stringify(playerInputs),
     };
 
-    return await axios.post("/api/played-games", data);
+    try {
+      await axios.post("/api/played-games", data);
+      router.push("/dashboard");
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
@@ -80,82 +86,73 @@ export default function Scoreboard() {
           {data?.game_name}
         </h1>
       </header>
-      <main className="flex justify-center items-center">
-        <div className="max-h-full w-full overflow-auto">
-          <div>
-            <div className="flex items-center justify-center">
-              <div className="w-40 min-w-40 border border-black bg-white h-16 flex items-center justify-center p-4">
-                <span>
-                  Players name / <br />
-                  Game fields
-                </span>
+      <main className="flex items-center justify-around w-full">
+        <div className="overflow-y-auto">
+          <div className="flex">
+            <div className="min-w-48 border border-black bg-white h-16 flex items-center justify-center">
+              <span>
+                Players name <br />
+                Game fields
+              </span>
+            </div>
+            {Array.from({ length: playerCount }).map((_, playerIndex) => (
+              <Input
+                className="p-2 lg:h-16"
+                key={playerIndex}
+                placeholder={`Player ${playerIndex + 1} name`}
+                type={"text"}
+                onChange={(e) =>
+                  handleInputChange(playerIndex, "name", e.target.value)
+                }
+              />
+            ))}
+          </div>
+          {scoreData.map((item, fieldIndex) => (
+            <div key={item.id} className="flex">
+              <div
+                className={`min-w-48 border border-black h-16 flex items-center justify-center`}
+                style={{ backgroundColor: item.color }}
+              >
+                <span>{item.placeholder}</span>
               </div>
               {Array.from({ length: playerCount }).map((_, playerIndex) => (
                 <Input
-                  className="flex-shrink-0 lg:h-16"
+                  className="p-2 lg:h-16"
                   key={playerIndex}
-                  placeholder={`Player ${playerIndex + 1} name`}
-                  type={"text"}
+                  placeholder={`Player ${playerIndex + 1} ${item.placeholder}`}
+                  type={"number"}
                   onChange={(e) =>
-                    handleInputChange(playerIndex, "name", e.target.value)
+                    handleInputChange(
+                      playerIndex,
+                      item.placeholder === "" ? item.color : item.placeholder,
+                      e.target.value,
+                    )
                   }
                 />
               ))}
             </div>
-            <div>
-              {scoreData.map((item, fieldIndex) => (
-                <div key={item.id} className="flex items-center justify-center">
-                  <div
-                    className={`w-40 min-w-40 border border-black h-16 flex items-center justify-center`}
-                    style={{ backgroundColor: item.color }}
-                  >
-                    <span>{item.placeholder}</span>
-                  </div>
-                  {Array.from({ length: playerCount }).map((_, playerIndex) => (
-                    <Input
-                      className="flex-shrink-0 lg:h-16"
-                      key={playerIndex}
-                      placeholder={`Player ${playerIndex + 1} ${item.placeholder}`}
-                      type={"number"}
-                      onChange={(e) =>
-                        handleInputChange(
-                          playerIndex,
-                          item.placeholder === ""
-                            ? item.color
-                            : item.placeholder,
-                          e.target.value,
-                        )
-                      }
-                    />
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
       </main>
-      <div className="w-full flex items-center justify-center">
-        <div className="w-[90vw]">
-          {!(playerCount >= data.max_players) && (
-            <div className="w-full flex items-center justify-center mt-4">
-              <Button
-                nameToDisplay="Add player"
-                className="flex font-medium cursor-pointer justify-center  items-center"
-                onClick={addPlayer}
-                size="sm"
-                variant="withoutBackground"
-              />
-            </div>
-          )}
-          <div className="flex flex-col mt-4 items-center justify-center">
-            <Button
-              onClick={() => sendPlayedGame()}
-              nameToDisplay={"Save scoresheet"}
-              variant="default"
-              size="xl"
-            />
-          </div>
+      {!(playerCount >= data.max_players) && (
+        <div className="w-full flex items-center justify-center mt-4">
+          <Button
+            nameToDisplay="Add player"
+            className="flex font-medium cursor-pointer justify-center  items-center"
+            onClick={addPlayer}
+            size="sm"
+            variant="withoutBackground"
+          />
         </div>
+      )}
+
+      <div className="flex flex-col mt-4 items-center justify-center">
+        <Button
+          onClick={() => sendPlayedGame()}
+          nameToDisplay={"Save scoresheet"}
+          variant="default"
+          size="xl"
+        />
       </div>
     </div>
   );

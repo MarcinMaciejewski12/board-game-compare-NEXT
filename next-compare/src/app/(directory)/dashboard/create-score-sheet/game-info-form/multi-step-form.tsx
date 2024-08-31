@@ -15,7 +15,6 @@ export default function MultiStepForm() {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("siemnao");
     const data = {
       details: gameInfo,
       gameFields: reorderValues,

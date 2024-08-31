@@ -58,8 +58,6 @@ export function ScoreSheetMultiFormContextProvider({ children }: ContextProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [color, setColor] = useState("#fff");
 
-  console.log("context info", gameInfo);
-
   const contextData: ContextDataInterface = {
     gameName,
     setGameName,

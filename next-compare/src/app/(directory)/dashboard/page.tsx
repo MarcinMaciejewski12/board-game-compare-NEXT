@@ -7,7 +7,7 @@ import axios from "axios";
 import { useUserContext } from "@/components/context/user-context/user-context";
 import DashboardCard from "@/components/dashboard-card";
 import { fetcher } from "@/lib/swr-fetcher/fetcher";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import { useRouter } from "next/navigation";
 
 export interface Games {
@@ -82,10 +82,13 @@ export default function Dashboard() {
     if (getUserBoardGames) {
       setGames(getUserBoardGames.data);
     }
-  }, [getUserBoardGames]);
+    mutate(
+      `api/user-games/get-user-games/get-all-user-games?id=${userGamesId ? userGamesId : null}`,
+    );
+  }, [getUserBoardGames, data, games]);
 
   if (isLoading) return "Loading...";
-
+  console.log(games);
   return (
     <div className="w-full h-full">
       <div className="">
