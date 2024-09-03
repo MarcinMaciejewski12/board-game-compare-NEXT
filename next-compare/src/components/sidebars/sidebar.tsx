@@ -13,9 +13,9 @@ export default function Sidebar() {
           <NavLink href={"/dashboard/games-list"}>
             <List color={"white"} />
           </NavLink>
-          <NavLink href={"/calendar"}>
-            <CalendarDays color={"white"} />
-          </NavLink>
+          {/*<NavLink href={"/calendar"}>*/}
+          {/*  <CalendarDays color={"white"} />*/}
+          {/*</NavLink>*/}
         </div>
         <NavLink href={"/calendar"}>
           <Settings color={"white"} />
