@@ -39,6 +39,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "Games is deleted" }, { status: 201 });
   } catch (e) {
     console.error(e);
-    return NextResponse.json({ message: "Something went wrong" });
+    return NextResponse.json({ message: "Something went wrong", status: 403 });
   }
 }

@@ -1,5 +1,5 @@
 import { Input } from "@/components/input";
-import React, { FormEvent, useRef } from "react";
+import React, { useRef } from "react";
 import { Button } from "@/components/button";
 import { motion } from "framer-motion";
 import { useScoreSheetMultiContext } from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";

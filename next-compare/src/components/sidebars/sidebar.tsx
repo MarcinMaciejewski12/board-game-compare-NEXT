@@ -10,12 +10,12 @@ export default function Sidebar() {
           <NavLink href={"/dashboard"}>
             <Home color="white" />
           </NavLink>
-          <NavLink href={"/dashboard/games-list"}>
+          <NavLink href={"/games-list"}>
             <List color={"white"} />
           </NavLink>
-          <NavLink href={"/calendar"}>
-            <CalendarDays color={"white"} />
-          </NavLink>
+          {/*<NavLink href={"/calendar"}>*/}
+          {/*  <CalendarDays color={"white"} />*/}
+          {/*</NavLink>*/}
         </div>
         <NavLink href={"/calendar"}>
           <Settings color={"white"} />
