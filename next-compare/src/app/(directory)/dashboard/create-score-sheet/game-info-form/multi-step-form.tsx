@@ -1,15 +1,19 @@
+"use client";
 import React, { useState } from "react";
 import GameInfoForm from "@/app/(directory)/dashboard/create-score-sheet/game-info-form/game-info-form";
 import ScoreCreator from "@/app/(directory)/dashboard/create-score-sheet/game-info-form/score-creator";
 import axios from "axios";
 import { useScoreSheetMultiContext } from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";
 import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/components/hooks/use-toast";
 
 export default function MultiStepForm() {
   const [step, setStep] = useState(1);
+  const { toast } = useToast();
   const { gameInfo, gameName, reorderValues } = useScoreSheetMultiContext();
   const { user } = useUser();
-
+  const router = useRouter();
   const nextStep = () => setStep((prevStep) => prevStep + 1);
   const prevStep = () => setStep((prevStep) => prevStep - 1);
 
@@ -23,7 +27,13 @@ export default function MultiStepForm() {
     };
 
     try {
-      await axios.post("/api/new-score-sheet", data);
+      axios.post("/api/new-score-sheet", data).then((res) => {
+        router.push("/dashboard");
+        toast({
+          title: `Added ${gameName} to your inventory!`,
+          className: "bg-white",
+        });
+      });
     } catch (e) {
       console.error(e);
     }

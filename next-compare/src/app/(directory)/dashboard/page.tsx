@@ -9,6 +9,7 @@ import DashboardCard from "@/components/dashboard-card";
 import { fetcher } from "@/lib/swr-fetcher/fetcher";
 import useSWR, { mutate } from "swr";
 import { useRouter } from "next/navigation";
+import { Input } from "@/components/input";
 
 export interface Games {
   createdAt: string;
@@ -29,6 +30,7 @@ export default function Dashboard() {
   const { isSignedIn, user } = useUser();
   const router = useRouter();
   const [userGamesId, setUserGamesId] = useState<string[]>([]);
+  const [search, setSearch] = useState("");
   const [games, setGames] = useState<Games[]>([
     {
       createdAt: "",
@@ -82,22 +84,25 @@ export default function Dashboard() {
     if (getUserBoardGames) {
       setGames(getUserBoardGames.data);
     }
-    mutate(
-      `api/user-games/get-user-games/get-all-user-games?id=${userGamesId ? userGamesId : null}`,
-    );
   }, [getUserBoardGames, data, games]);
 
   if (isLoading) return "Loading...";
-  console.log(games);
+
+  const gamesData = search
+    ? games.filter((item) =>
+        item.game_name.toLowerCase().includes(search.toLowerCase()),
+      )
+    : games;
+
   return (
     <div className="w-full h-full">
-      <div className="">
+      <div>
         <h1 className="text-default text-5xl font-bold mb-2">{`Hello ${isSignedIn ? user.username : ""}`}</h1>
         <span className="text-default text-3xl">
           What did you play this time?
         </span>
       </div>
-      <div>
+      <div className="mb-5">
         <div className="w-full h-16 items-center flex justify-start">
           <Link href={"/dashboard/create-score-sheet"}>
             <Button
@@ -108,8 +113,16 @@ export default function Dashboard() {
           </Link>
         </div>
       </div>
+      {/*TODO: styles*/}
+      <Input
+        variant={"searchbar"}
+        className="mb-3"
+        onChange={(e) => setSearch(e.target.value)}
+        type="search"
+        placeholder="Search games"
+      />
       <section className="grid gap-2 mb-2 w-full h-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {games?.map((data: Games) => {
+        {gamesData?.map((data: Games) => {
           return (
             <div key={data.id}>
               <DashboardCard

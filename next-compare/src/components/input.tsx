@@ -6,6 +6,7 @@ const inputVariants = cva("", {
   variants: {
     variant: {
       default: "h-12 min-w-48 p-2 border rounded",
+      searchbar: "h-12 w-48 p-2 border rounded",
     },
   },
 });

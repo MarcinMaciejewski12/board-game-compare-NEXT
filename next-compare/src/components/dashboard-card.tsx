@@ -8,6 +8,7 @@ import { useState } from "react";
 import { CircleArrowLeft, Trash } from "lucide-react";
 import axios from "axios";
 import { mutate } from "swr";
+import { useToast } from "@/components/hooks/use-toast";
 
 interface DashboardCardProps {
   difficulty?: number;
@@ -80,20 +81,27 @@ function FrontSide({
   const reverseCardHandler = () => {
     setIsFlippedState!(!isFlippedState);
   };
-
+  const { toast } = useToast();
   async function deleteGameHandler(id: string, userId: string) {
     try {
-      await axios.post("api/user-games/delete-game", {
+      const res = await axios.post("api/user-games/delete-game", {
         userId: userId,
         gameId: id,
       });
-      // await mutate(
-      //   `api/user-games/get-user-games/get-all-user-games?id=${userId ?? ""}`,
-      // );
+      if (res.status)
+        toast({
+          title: "Delete score sheet",
+          className: "bg-white",
+        });
+      await mutate(`api/users/get-user?userId=${userId}`);
+      await mutate(
+        `api/user-games/get-user-games/get-all-user-games?id=${userId}`,
+      );
     } catch (e) {
       console.error(e);
     }
   }
+
   return (
     <>
       <motion.div className="w-full h-[80%]">

@@ -8,6 +8,7 @@ import Sidebar from "@/components/sidebars/sidebar";
 import HeaderArrow from "@/components/header-arrow";
 import { currentUser } from "@clerk/nextjs/server";
 import DefaultSidebar from "@/components/sidebars/default-sidebar";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -48,6 +49,7 @@ export default async function RootLayout({
               </div>
               <div className="w-[20px]" />
             </div>
+            <Toaster />
           </UserContextProvider>
         </body>
       </html>
