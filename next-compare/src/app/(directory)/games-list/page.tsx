@@ -5,6 +5,7 @@ import DashboardCard from "@/components/dashboard-card";
 import { Games } from "@/app/(directory)/dashboard/page";
 import { useUser } from "@clerk/nextjs";
 import { useState } from "react";
+import { Input } from "@/components/input";
 
 export default function GamesList() {
   const { data } = useSWR(
@@ -22,7 +23,8 @@ export default function GamesList() {
   return (
     <>
       {/*TODO: styles*/}
-      <input
+      <Input
+        variant="searchbar"
         className="mb-3"
         onChange={(e) => setSearch(e.target.value)}
         type="search"

@@ -84,16 +84,14 @@ function FrontSide({
   const { toast } = useToast();
   async function deleteGameHandler(id: string, userId: string) {
     try {
-      await axios
-        .post("api/user-games/delete-game", {
-          userId: userId,
-          gameId: id,
-        })
-        .then(() => {
-          toast({
-            title: "Delete score sheet",
-            className: "bg-white",
-          });
+      const res = await axios.post("api/user-games/delete-game", {
+        userId: userId,
+        gameId: id,
+      });
+      if (res.status)
+        toast({
+          title: "Delete score sheet",
+          className: "bg-white",
         });
       await mutate(`api/users/get-user?userId=${userId}`);
       await mutate(

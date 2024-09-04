@@ -9,6 +9,7 @@ import DashboardCard from "@/components/dashboard-card";
 import { fetcher } from "@/lib/swr-fetcher/fetcher";
 import useSWR, { mutate } from "swr";
 import { useRouter } from "next/navigation";
+import { Input } from "@/components/input";
 
 export interface Games {
   createdAt: string;
@@ -113,7 +114,8 @@ export default function Dashboard() {
         </div>
       </div>
       {/*TODO: styles*/}
-      <input
+      <Input
+        variant={"searchbar"}
         className="mb-3"
         onChange={(e) => setSearch(e.target.value)}
         type="search"
