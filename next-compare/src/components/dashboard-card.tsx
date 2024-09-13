@@ -1,11 +1,12 @@
 import sevenWonders from "@/assets/7wonders.jpeg";
 import Image from "next/image";
 import { Button } from "@/components/button";
-import InfoSign from "@/components/info-sign";
+import { TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { CircleArrowLeft, Trash } from "lucide-react";
+
+import { Trash, History, Info, ArrowLeft, Users, Clock } from "lucide-react";
 import axios from "axios";
 import { mutate } from "swr";
 import { useToast } from "@/components/hooks/use-toast";
@@ -37,11 +38,7 @@ export default function DashboardCard({
   const [isFlipped, setIsFlipped] = useState(false);
 
   return (
-    <motion.div
-      animate={{ rotateY: isFlipped ? 180 : 0 }}
-      transition={{ duration: 0.5 }}
-      className="lg:min-w-80 lg:h-80 shadow-xl rounded-lg bg-white"
-    >
+    <motion.div className="max-w-72 lg:h-[22rem] shadow-xl rounded-lg bg-white">
       {isFlipped ? (
         <BackSide
           difficulty={difficulty}
@@ -51,7 +48,8 @@ export default function DashboardCard({
           game_name={game_name}
           setIsFlippedState={setIsFlipped}
           isFlippedState={isFlipped}
-          userId=""
+          userId={userId}
+          unique_board_id={unique_board_id}
         />
       ) : (
         <FrontSide
@@ -66,10 +64,6 @@ export default function DashboardCard({
   );
 }
 
-function LiElement({ children }: any) {
-  return <li className="text-default text-2xl">{children}</li>;
-}
-
 function FrontSide({
   game_name,
   unique_board_id,
@@ -77,10 +71,59 @@ function FrontSide({
   setIsFlippedState,
   userId,
 }: DashboardCardProps) {
-  // TODO: refactor this function to one function in parent component!
   const reverseCardHandler = () => {
     setIsFlippedState!(!isFlippedState);
   };
+  return (
+    <motion.div className="h-full">
+      <section className="h-56 relative">
+        <Info
+          className="absolute text-white end-2 top-2 cursor-pointer"
+          onClick={() => reverseCardHandler()}
+        />
+        <Image
+          src={sevenWonders}
+          alt="game"
+          className="object-fit w-full h-full rounded-xl"
+        />
+      </section>
+      <section className="rounded flex flex-col gap-4">
+        <div className="w-full flex items-center justify-center">
+          <h1 className="text-default text-2xl">{game_name}</h1>
+        </div>
+        {/*  TODO: create real label for games types  */}
+        <>
+          <div className="flex justify-center items-center">
+            <div className="bg-blue-500 px-2 h-6 inline-block rounded text-white cursor-default">
+              Deck building
+            </div>
+          </div>
+          <div className="flex h-full items-end justify-center">
+            <Link href={`/dashboard/scoreboard/${unique_board_id}`}>
+              <Button
+                nameToDisplay={"Add score"}
+                variant="default"
+                className="px-2 h-8"
+              />
+            </Link>
+          </div>
+        </>
+      </section>
+    </motion.div>
+  );
+}
+
+function BackSide({
+  game_name,
+  min_players,
+  max_players,
+  difficulty,
+  playtime,
+  setIsFlippedState,
+  isFlippedState,
+  unique_board_id,
+  userId,
+}: DashboardCardProps) {
   const { toast } = useToast();
   async function deleteGameHandler(id: string, userId: string) {
     try {
@@ -103,70 +146,51 @@ function FrontSide({
   }
 
   return (
-    <>
-      <motion.div className="w-full h-[80%]">
-        <div className="flex gap-4 items-center flex-col">
-          <Image
-            src={sevenWonders}
-            alt="game"
-            className="object-fit rounded-2xl w-[40%] mt-4"
-          />
-          <h1 className="text-default text-2xl">{game_name}</h1>
-        </div>
-      </motion.div>
-      <motion.div className="w-full flex justify-between items-center p-4 h-[20%] border-t">
-        <InfoSign className="w-8 h-8" onClick={() => reverseCardHandler()} />
-        <div className="flex items-center gap-2">
-          <Link href={`/dashboard/scoreboard/${unique_board_id}`}>
-            <Button
-              nameToDisplay="+"
-              variant="default"
-              size="sm"
-              className="text-2xl flex shadow-xl"
+    <motion.div>
+      <div className="flex flex-col w-full h-[100%] justify-center items-center">
+        <section className="w-full h-12">
+          <div className="flex h-full items-center justify-between p-4">
+            <ArrowLeft
+              className="cursor-pointer"
+              onClick={() => setIsFlippedState!(!isFlippedState)}
             />
+            <span className="text-xl font-medium">{game_name}</span>
+            <Trash
+              onClick={() =>
+                deleteGameHandler(unique_board_id as string, userId)
+              }
+              className="cursor-pointer"
+            />
+          </div>
+        </section>
+        <section className="flex flex-col items-center justify-center w-full h-32">
+          <div className="px-7">
+            <div className="flex gap-4">
+              <div className="flex">
+                <Users />: {min_players} - {max_players}
+              </div>
+              <div className="flex">
+                <Clock />: {playtime}
+              </div>
+            </div>
+            <div className="flex w-full ">
+              <TrendingUp />: {difficulty}
+            </div>
+          </div>
+        </section>
+        <section className=" w-full px-4 h-32">
+          {/*TODO: add description to form!*/}
+          Plance for description
+        </section>
+        <section className="w-full h-12 px-4 flex gap-2 items-center justify-end">
+          <Link href={`/dashboard/scoreboard/${unique_board_id}`}>
+            <Button variant="default" className="px-3 h-8" nameToDisplay="+" />
           </Link>
-          <Trash
-            color="red"
-            className="cursor-pointer"
-            onClick={() => deleteGameHandler(unique_board_id as string, userId)}
-          />
-        </div>
-      </motion.div>
-    </>
-  );
-}
-
-function BackSide({
-  game_name,
-  min_players,
-  max_players,
-  difficulty,
-  playtime,
-  setIsFlippedState,
-  isFlippedState,
-}: DashboardCardProps) {
-  // TODO: refactor this function to one function in parent component!
-  const reverseCardHandler = () => {
-    setIsFlippedState!(!isFlippedState);
-  };
-  return (
-    <motion.div animate={{ rotateY: -180 }}>
-      <div className="w-full justify-center flex items-center h-16 border-b">
-        <h1 className="text-default text-2xl ">{game_name}</h1>
+          <Link href={`/dashboard/history/${unique_board_id}`}>
+            <History className="cursor-pointer h-6 w-6 text-default " />
+          </Link>
+        </section>
       </div>
-      <ol className="w-full h-52 flex p-4 flex-col gap-4">
-        <div>
-          <LiElement>
-            Players: {min_players}-{max_players}
-          </LiElement>
-        </div>
-        <LiElement>Difficulty: {difficulty}/10</LiElement>
-        <LiElement>Playtime: {playtime}min</LiElement>
-      </ol>
-      <CircleArrowLeft
-        className="cursor-pointer ml-4 h-8 w-8 text-default"
-        onClick={() => reverseCardHandler()}
-      />
     </motion.div>
   );
 }
