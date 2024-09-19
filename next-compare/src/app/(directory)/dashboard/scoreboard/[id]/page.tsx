@@ -36,6 +36,7 @@ export default function Scoreboard() {
   const pathname = usePathname().split("/").pop();
   const scoreData = JSON.parse(data.score_sheet) as ScoreData[];
   const router = useRouter();
+
   useEffect(() => {
     const dataHandler = async () => {
       const data = await axios.get(
@@ -61,14 +62,20 @@ export default function Scoreboard() {
       ...newPlayerInputs[playerIndex],
       [fieldName]: value,
     };
+
     setPlayerInputs(newPlayerInputs);
   };
 
   const sendPlayedGame = async () => {
+    const playerScores = playerInputs.map((inputs, playerIndex) => ({
+      ...inputs,
+      totalScore: totalScore(playerIndex),
+    }));
+
     const data = {
       user_id: user?.id,
       unique_board_id: pathname,
-      game_score_board: JSON.stringify(playerInputs),
+      game_score_board: JSON.stringify(playerScores),
     };
 
     try {
@@ -79,6 +86,14 @@ export default function Scoreboard() {
     }
   };
 
+  const totalScore = (playerIndex: number) => {
+    return scoreData.reduce((sum, item) => {
+      const key = item?.placeholder === "" ? item.color : item.placeholder;
+
+      return sum + parseInt(playerInputs[playerIndex]?.[key] || "0", 10);
+    }, 0);
+  };
+  console.log(totalScore(1));
   return (
     <div className="w-full h-full">
       <header className="flex items-center justify-center">
@@ -132,6 +147,22 @@ export default function Scoreboard() {
               ))}
             </div>
           ))}
+          {/*SUMMARY ROW*/}
+          <div className="flex">
+            <div className="min-w-48 border border-black bg-white h-10 flex items-center justify-center">
+              Total
+            </div>
+            <div className="flex">
+              {Array.from({ length: playerCount }).map((_, playerIndex) => (
+                <Input
+                  className="p-2 lg:h-10"
+                  key={playerIndex}
+                  value={totalScore(playerIndex)}
+                  readOnly
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </main>
       {!(playerCount >= data.max_players) && (

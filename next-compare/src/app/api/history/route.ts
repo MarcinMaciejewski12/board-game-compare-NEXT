@@ -4,17 +4,23 @@ import { playedGames } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
 export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const id = searchParams.get("id");
+
   try {
+    if (!id) {
+      return NextResponse.json({ error: "id is required" }, { status: 400 });
+    }
+
     const data = await db
       .select()
       .from(playedGames)
-      .where(
-        eq(playedGames.unique_board_id, "qP2d531fypsfwefwwq25adhthrhxcvmlpoy"),
-      );
+      .where(eq(playedGames.unique_board_id, id));
 
-    console.log(JSON.parse(data[0].game_score_board as unknown as string));
-
-    return NextResponse.json({ success: true, data: data });
+    return NextResponse.json({
+      success: true,
+      data: data,
+    });
   } catch (e) {
     console.error(e);
   }
