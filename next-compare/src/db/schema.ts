@@ -36,6 +36,7 @@ export const allScoreBoards = pgTable("all_score_boards", {
   max_players: integer("max_players"),
   difficulty: integer("difficulty"),
   playtime: text("playtime"),
+  description: text("description"),
   photo: text("photo"),
   is_shared_to_community: boolean("is_shared_to_community"),
   game_score_board: json("game_score_board"),

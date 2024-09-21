@@ -23,6 +23,7 @@ interface DashboardCardProps {
   isFlippedState?: boolean;
   setIsFlippedState?: React.Dispatch<React.SetStateAction<boolean>>;
   userId: string;
+  description?: string | null;
 }
 
 export default function DashboardCard({
@@ -34,6 +35,7 @@ export default function DashboardCard({
   playtime,
   unique_board_id,
   userId,
+  description,
 }: DashboardCardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -49,6 +51,7 @@ export default function DashboardCard({
           setIsFlippedState={setIsFlipped}
           isFlippedState={isFlipped}
           userId={userId}
+          description={description}
           unique_board_id={unique_board_id}
         />
       ) : (
@@ -123,6 +126,7 @@ function BackSide({
   isFlippedState,
   unique_board_id,
   userId,
+  description,
 }: DashboardCardProps) {
   const { toast } = useToast();
   async function deleteGameHandler(id: string, userId: string) {
@@ -180,7 +184,7 @@ function BackSide({
         </section>
         <section className=" w-full px-4 h-32">
           {/*TODO: add description to form!*/}
-          Plance for description
+          <p className="break-all"> {description ?? "Empty description"}</p>
         </section>
         <section className="w-full h-12 px-4 flex gap-2 items-center justify-end">
           <Link href={`/dashboard/scoreboard/${unique_board_id}`}>

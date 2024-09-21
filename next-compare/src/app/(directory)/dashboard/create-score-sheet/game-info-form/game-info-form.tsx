@@ -3,6 +3,7 @@ import React, { useRef } from "react";
 import { Button } from "@/components/button";
 import { motion } from "framer-motion";
 import { useScoreSheetMultiContext } from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";
+import { Textarea } from "@/components/ui/textarea";
 
 type GameInfoFormProps = {
   nextStep: () => void;
@@ -16,7 +17,7 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
 
   const nextStepValidation = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log(formRef.current?.checkValidity());
+
     if (formRef.current?.checkValidity()) {
       nextStep();
     }
@@ -27,9 +28,11 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
     setGameName(value);
   };
 
-  const dialogHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-
+  const dialogHandler = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    const { name, value, type, checked } = e.target as HTMLInputElement;
+    console.log(value);
     setGameInfo((prevState) => ({
       ...prevState,
       [name]: type === "checkbox" ? checked : value,
@@ -105,6 +108,14 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
                 required
               />
               <span className="font-bold text-2xl">min</span>
+            </div>
+            <div className="flex items-end gap-2">
+              <Textarea
+                placeholder="Write a short description of the game"
+                name="description"
+                onChange={dialogHandler}
+                className="bg-white resize-none outline-none"
+              />
             </div>
             <div className="flex gap-1 justify-center items-center font-medium">
               <input

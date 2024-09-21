@@ -24,8 +24,9 @@ export interface Games {
   playtime: string;
   unique_board_id: string;
   user_id: string;
+  description?: string | null;
 }
-
+// TODO: chage dashboard to server side!
 export default function Dashboard() {
   const { isSignedIn, user } = useUser();
   const router = useRouter();
@@ -44,6 +45,7 @@ export default function Dashboard() {
       photo: "",
       playtime: "",
       unique_board_id: "",
+      description: "",
       user_id: "",
     },
   ]);
@@ -135,6 +137,7 @@ export default function Dashboard() {
                 min_players={data.min_players}
                 photo={data.photo}
                 playtime={data.playtime}
+                description={data.description}
               />
             </div>
           );
