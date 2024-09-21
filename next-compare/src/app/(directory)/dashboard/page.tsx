@@ -121,7 +121,7 @@ export default function Dashboard() {
         type="search"
         placeholder="Search games"
       />
-      <section className="grid gap-2 mb-2 w-full h-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <section className="grid gap-2 mb-2 w-full h-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-8">
         {gamesData?.map((data: Games) => {
           return (
             <div key={data.id}>
