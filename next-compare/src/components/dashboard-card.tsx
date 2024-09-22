@@ -1,7 +1,7 @@
 import sevenWonders from "@/assets/7wonders.jpeg";
 import Image from "next/image";
 import { Button } from "@/components/button";
-import { TrendingUp } from "lucide-react";
+import { Pencil, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -183,15 +183,18 @@ function BackSide({
           </div>
         </section>
         <section className=" w-full px-4 h-32">
-          {/*TODO: add description to form!*/}
           <p className="break-all"> {description ?? "Empty description"}</p>
         </section>
-        <section className="w-full h-12 px-4 flex gap-2 items-center justify-end">
-          <Link href={`/dashboard/scoreboard/${unique_board_id}`}>
-            <Button variant="default" className="px-3 h-8" nameToDisplay="+" />
+        <section className="w-full h-12 px-4 flex gap-1 items-center justify-end">
+          <Link href={`/dashboard/scoreboard/${unique_board_id}/edit`}>
+            <div className="w-8 h-8 rounded bg-buttonAndShadowColor flex justify-center items-center">
+              <Pencil className="w-5 h-5 text-white" />
+            </div>
           </Link>
           <Link href={`/dashboard/history/${unique_board_id}`}>
-            <History className="cursor-pointer h-6 w-6 text-default " />
+            <div className="w-8 h-8 border rounded flex items-center justify-center">
+              <History className="cursor-pointer h-6 w-6 text-default " />
+            </div>
           </Link>
         </section>
       </div>
