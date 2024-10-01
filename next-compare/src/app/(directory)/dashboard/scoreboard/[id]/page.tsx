@@ -3,10 +3,8 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/button";
 import axios from "axios";
 import { Input } from "@/components/input";
-import { redirect, usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
-import useSWR from "swr";
-import { fetcher } from "@/lib/swr-fetcher/fetcher";
 
 interface Data {
   board_id: string;
@@ -20,7 +18,7 @@ interface ScoreData {
   id: number;
   placeholder: string;
 }
-
+// TODO: refactor this component to server side rendering
 export default function Scoreboard() {
   const [data, setData] = useState<Data>({
     board_id: "",

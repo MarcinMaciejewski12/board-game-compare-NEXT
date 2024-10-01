@@ -186,7 +186,9 @@ function BackSide({
           <p className="break-all"> {description ?? "Empty description"}</p>
         </section>
         <section className="w-full h-12 px-4 flex gap-1 items-center justify-end">
-          <Link href={`/dashboard/scoreboard/${unique_board_id}/edit`}>
+          <Link
+            href={`/dashboard/scoreboard/${unique_board_id}/edit-score-sheet`}
+          >
             <div className="w-8 h-8 rounded bg-buttonAndShadowColor flex justify-center items-center">
               <Pencil className="w-5 h-5 text-white" />
             </div>
