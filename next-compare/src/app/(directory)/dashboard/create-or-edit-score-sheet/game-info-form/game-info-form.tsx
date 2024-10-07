@@ -1,5 +1,5 @@
 import { Input } from "@/components/input";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Button } from "@/components/button";
 import { motion } from "framer-motion";
 import { useScoreSheetMultiContext } from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";
@@ -12,7 +12,9 @@ type GameInfoFormProps = {
 export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
   const { setGameInfo, setGameName, gameName, gameInfo } =
     useScoreSheetMultiContext();
-
+  const [errorMessage, setErrorMessage] = useState<{ [key: string]: string }>(
+    {},
+  );
   const formRef = useRef<HTMLFormElement>(null);
 
   const nextStepValidation = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -20,6 +22,24 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
 
     if (formRef.current?.checkValidity()) {
       nextStep();
+    } else {
+      const formElements = formRef.current?.elements;
+      const newErrorMessages: { [key: string]: string } = {};
+
+      Array.from(formElements as unknown as HTMLFormElement).forEach(
+        (element) => {
+          if (
+            element instanceof HTMLInputElement ||
+            element instanceof HTMLTextAreaElement
+          ) {
+            if (element.required && !element.value) {
+              newErrorMessages[element.name] = "This field is required.";
+            }
+          }
+        },
+      );
+
+      setErrorMessage(newErrorMessages);
     }
   };
 
@@ -32,11 +52,22 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value, type, checked } = e.target as HTMLInputElement;
-    console.log(value);
     setGameInfo((prevState) => ({
       ...prevState,
       [name]: type === "checkbox" ? checked : value,
     }));
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    if (!value) {
+      setErrorMessage((prev) => ({
+        ...prev,
+        [name]: "This field is required.",
+      }));
+    } else {
+      setErrorMessage((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
   return (
@@ -59,6 +90,9 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
               type="text"
               onChange={gameNameInputChange}
               required
+              errorMessage={errorMessage["gameName"]}
+              name={"gameName"}
+              onBlur={handleBlur}
             />
             <div className="flex gap-2 items-end">
               <Input
@@ -71,6 +105,8 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
                 min={1}
                 max={15}
                 required
+                errorMessage={errorMessage["min_player"]}
+                onBlur={handleBlur}
               />
               <Input
                 onChange={dialogHandler}
@@ -81,6 +117,8 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
                 max={15}
                 type="number"
                 required
+                errorMessage={errorMessage["max_player"]}
+                onBlur={handleBlur}
               />
             </div>
             <div className="flex items-end gap-2">
@@ -94,6 +132,8 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
                 variant="default"
                 onChange={dialogHandler}
                 required
+                errorMessage={errorMessage["difficulty"]}
+                onBlur={handleBlur}
               />
               <span className="font-bold text-2xl">/10</span>
             </div>
@@ -106,6 +146,8 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
                 name="playtime"
                 onChange={dialogHandler}
                 required
+                errorMessage={errorMessage["playtime"]}
+                onBlur={handleBlur}
               />
               <span className="font-bold text-2xl">min</span>
             </div>
