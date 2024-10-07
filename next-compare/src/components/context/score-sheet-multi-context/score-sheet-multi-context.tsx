@@ -29,6 +29,7 @@ type GameInfo = {
   min_player: number;
   difficulty: number;
   playtime: string;
+  description: string;
   isSharedToCommunity: boolean;
 };
 
@@ -51,6 +52,7 @@ export function ScoreSheetMultiFormContextProvider({ children }: ContextProps) {
     min_player: 0,
     difficulty: 0,
     playtime: "",
+    description: "",
     isSharedToCommunity: false,
   });
   const [gameName, setGameName] = useState("");

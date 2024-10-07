@@ -29,7 +29,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
         <input
           className={cn(
-            "border border-black",
+            "border rounded-md border-input text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
             inputVariants({ variant, className }),
           )}
           ref={ref}

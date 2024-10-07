@@ -1,7 +1,7 @@
 import sevenWonders from "@/assets/7wonders.jpeg";
 import Image from "next/image";
 import { Button } from "@/components/button";
-import { TrendingUp } from "lucide-react";
+import { Pencil, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -23,6 +23,7 @@ interface DashboardCardProps {
   isFlippedState?: boolean;
   setIsFlippedState?: React.Dispatch<React.SetStateAction<boolean>>;
   userId: string;
+  description?: string | null;
 }
 
 export default function DashboardCard({
@@ -34,6 +35,7 @@ export default function DashboardCard({
   playtime,
   unique_board_id,
   userId,
+  description,
 }: DashboardCardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -49,6 +51,7 @@ export default function DashboardCard({
           setIsFlippedState={setIsFlipped}
           isFlippedState={isFlipped}
           userId={userId}
+          description={description}
           unique_board_id={unique_board_id}
         />
       ) : (
@@ -123,6 +126,7 @@ function BackSide({
   isFlippedState,
   unique_board_id,
   userId,
+  description,
 }: DashboardCardProps) {
   const { toast } = useToast();
   async function deleteGameHandler(id: string, userId: string) {
@@ -179,15 +183,20 @@ function BackSide({
           </div>
         </section>
         <section className=" w-full px-4 h-32">
-          {/*TODO: add description to form!*/}
-          Plance for description
+          <p className="break-all"> {description ?? "Empty description"}</p>
         </section>
-        <section className="w-full h-12 px-4 flex gap-2 items-center justify-end">
-          <Link href={`/dashboard/scoreboard/${unique_board_id}`}>
-            <Button variant="default" className="px-3 h-8" nameToDisplay="+" />
+        <section className="w-full h-12 px-4 flex gap-1 items-center justify-end">
+          <Link
+            href={`/dashboard/create-or-edit-score-sheet/edit-score-sheet/${unique_board_id}`}
+          >
+            <div className="w-8 h-8 rounded bg-buttonAndShadowColor flex justify-center items-center">
+              <Pencil className="w-5 h-5 text-white" />
+            </div>
           </Link>
           <Link href={`/dashboard/history/${unique_board_id}`}>
-            <History className="cursor-pointer h-6 w-6 text-default " />
+            <div className="w-8 h-8 border rounded flex items-center justify-center">
+              <History className="cursor-pointer h-6 w-6 text-default " />
+            </div>
           </Link>
         </section>
       </div>
