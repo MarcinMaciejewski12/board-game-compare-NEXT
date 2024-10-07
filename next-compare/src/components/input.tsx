@@ -1,8 +1,6 @@
 import { forwardRef, InputHTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 import { cva, VariantProps } from "class-variance-authority";
-import { Simulate } from "react-dom/test-utils";
-import error = Simulate.error;
 
 const inputVariants = cva("", {
   variants: {
