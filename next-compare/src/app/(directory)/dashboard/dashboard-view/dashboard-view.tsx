@@ -11,45 +11,14 @@ import Link from "next/link";
 import { Button } from "@/components/button";
 import { Input } from "@/components/input";
 import DashboardCard from "@/components/dashboard-card";
-
-export interface Games {
-  createdAt: string;
-  difficulty: number;
-  game_name: string;
-  game_score_board: string;
-  id: string;
-  is_shared_to_community: boolean;
-  max_players: number;
-  min_players: number;
-  photo: string;
-  playtime: string;
-  unique_board_id: string;
-  user_id: string;
-  description?: string | null;
-}
+import { Games } from "@/app/(directory)/dashboard/page";
 
 export default function DashboardView() {
   const { isSignedIn, user } = useUser();
   const router = useRouter();
   const [userGamesId, setUserGamesId] = useState<string[]>([]);
   const [search, setSearch] = useState("");
-  const [games, setGames] = useState<Games[]>([
-    {
-      createdAt: "",
-      difficulty: 0,
-      game_name: "",
-      game_score_board: "",
-      id: "",
-      is_shared_to_community: false,
-      max_players: 0,
-      min_players: 0,
-      photo: "",
-      playtime: "",
-      unique_board_id: "",
-      description: "",
-      user_id: "",
-    },
-  ]);
+  const [games, setGames] = useState<Games[]>([]);
 
   if (!isSignedIn) router.push("/");
 
