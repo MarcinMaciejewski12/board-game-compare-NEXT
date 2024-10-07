@@ -1,3 +1,4 @@
+"use client";
 import sevenWonders from "@/assets/7wonders.jpeg";
 import Image from "next/image";
 import { Button } from "@/components/button";
