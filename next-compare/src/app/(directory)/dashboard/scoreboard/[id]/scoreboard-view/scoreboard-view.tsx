@@ -32,7 +32,8 @@ export default function ScoreboardView() {
   >([]);
   const { user } = useUser();
   const pathname = usePathname().split("/").pop();
-  const scoreData = JSON.parse(data.score_sheet) as ScoreData[];
+  console.log("data", data);
+  const scoreData = JSON.parse(data?.score_sheet ?? "[]") as ScoreData[];
   const router = useRouter();
 
   useEffect(() => {
@@ -40,7 +41,8 @@ export default function ScoreboardView() {
       const data = await axios.get(
         `/api/user-games/get-user-games/get-particular-game?id=${pathname}`,
       );
-      setData(data.data[0]);
+      console.log(data);
+      setData(data.data.result[0]);
     };
     dataHandler();
   }, [pathname]);

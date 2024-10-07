@@ -107,7 +107,7 @@ export default function DashboardView() {
       </div>
       <div className="mb-5">
         <div className="w-full h-16 items-center flex justify-start">
-          <Link href={"/dashboard/create-score-sheet"}>
+          <Link href={"/dashboard/create-or-edit-score-sheet"}>
             <Button
               nameToDisplay="Add score board"
               variant="default"

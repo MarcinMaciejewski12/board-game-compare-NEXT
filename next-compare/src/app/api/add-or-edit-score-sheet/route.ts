@@ -2,15 +2,20 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { allScoreBoards, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
+
 export async function POST(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const gameId = searchParams.get("id");
   try {
+    if (gameId) return;
+
     const body = await request.json();
     const uid = () =>
       String(Date.now().toString(32) + Math.random().toString(16)).replace(
         /\./g,
         "",
       );
-    console.log(body.details);
+
     const result = await db
       .insert(allScoreBoards)
       .values({
@@ -51,5 +56,46 @@ export async function POST(request: NextRequest) {
   } catch (e) {
     console.error(e);
     throw new Error("Something went wrong");
+  }
+}
+
+export async function PUT(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const gameId = searchParams.get("id");
+
+  try {
+    const body = await request.json();
+    if (gameId) {
+      const getBoardGame = await db
+        .select()
+        .from(allScoreBoards)
+        .where(eq(allScoreBoards.unique_board_id, gameId));
+
+      if (getBoardGame) {
+        await db
+          .update(allScoreBoards)
+          .set({ game_score_board: JSON.stringify(body.gameFields) })
+          .where(eq(allScoreBoards.unique_board_id, gameId));
+
+        return NextResponse.json({
+          success: true,
+          message: "Game score board updated successfully",
+          status: 200,
+        });
+      } else {
+        return NextResponse.json({
+          success: false,
+          message: "Game not found",
+          status: 404,
+        });
+      }
+    }
+  } catch (e) {
+    console.error(e);
+    return NextResponse.json({
+      success: false,
+      message: "Something went wrong",
+      status: 500,
+    });
   }
 }

@@ -1,3 +1,4 @@
+"use client";
 import { Reorder } from "framer-motion";
 import { Input } from "@/components/input";
 import { HexColorPicker } from "react-colorful";
@@ -5,15 +6,18 @@ import { X } from "lucide-react";
 import { Button } from "@/components/button";
 import React, { useEffect, useRef } from "react";
 import { useScoreSheetMultiContext } from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";
+import axios from "axios";
 
 interface ScoreCreatorProps {
   submitStep: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
-  prevStep: () => void;
+  prevStep?: () => void;
+  editedScoreSheetId?: string;
 }
-
+// TODO: Refactor needed(move functions to dedicated lib folder)
 export default function ScoreCreator({
   submitStep,
   prevStep,
+  editedScoreSheetId,
 }: ScoreCreatorProps) {
   const popover = useRef<HTMLDivElement>(null);
   const {
@@ -23,7 +27,27 @@ export default function ScoreCreator({
     setColor,
     reorderValues,
     setReorderValues,
+    setGameName,
+    gameName,
   } = useScoreSheetMultiContext();
+
+  useEffect(() => {
+    if (editedScoreSheetId) {
+      const getEditedFields = async () => {
+        try {
+          const data = await axios.get(
+            `/api/user-games/get-user-games/get-particular-game?id=${editedScoreSheetId}`,
+          );
+          const scoreSheet = JSON.parse(data.data.result[0].score_sheet);
+          setGameName(data.data.result[0].game_name);
+          setReorderValues(scoreSheet);
+        } catch (e) {
+          console.error(e);
+        }
+      };
+      getEditedFields();
+    }
+  }, [editedScoreSheetId]);
 
   const handleToggle = (index: number) => {
     if (openIndex === index) {
@@ -91,6 +115,7 @@ export default function ScoreCreator({
 
   return (
     <main>
+      {gameName && <h1>{gameName}</h1>}
       <div>
         <div className="w-72 border border-black bg-white h-24 flex items-center rounded-lg justify-center p-4 mb-4">
           <span className="text-2xl text-default">Game fields</span>
@@ -102,7 +127,6 @@ export default function ScoreCreator({
           axis="y"
         >
           {reorderValues.map((reorder, index) => {
-            console.log(reorder.color);
             return (
               <Reorder.Item
                 value={reorder}
@@ -119,6 +143,7 @@ export default function ScoreCreator({
                     className="border-none"
                     placeholder="Field name"
                     type="text"
+                    value={reorder.placeholder}
                     onChange={(e) => handleInputChange(e, index)}
                   />
                 </div>
@@ -163,7 +188,9 @@ export default function ScoreCreator({
           />
           <Button
             className="mt-4"
-            nameToDisplay="Save score board"
+            nameToDisplay={
+              editedScoreSheetId ? "Edit score board" : "Save score board"
+            }
             variant="default"
             size="lg"
             //@ts-ignore
