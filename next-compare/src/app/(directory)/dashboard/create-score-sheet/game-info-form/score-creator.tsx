@@ -5,11 +5,7 @@ import { X } from "lucide-react";
 import { Button } from "@/components/button";
 import React, { useEffect, useRef } from "react";
 import { useScoreSheetMultiContext } from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";
-
-interface ScoreCreatorProps {
-  submitStep: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
-  prevStep: () => void;
-}
+import { ScoreCreatorProps } from "@/app/(directory)/dashboard/lib/dashboard-types";
 
 export default function ScoreCreator({
   submitStep,

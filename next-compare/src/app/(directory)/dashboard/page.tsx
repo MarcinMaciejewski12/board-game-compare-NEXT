@@ -10,21 +10,7 @@ import { fetcher } from "@/lib/swr-fetcher/fetcher";
 import useSWR, { mutate } from "swr";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/input";
-
-export interface Games {
-  createdAt: string;
-  difficulty: number;
-  game_name: string;
-  game_score_board: string;
-  id: string;
-  is_shared_to_community: boolean;
-  max_players: number;
-  min_players: number;
-  photo: string;
-  playtime: string;
-  unique_board_id: string;
-  user_id: string;
-}
+import { Games } from "@/app/(directory)/dashboard/lib/dashboard-types";
 
 export default function Dashboard() {
   const { isSignedIn, user } = useUser();

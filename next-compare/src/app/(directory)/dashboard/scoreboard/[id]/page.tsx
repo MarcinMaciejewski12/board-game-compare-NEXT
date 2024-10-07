@@ -3,23 +3,12 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/button";
 import axios from "axios";
 import { Input } from "@/components/input";
-import { redirect, usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
-import useSWR from "swr";
-import { fetcher } from "@/lib/swr-fetcher/fetcher";
-
-interface Data {
-  board_id: string;
-  game_name: string;
-  max_players: number;
-  score_sheet: string;
-}
-
-interface ScoreData {
-  color: string;
-  id: number;
-  placeholder: string;
-}
+import {
+  Data,
+  ScoreData,
+} from "@/app/(directory)/dashboard/lib/dashboard-types";
 
 export default function Scoreboard() {
   const [data, setData] = useState<Data>({

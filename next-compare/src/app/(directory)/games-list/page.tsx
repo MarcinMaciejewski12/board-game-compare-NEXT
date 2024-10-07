@@ -2,10 +2,10 @@
 import { fetcher } from "@/lib/swr-fetcher/fetcher";
 import useSWR from "swr";
 import DashboardCard from "@/components/dashboard-card";
-import { Games } from "@/app/(directory)/dashboard/page";
 import { useUser } from "@clerk/nextjs";
 import { useState } from "react";
 import { Input } from "@/components/input";
+import { Games } from "@/app/(directory)/dashboard/lib/dashboard-types";
 
 export default function GamesList() {
   const { data } = useSWR(
