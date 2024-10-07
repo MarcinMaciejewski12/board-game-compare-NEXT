@@ -11,7 +11,7 @@ import Link from "next/link";
 import { Button } from "@/components/button";
 import { Input } from "@/components/input";
 import DashboardCard from "@/components/dashboard-card";
-import { Games } from "@/app/(directory)/dashboard/page";
+import { Games } from "@/app/(directory)/dashboard/lib/dashboard-types";
 
 export default function DashboardView() {
   const { isSignedIn, user } = useUser();

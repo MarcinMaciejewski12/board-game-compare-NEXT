@@ -38,7 +38,7 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
-  // TODO: needed to add validation info for user
+
   return (
     <motion.div className="w-[40vw] h-[70vh] bg-white flex justify-center rounded shadow-xl p-8">
       <div className="flex flex-col justify-between items-center w-full">

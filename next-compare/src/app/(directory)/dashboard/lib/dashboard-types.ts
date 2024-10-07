@@ -14,6 +14,7 @@ export interface Games {
   playtime: string;
   unique_board_id: string;
   user_id: string;
+  description: string;
 }
 // ------------------
 
