@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import GameInfoForm from "@/app/(directory)/dashboard/create-score-sheet/game-info-form/game-info-form";
-import ScoreCreator from "@/app/(directory)/dashboard/create-score-sheet/game-info-form/score-creator";
+import GameInfoForm from "@/app/(directory)/dashboard/create-or-edit-score-sheet/game-info-form/game-info-form";
+import ScoreCreator from "@/app/(directory)/dashboard/create-or-edit-score-sheet/game-info-form/score-creator";
 import axios from "axios";
 import { useScoreSheetMultiContext } from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";
 import { useUser } from "@clerk/nextjs";
@@ -27,7 +27,7 @@ export default function MultiStepForm() {
     };
 
     try {
-      axios.post("/api/new-score-sheet", data).then((res) => {
+      axios.post("/api/add-or-edit-score-sheet", data).then((res) => {
         router.push("/dashboard");
         toast({
           title: `Added ${gameName} to your inventory!`,

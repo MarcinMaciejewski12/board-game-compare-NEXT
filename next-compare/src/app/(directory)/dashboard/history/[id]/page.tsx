@@ -1,4 +1,4 @@
-import HistoryView from "@/app/(directory)/dashboard/scoreboard/[id]/history-view/history-view";
+import HistoryView from "@/app/(directory)/dashboard/history/[id]/history-view/history-view";
 
 export default function PlayedGamesHistory({
   params,

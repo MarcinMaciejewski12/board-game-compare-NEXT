@@ -6,7 +6,7 @@ import { eq } from "drizzle-orm";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-
+  const id = searchParams.get("id") ?? "";
   try {
     const result = await db
       .select({
@@ -16,10 +16,14 @@ export async function GET(req: NextRequest) {
         score_sheet: allScoreBoards.game_score_board,
       })
       .from(allScoreBoards)
-      .where(eq(allScoreBoards.unique_board_id, searchParams.get("id") ?? ""));
+      .where(eq(allScoreBoards.unique_board_id, id));
 
-    return NextResponse.json(result);
+    return NextResponse.json({ result }, { status: 200 });
   } catch (e) {
     console.error(e);
+    return NextResponse.json(
+      { error: "Failed to fetch the game data" },
+      { status: 500 },
+    );
   }
 }

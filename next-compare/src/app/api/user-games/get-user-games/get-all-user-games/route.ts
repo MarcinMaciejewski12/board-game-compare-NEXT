@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
       .select()
       .from(allScoreBoards)
       .where(inArray(allScoreBoards.unique_board_id, gamesId));
-
+    console.log(result);
     return NextResponse.json({ success: true, data: result });
   } catch (e) {
     console.error(e);
