@@ -22,7 +22,6 @@ export default function GamesList() {
 
   return (
     <>
-      {/*TODO: styles*/}
       <Input
         variant="searchbar"
         className="mb-3"
