@@ -46,6 +46,7 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
   const gameNameInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setGameName(value);
+    handleBlur(e as React.FocusEvent<HTMLInputElement>);
   };
 
   const dialogHandler = (

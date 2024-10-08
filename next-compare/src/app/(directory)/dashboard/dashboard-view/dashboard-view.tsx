@@ -20,7 +20,11 @@ export default function DashboardView() {
   const [search, setSearch] = useState("");
   const [games, setGames] = useState<Games[]>([]);
 
-  if (!isSignedIn) router.push("/");
+  useEffect(() => {
+    if (!isSignedIn) {
+      router.push("/");
+    }
+  }, [isSignedIn, router]);
 
   const { setUser } = useUserContext();
   const { data, isLoading } = useSWR(
