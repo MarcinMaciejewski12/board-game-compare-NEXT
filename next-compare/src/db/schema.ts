@@ -6,6 +6,7 @@ import {
   text,
   boolean,
   integer,
+  jsonb,
 } from "drizzle-orm/pg-core";
 import { timestamp } from "drizzle-orm/pg-core/columns/timestamp";
 
@@ -40,4 +41,5 @@ export const allScoreBoards = pgTable("all_score_boards", {
   photo: text("photo"),
   is_shared_to_community: boolean("is_shared_to_community"),
   game_score_board: json("game_score_board"),
+  labels: jsonb("labels"),
 });

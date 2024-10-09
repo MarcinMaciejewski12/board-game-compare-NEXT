@@ -69,7 +69,7 @@ export default function DashboardView() {
         item.game_name.toLowerCase().includes(search.toLowerCase()),
       )
     : games;
-
+  console.log(getUserBoardGames);
   return (
     <div className="w-full h-full">
       <div>
@@ -112,6 +112,7 @@ export default function DashboardView() {
                 photo={data.photo}
                 playtime={data.playtime}
                 description={data.description}
+                labels={data.labels}
               />
             </div>
           );

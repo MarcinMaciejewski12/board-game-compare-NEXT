@@ -15,6 +15,7 @@ export interface Games {
   unique_board_id: string;
   user_id: string;
   description: string;
+  labels: string;
 }
 // ------------------
 
