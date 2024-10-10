@@ -31,6 +31,7 @@ export function Burger({
 
   const handleClick = () => {
     setOpen(!open);
+
     navigationIsOpenHandler(!open);
   };
 
@@ -42,17 +43,17 @@ export function Burger({
       <motion.div
         variants={topBlock}
         animate={open ? "hidden" : "visible"}
-        className="w-8 bg-black h-0.5"
+        className="w-8 bg-white h-0.5"
       />
       <motion.div
-        className="w-8 bg-black h-0.5"
+        className="w-8 bg-white h-0.5"
         variants={middleBlock}
         animate={open ? "hidden" : "visible"}
       />
       <motion.div
         variants={bottomBlock}
         animate={open ? "hidden" : "visible"}
-        className="w-8 bg-black h-0.5"
+        className="w-8 bg-white h-0.5"
       />
     </button>
   );

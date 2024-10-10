@@ -45,7 +45,7 @@ export default function DashboardCard({
   const [isFlipped, setIsFlipped] = useState(false);
 
   return (
-    <motion.div className="max-w-72 min-h-[23rem] h-[23rem] shadow-xl rounded-lg bg-white">
+    <motion.div className="min-h-[23rem] h-[23rem] shadow-xl rounded-lg bg-white">
       {isFlipped ? (
         <BackSide
           difficulty={difficulty}
@@ -91,7 +91,7 @@ function FrontSide({
   );
 
   return (
-    <motion.div className="h-full">
+    <motion.div className="h-full w-72">
       <section className="h-56 relative">
         <Info
           className="absolute text-white end-2 top-2 cursor-pointer"
@@ -119,8 +119,8 @@ function FrontSide({
               />
             ))}
             {labelsToDisplay.length > 2 && (
-              <div className="w-8 h-8 rounded-2xl bg-gray-300 flex items-center justify-center">
-                {`+${labelsToDisplay.length - 2}`}
+              <div className="w-8 h-8 rounded-2xl opacity-50 bg-gray-300 flex items-center justify-center">
+                <span className="opacity-100">{`+${labelsToDisplay.length - 2}`}</span>
               </div>
             )}
           </div>
@@ -174,7 +174,7 @@ function BackSide({
   }
 
   return (
-    <motion.div>
+    <div className="w-72">
       <div className="flex flex-col w-full h-[100%] justify-center items-center">
         <section className="w-full h-12">
           <div className="flex h-full items-center justify-between p-4">
@@ -224,6 +224,6 @@ function BackSide({
           </Link>
         </section>
       </div>
-    </motion.div>
+    </div>
   );
 }

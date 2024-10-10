@@ -6,8 +6,6 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { UserContextProvider } from "@/components/context/user-context/user-context";
 import Sidebar from "@/components/sidebars/sidebar";
 import HeaderArrow from "@/components/header-arrow";
-import { currentUser } from "@clerk/nextjs/server";
-import DefaultSidebar from "@/components/sidebars/default-sidebar";
 import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -22,32 +20,26 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const user = await currentUser();
-
-  //TODO: refactor needed: UGLY CODE
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${inter.className} overflow-hidden`}>
+        <body className={`${inter.className} sm:overflow-hidden`}>
           <UserContextProvider>
             <Header />
             <div className="flex">
               <div
-                className="w-defaultSidebarWidth"
+                className="w-defaultSidebarWidth hidden sm:flex"
                 style={{ height: "calc(100vh - var(--default-header-height))" }}
               >
-                {user ? <Sidebar /> : <DefaultSidebar />}
+                <Sidebar />
               </div>
-              <div
-                style={{ height: "calc(100vh - var(--default-header-height))" }}
-                className=" px-2 rounded-tl-[1rem] overflow-auto rounded-tr-[1rem] bg-secondary w-full"
-              >
+              <div className="px-2 bg-secondary w-full sm:h-[calc(100vh-var(--default-header-height))] sm:overflow-auto sm:rounded-tr-[1rem] sm:rounded-tl-[1rem]">
                 <div>
                   <HeaderArrow />
                 </div>
                 {children}
               </div>
-              <div className="w-[20px]" />
+              <div className="hidden sm:block w-[20px]" />
             </div>
             <Toaster />
           </UserContextProvider>

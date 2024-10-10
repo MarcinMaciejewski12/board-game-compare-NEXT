@@ -4,6 +4,7 @@ import { UserContextProvider } from "@/components/context/user-context/user-cont
 export default function Dashboard() {
   return (
     <UserContextProvider>
+      {/*<div></div>*/}
       <DashboardView />
     </UserContextProvider>
   );

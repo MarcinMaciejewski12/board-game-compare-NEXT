@@ -7,40 +7,84 @@ import {
   useUser,
 } from "@clerk/nextjs";
 import { Button } from "./button";
-import { LogIn } from "lucide-react";
+import { Home, List, LogIn, Settings } from "lucide-react";
+import { Burger } from "@/components/burger";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import NavLink from "@/components/sidebars/lib/nav-active";
 
 export default function Header() {
   const { isSignedIn } = useUser();
-
+  const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className="w-full h-defaultHeaderHeight flex items-center">
-      <div className="h-full w-defaultSidebarWidth" />
-      <div className="flex items-center justify-between w-full mr-[20px]">
-        <h1 className="text-white text-xl tracking-wider font-medium">
-          <Link href={"/dashboard"}>BoardGameCompare.</Link>
-        </h1>
-        {isSignedIn ? (
-          <div className="w-24 border border-white text-white rounded-2xl h-8 flex items-center justify-center ">
-            <SignOutButton />
-          </div>
-        ) : (
-          <div className="flex gap-4">
-            <Link href={"/login"}>
-              <Button
-                className="w-24 border border-white text-white rounded-2xl h-8 flex items-center justify-center shadow-none"
-                nameToDisplay="Log In"
-              />
-            </Link>
+    <>
+      <div className="hidden w-full sm:h-defaultHeaderHeight sm:flex items-center">
+        <div className="h-full w-defaultSidebarWidth" />
+        <div className="flex items-center justify-between w-full mr-[20px]">
+          <h1 className="hidden sm:block text-white text-xl tracking-wider font-medium">
+            <Link href={"/dashboard"}>BoardGameCompare.</Link>
+          </h1>
+          {isSignedIn ? (
+            <div className="hidden w-24 border border-white text-white rounded-2xl h-8 items-center justify-center sm:flex">
+              <SignOutButton />
+            </div>
+          ) : (
+            <div className="flex gap-4">
+              <Link href={"/login"}>
+                <Button
+                  className="w-24 border border-white text-white rounded-2xl h-8 flex items-center justify-center shadow-none"
+                  nameToDisplay="Log In"
+                />
+              </Link>
 
-            <Link href={"/register"}>
-              <Button
-                nameToDisplay="Sign up"
-                className="bg-buttonAndShadowColor shadow-xl h-8 flex items-center justify-center rounded-2xl px-4  text-white hover:bg-buttonAndShadowColor/90"
-              />
-            </Link>
-          </div>
-        )}
+              <Link href={"/register"}>
+                <Button
+                  nameToDisplay="Sign up"
+                  className="bg-buttonAndShadowColor shadow-xl h-8 flex items-center justify-center rounded-2xl px-4  text-white hover:bg-buttonAndShadowColor/90"
+                />
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+      {/*    HERE IS HEADER FOR MOBILE DEVICES     */}
+      <div
+        className="lg:hidden h-defaultHeaderHeight bg-primary drop-shadow-lg shadow-2xl z-20 top-0 sticky flex items-center justify-around
+      "
+      >
+        <h1 className="text-white">BoardGameCompare.</h1>
+        <Burger navigationIsOpenHandler={() => setIsOpen(!isOpen)} />
+      </div>
+      {isOpen && (
+        <motion.div className="absolute w-full bg-white z-10 h-[calc(100vh-var(--default-header-height))] overflow-hidden">
+          <div className="w-full flex items-center flex-col">
+            <NavLink suffixRouteName="Shelf" href={"/dashboard"}>
+              <Home color="black" />
+            </NavLink>
+            <NavLink suffixRouteName="Shared scoresheet" href={"/games-list"}>
+              <List color={"black"} />
+            </NavLink>
+            {/*<NavLink href={"/calendar"}>*/}
+            {/*  <Settings color={"black"} />*/}
+            {/*</NavLink>*/}
+          </div>
+
+          {/*<div className="flex flex-col gap-4 items-center justify-center">*/}
+          {/*  <Link href={"/login"}>*/}
+          {/*    <Button*/}
+          {/*      nameToDisplay="Log In"*/}
+          {/*      className="w-24 border border-black text-black rounded-2xl h-8 flex items-center justify-center shadow-none"*/}
+          {/*    />*/}
+          {/*  </Link>*/}
+          {/*  <Link href={"/register"}>*/}
+          {/*    <Button*/}
+          {/*      nameToDisplay="Sign up"*/}
+          {/*      className="bg-buttonAndShadowColor shadow-xl h-8 flex items-center justify-center rounded-2xl px-4  text-white hover:bg-buttonAndShadowColor/90"*/}
+          {/*    />*/}
+          {/*  </Link>*/}
+          {/*</div>*/}
+        </motion.div>
+      )}
+    </>
   );
 }

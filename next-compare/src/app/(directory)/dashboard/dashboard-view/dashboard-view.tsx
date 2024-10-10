@@ -69,17 +69,19 @@ export default function DashboardView() {
         item.game_name.toLowerCase().includes(search.toLowerCase()),
       )
     : games;
-  console.log(getUserBoardGames);
+
   return (
     <div className="w-full h-full">
-      <div>
-        <h1 className="text-default text-5xl font-bold mb-2">{`Hello ${isSignedIn ? user.username : ""}`}</h1>
+      <div className="hidden sm:block">
+        <h1 className="text-default text-5xl font-bold mb-2">
+          {isSignedIn && `Hello ${user.username}`}
+        </h1>
         <span className="text-default text-3xl">
           What did you play this time?
         </span>
       </div>
       <div className="mb-5">
-        <div className="w-full h-16 items-center flex justify-start">
+        <div className="hidden w-full h-16 items-center sm:flex justify-start">
           <Link href={"/dashboard/create-or-edit-score-sheet"}>
             <Button
               nameToDisplay="Add score board"
@@ -92,12 +94,13 @@ export default function DashboardView() {
       {/*TODO: styles*/}
       <Input
         variant={"searchbar"}
-        className="mb-3"
+        className="hidden sm:flex mb-3"
         onChange={(e) => setSearch(e.target.value)}
         type="search"
         placeholder="Search games"
       />
-      <section className="grid gap-2 mb-2 w-full h-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-8">
+
+      <section className="sm:grid  gap-2 mb-2 w-full h-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-8 flex items-center flex-col">
         {gamesData?.map((data: Games) => {
           return (
             <div key={data.id}>
