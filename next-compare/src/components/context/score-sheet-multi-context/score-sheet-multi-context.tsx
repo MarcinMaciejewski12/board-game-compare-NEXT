@@ -16,6 +16,8 @@ interface ContextDataInterface {
   setColor: React.Dispatch<React.SetStateAction<string>>;
   gameInfo: GameInfo | null;
   setGameInfo: React.Dispatch<React.SetStateAction<GameInfo>>;
+  labelTable: number[];
+  setLabelTable: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
 type ReorderValue = {
@@ -44,6 +46,8 @@ const ScoreSheetMultiFormContext = createContext<ContextDataInterface>({
   setColor: () => {},
   gameInfo: null,
   setGameInfo: () => {},
+  labelTable: [],
+  setLabelTable: () => {},
 });
 
 export function ScoreSheetMultiFormContextProvider({ children }: ContextProps) {
@@ -59,6 +63,7 @@ export function ScoreSheetMultiFormContextProvider({ children }: ContextProps) {
   const [reorderValues, setReorderValues] = useState<ReorderValue[]>([]);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [color, setColor] = useState("#fff");
+  const [labelTable, setLabelTable] = useState<number[]>([]);
 
   const contextData: ContextDataInterface = {
     gameName,
@@ -71,6 +76,8 @@ export function ScoreSheetMultiFormContextProvider({ children }: ContextProps) {
     setColor,
     gameInfo,
     setGameInfo,
+    labelTable,
+    setLabelTable,
   };
 
   return (

@@ -15,7 +15,6 @@ export async function POST(request: NextRequest) {
         /\./g,
         "",
       );
-
     const result = await db
       .insert(allScoreBoards)
       .values({
@@ -31,6 +30,7 @@ export async function POST(request: NextRequest) {
         is_shared_to_community: body.details.isSharedToCommunity,
         unique_board_id: uid(),
         game_score_board: JSON.stringify(body.gameFields),
+        labels: JSON.stringify(body.labels),
       })
       .returning();
 

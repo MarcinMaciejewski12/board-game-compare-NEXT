@@ -11,7 +11,8 @@ import { useToast } from "@/components/hooks/use-toast";
 export default function MultiStepForm() {
   const [step, setStep] = useState(1);
   const { toast } = useToast();
-  const { gameInfo, gameName, reorderValues } = useScoreSheetMultiContext();
+  const { gameInfo, gameName, reorderValues, labelTable } =
+    useScoreSheetMultiContext();
   const { user } = useUser();
   const router = useRouter();
   const nextStep = () => setStep((prevStep) => prevStep + 1);
@@ -24,10 +25,11 @@ export default function MultiStepForm() {
       gameFields: reorderValues,
       user_id: user?.id,
       gameName: gameName,
+      labels: labelTable,
     };
 
     try {
-      axios.post("/api/add-or-edit-score-sheet", data).then((res) => {
+      axios.post("/api/add-or-edit-score-sheet", data).then(() => {
         router.push("/dashboard");
         toast({
           title: `Added ${gameName} to your inventory!`,

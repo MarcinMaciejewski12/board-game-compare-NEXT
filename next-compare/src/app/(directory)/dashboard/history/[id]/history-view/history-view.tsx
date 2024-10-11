@@ -9,7 +9,7 @@ interface HistoryViewProps {
 }
 
 export default function HistoryView({ id }: HistoryViewProps) {
-  const { data, isLoading } = useSWR(`/api/history?id=${id}`, fetcher);
+  const { data } = useSWR(`/api/history?id=${id}`, fetcher);
   const [historyData, setHistoryData] = useState(data ?? []);
 
   useEffect(() => {

@@ -1,3 +1,4 @@
+"use client";
 import sevenWonders from "@/assets/7wonders.jpeg";
 import Image from "next/image";
 import { Button } from "@/components/button";
@@ -10,6 +11,8 @@ import { Trash, History, Info, ArrowLeft, Users, Clock } from "lucide-react";
 import axios from "axios";
 import { mutate } from "swr";
 import { useToast } from "@/components/hooks/use-toast";
+import { labels, LabelType } from "@/app/(directory)/dashboard/lib/labels";
+import Label from "@/components/Label";
 
 interface DashboardCardProps {
   difficulty?: number;
@@ -24,6 +27,7 @@ interface DashboardCardProps {
   setIsFlippedState?: React.Dispatch<React.SetStateAction<boolean>>;
   userId: string;
   description?: string | null;
+  labels?: string;
 }
 
 export default function DashboardCard({
@@ -36,11 +40,12 @@ export default function DashboardCard({
   unique_board_id,
   userId,
   description,
+  labels,
 }: DashboardCardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
 
   return (
-    <motion.div className="max-w-72 lg:h-[22rem] shadow-xl rounded-lg bg-white">
+    <motion.div className="min-h-[23rem] h-[23rem] shadow-xl rounded-lg bg-white">
       {isFlipped ? (
         <BackSide
           difficulty={difficulty}
@@ -56,6 +61,7 @@ export default function DashboardCard({
         />
       ) : (
         <FrontSide
+          labels={labels}
           game_name={game_name}
           unique_board_id={unique_board_id}
           isFlippedState={isFlipped}
@@ -73,12 +79,19 @@ function FrontSide({
   isFlippedState,
   setIsFlippedState,
   userId,
+  labels: _labels,
 }: DashboardCardProps) {
   const reverseCardHandler = () => {
     setIsFlippedState!(!isFlippedState);
   };
+  const parsedLabels = JSON.parse(_labels ?? "[]");
+
+  const labelsToDisplay = parsedLabels.map((id: number) =>
+    labels.find((label) => label.id === id),
+  );
+
   return (
-    <motion.div className="h-full">
+    <motion.div className="h-full w-72">
       <section className="h-56 relative">
         <Info
           className="absolute text-white end-2 top-2 cursor-pointer"
@@ -94,14 +107,25 @@ function FrontSide({
         <div className="w-full flex items-center justify-center">
           <h1 className="text-default text-2xl">{game_name}</h1>
         </div>
-        {/*  TODO: create real label for games types  */}
+
         <>
-          <div className="flex justify-center items-center">
-            <div className="bg-blue-500 px-2 h-6 inline-block rounded text-white cursor-default">
-              Deck building
-            </div>
+          <div className="flex gap-1 w-full px-1 items-center justify-between">
+            {labelsToDisplay.slice(0, 2).map((label: LabelType) => (
+              <Label
+                key={label.id}
+                id={label.id}
+                color={label.color}
+                name={label.name}
+              />
+            ))}
+            {labelsToDisplay.length > 2 && (
+              <div className="w-8 h-8 rounded-2xl opacity-50 bg-gray-300 flex items-center justify-center">
+                <span className="opacity-100">{`+${labelsToDisplay.length - 2}`}</span>
+              </div>
+            )}
           </div>
-          <div className="flex h-full items-end justify-center">
+
+          <div className="flex h-full items-end justify-center ">
             <Link href={`/dashboard/scoreboard/${unique_board_id}`}>
               <Button
                 nameToDisplay={"Add score"}
@@ -150,7 +174,7 @@ function BackSide({
   }
 
   return (
-    <motion.div>
+    <div className="w-72">
       <div className="flex flex-col w-full h-[100%] justify-center items-center">
         <section className="w-full h-12">
           <div className="flex h-full items-center justify-between p-4">
@@ -200,6 +224,6 @@ function BackSide({
           </Link>
         </section>
       </div>
-    </motion.div>
+    </div>
   );
 }

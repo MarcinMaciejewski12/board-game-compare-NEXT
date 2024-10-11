@@ -1,9 +1,19 @@
+"use client";
 import mainPhoto from "@/assets/mainPhoto.jpg";
 import friendPlayingBoardgame from "@/assets/2ndMainPhoto.jpg";
 import Image from "next/image";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 export default function LandingPage() {
+  const { isSignedIn } = useUser();
+  const router = useRouter();
+
+  if (isSignedIn) {
+    router.push("/dashboard");
+  }
+
   return (
-    <div className="overflow-hidden -z-10-">
+    <div className="overflow-hidden -z-10">
       <section className="min-w-full h-[80vh] flex">
         <div className="w-1/2 h-full flex justify-center items-center">
           <h1 className="text-center text-default font-poppins font-bold text-4xl">

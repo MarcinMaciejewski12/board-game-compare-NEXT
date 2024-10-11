@@ -6,9 +6,14 @@ import React from "react";
 interface NavActiveProps {
   href: string;
   children: React.ReactNode;
+  suffixRouteName?: string;
 }
 
-export default function NavLink({ href, children }: NavActiveProps) {
+export default function NavLink({
+  href,
+  children,
+  suffixRouteName,
+}: NavActiveProps) {
   const pathname = usePathname();
   const isActive = href === pathname;
 
@@ -20,6 +25,7 @@ export default function NavLink({ href, children }: NavActiveProps) {
         }
       >
         {children}
+        {suffixRouteName && suffixRouteName}
       </div>
     </Link>
   );

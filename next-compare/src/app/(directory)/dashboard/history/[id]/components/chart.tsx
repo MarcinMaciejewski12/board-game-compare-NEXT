@@ -5,17 +5,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
-
-const colorPalette = [
-  "#FFF", // Original color
-  "#8FAF92", // Light green
-  "#4F6F52", // Dark green
-  "#AFCFB2", // Pale green
-  "#3F5F42", // Deep green
-  "#B0C4B1", // Soft green
-  "#5A7F61", // Medium green
-  "#7FAF81", // Fresh green
-];
+import { colorPalette } from "@/app/(directory)/dashboard/lib/dashboard-types";
 
 interface ChartProps {
   scoreBoardData: { name: string; totalScore: number }[];

@@ -11,7 +11,7 @@ import Link from "next/link";
 import { Button } from "@/components/button";
 import { Input } from "@/components/input";
 import DashboardCard from "@/components/dashboard-card";
-import { Games } from "@/app/(directory)/dashboard/page";
+import { Games } from "@/app/(directory)/dashboard/lib/dashboard-types";
 
 export default function DashboardView() {
   const { isSignedIn, user } = useUser();
@@ -20,7 +20,11 @@ export default function DashboardView() {
   const [search, setSearch] = useState("");
   const [games, setGames] = useState<Games[]>([]);
 
-  if (!isSignedIn) router.push("/");
+  useEffect(() => {
+    if (!isSignedIn) {
+      router.push("/");
+    }
+  }, [isSignedIn, router]);
 
   const { setUser } = useUserContext();
   const { data, isLoading } = useSWR(
@@ -68,14 +72,16 @@ export default function DashboardView() {
 
   return (
     <div className="w-full h-full">
-      <div>
-        <h1 className="text-default text-5xl font-bold mb-2">{`Hello ${isSignedIn ? user.username : ""}`}</h1>
+      <div className="hidden sm:block">
+        <h1 className="text-default text-5xl font-bold mb-2">
+          {isSignedIn && `Hello ${user.username}`}
+        </h1>
         <span className="text-default text-3xl">
           What did you play this time?
         </span>
       </div>
       <div className="mb-5">
-        <div className="w-full h-16 items-center flex justify-start">
+        <div className="hidden w-full h-16 items-center sm:flex justify-start">
           <Link href={"/dashboard/create-or-edit-score-sheet"}>
             <Button
               nameToDisplay="Add score board"
@@ -85,15 +91,16 @@ export default function DashboardView() {
           </Link>
         </div>
       </div>
-      {/*TODO: styles*/}
-      <Input
-        variant={"searchbar"}
-        className="mb-3"
-        onChange={(e) => setSearch(e.target.value)}
-        type="search"
-        placeholder="Search games"
-      />
-      <section className="grid gap-2 mb-2 w-full h-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-8">
+
+      <div className="flex justify-center pb-2 sm:block">
+        <Input
+          variant={"searchbar"}
+          onChange={(e) => setSearch(e.target.value)}
+          type="search"
+          placeholder="Search games"
+        />
+      </div>
+      <section className="sm:grid  gap-2 mb-2 w-full h-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-8 flex items-center flex-col">
         {gamesData?.map((data: Games) => {
           return (
             <div key={data.id}>
@@ -108,6 +115,7 @@ export default function DashboardView() {
                 photo={data.photo}
                 playtime={data.playtime}
                 description={data.description}
+                labels={data.labels}
               />
             </div>
           );

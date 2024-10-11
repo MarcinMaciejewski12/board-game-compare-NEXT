@@ -5,8 +5,8 @@ import { cva, VariantProps } from "class-variance-authority";
 const inputVariants = cva("", {
   variants: {
     variant: {
-      default: "h-12 min-w-48 p-2 border rounded",
-      searchbar: "h-12 w-48 p-2 border rounded",
+      default: "h-12 min-w-48 p-2",
+      searchbar: "h-12 w-72 sm:w-48 p-2",
     },
   },
 });
@@ -16,25 +16,41 @@ export interface InputProps
     VariantProps<typeof inputVariants> {
   asChild?: boolean;
   label?: string;
+  errorMessage?: string;
+  suffixText?: string;
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, variant, label, ...props }, ref) => {
+  (
+    { className, variant, label, onBlur, errorMessage, suffixText, ...props },
+    ref,
+  ) => {
     return (
       <div className="flex flex-col text-default ">
         {label && (
-          <label className="text-sm font-bold" htmlFor={label}>
+          <label className="text-sm font-bold flex" htmlFor={label}>
             {label}
+            {props.required && "*"}
           </label>
         )}
-        <input
-          className={cn(
-            "border rounded-md border-input text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
-            inputVariants({ variant, className }),
+        <div className="flex items-center gap-2">
+          <input
+            onBlur={onBlur}
+            className={cn(
+              `border rounded border-input text-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring`,
+              inputVariants({ variant, className }),
+            )}
+            ref={ref}
+            {...props}
+          />
+          {suffixText && (
+            <span className="text-xl font-medium">{suffixText}</span>
           )}
-          ref={ref}
-          {...props}
-        />
+        </div>
+
+        {errorMessage && (
+          <span className="text-red-500 text-sm">{errorMessage}</span>
+        )}
       </div>
     );
   },
