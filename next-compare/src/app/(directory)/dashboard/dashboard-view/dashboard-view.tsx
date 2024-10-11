@@ -91,15 +91,15 @@ export default function DashboardView() {
           </Link>
         </div>
       </div>
-      {/*TODO: styles*/}
-      <Input
-        variant={"searchbar"}
-        className="hidden sm:flex mb-3"
-        onChange={(e) => setSearch(e.target.value)}
-        type="search"
-        placeholder="Search games"
-      />
 
+      <div className="flex justify-center pb-2 sm:block">
+        <Input
+          variant={"searchbar"}
+          onChange={(e) => setSearch(e.target.value)}
+          type="search"
+          placeholder="Search games"
+        />
+      </div>
       <section className="sm:grid  gap-2 mb-2 w-full h-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-8 flex items-center flex-col">
         {gamesData?.map((data: Games) => {
           return (

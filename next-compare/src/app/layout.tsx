@@ -7,6 +7,7 @@ import { UserContextProvider } from "@/components/context/user-context/user-cont
 import Sidebar from "@/components/sidebars/sidebar";
 import HeaderArrow from "@/components/header-arrow";
 import { Toaster } from "@/components/ui/toaster";
+import MobileBottomNavigation from "@/components/mobile-bottom-navigation";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,13 +34,16 @@ export default async function RootLayout({
               >
                 <Sidebar />
               </div>
-              <div className="px-2 bg-secondary w-full sm:h-[calc(100vh-var(--default-header-height))] sm:overflow-auto sm:rounded-tr-[1rem] sm:rounded-tl-[1rem]">
+              <div className="px-2 bg-secondary w-full sm:h-[calc(100vh-var(--default-header-height))] sm:overflow-auto sm:rounded-tr-[1rem] sm:rounded-tl-[1rem] pb-[4.375rem]">
                 <div>
                   <HeaderArrow />
                 </div>
                 {children}
               </div>
               <div className="hidden sm:block w-[20px]" />
+            </div>
+            <div className="w-full fixed bottom-0 z-20 bg-primary h-defaultHeaderHeight sm:hidden">
+              <MobileBottomNavigation />
             </div>
             <Toaster />
           </UserContextProvider>

@@ -53,38 +53,8 @@ export default function Header() {
       "
       >
         <h1 className="text-white">BoardGameCompare.</h1>
-        <Burger navigationIsOpenHandler={() => setIsOpen(!isOpen)} />
+        {/*<Burger navigationIsOpenHandler={() => setIsOpen(!isOpen)} />*/}
       </div>
-      {isOpen && (
-        <motion.div className="absolute w-full bg-white z-10 h-[calc(100vh-var(--default-header-height))] overflow-hidden">
-          <div className="w-full flex items-center flex-col">
-            <NavLink suffixRouteName="Shelf" href={"/dashboard"}>
-              <Home color="black" />
-            </NavLink>
-            <NavLink suffixRouteName="Shared scoresheet" href={"/games-list"}>
-              <List color={"black"} />
-            </NavLink>
-            {/*<NavLink href={"/calendar"}>*/}
-            {/*  <Settings color={"black"} />*/}
-            {/*</NavLink>*/}
-          </div>
-
-          {/*<div className="flex flex-col gap-4 items-center justify-center">*/}
-          {/*  <Link href={"/login"}>*/}
-          {/*    <Button*/}
-          {/*      nameToDisplay="Log In"*/}
-          {/*      className="w-24 border border-black text-black rounded-2xl h-8 flex items-center justify-center shadow-none"*/}
-          {/*    />*/}
-          {/*  </Link>*/}
-          {/*  <Link href={"/register"}>*/}
-          {/*    <Button*/}
-          {/*      nameToDisplay="Sign up"*/}
-          {/*      className="bg-buttonAndShadowColor shadow-xl h-8 flex items-center justify-center rounded-2xl px-4  text-white hover:bg-buttonAndShadowColor/90"*/}
-          {/*    />*/}
-          {/*  </Link>*/}
-          {/*</div>*/}
-        </motion.div>
-      )}
     </>
   );
 }
