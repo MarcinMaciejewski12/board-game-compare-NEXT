@@ -1,21 +1,10 @@
 "use client";
 import Link from "next/link";
-import {
-  SignInButton,
-  SignOutButton,
-  SignUpButton,
-  useUser,
-} from "@clerk/nextjs";
+import { SignOutButton, useUser } from "@clerk/nextjs";
 import { Button } from "./button";
-import { Home, List, LogIn, Settings } from "lucide-react";
-import { Burger } from "@/components/burger";
-import { useState } from "react";
-import { motion } from "framer-motion";
-import NavLink from "@/components/sidebars/lib/nav-active";
 
 export default function Header() {
   const { isSignedIn } = useUser();
-  const [isOpen, setIsOpen] = useState(false);
   return (
     <>
       <div className="hidden w-full sm:h-defaultHeaderHeight sm:flex items-center">
@@ -53,6 +42,18 @@ export default function Header() {
       "
       >
         <h1 className="text-white">BoardGameCompare.</h1>
+        {isSignedIn ? (
+          <div className="w-24 border border-white text-white rounded-2xl h-8 items-center justify-center flex">
+            <SignOutButton />
+          </div>
+        ) : (
+          <Link href={"/login"}>
+            <Button
+              className="w-24 border border-white text-white rounded-2xl h-8 flex items-center justify-center shadow-none"
+              nameToDisplay="Log In"
+            />
+          </Link>
+        )}
         {/*<Burger navigationIsOpenHandler={() => setIsOpen(!isOpen)} />*/}
       </div>
     </>

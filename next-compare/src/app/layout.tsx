@@ -34,7 +34,8 @@ export default async function RootLayout({
               >
                 <Sidebar />
               </div>
-              <div className="px-2 bg-secondary w-full sm:h-[calc(100vh-var(--default-header-height))] sm:overflow-auto sm:rounded-tr-[1rem] sm:rounded-tl-[1rem] pb-[4.375rem]">
+
+              <div className="px-2 bg-secondary w-full h-full min-h-[calc(100vh-var(--default-header-height))] sm:overflow-auto sm:rounded-tr-[1rem] sm:rounded-tl-[1rem] pb-[4.375rem]">
                 <div>
                   <HeaderArrow />
                 </div>

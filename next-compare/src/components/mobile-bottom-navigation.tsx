@@ -8,7 +8,7 @@ import { Button } from "@/components/button";
 export default function MobileBottomNavigation() {
   const pathname = usePathname();
   return (
-    <div className="flex items-center justify-around">
+    <div className="flex h-full items-center justify-around">
       <NavLink href={"/"}>
         <Home color="white" />
       </NavLink>
@@ -26,9 +26,6 @@ export default function MobileBottomNavigation() {
       <NavLink href={"/games-list"}>
         <List color={"white"} />
       </NavLink>
-      {/*<NavLink href={"/calendar"}>*/}
-      {/*  <Settings color={"white"} />*/}
-      {/*</NavLink>*/}
     </div>
   );
 }
