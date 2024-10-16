@@ -45,7 +45,7 @@ export default function DashboardCard({
   const [isFlipped, setIsFlipped] = useState(false);
 
   return (
-    <motion.div className="min-h-[23rem] h-[23rem] shadow-xl rounded-lg bg-white">
+    <motion.div className="min-h-[23rem] w-72 shadow-xl rounded-lg bg-white">
       {isFlipped ? (
         <BackSide
           difficulty={difficulty}
@@ -91,7 +91,7 @@ function FrontSide({
   );
 
   return (
-    <motion.div className="h-full w-72">
+    <motion.div className="h-full w-full">
       <section className="h-56 relative">
         <Info
           className="absolute text-white end-2 top-2 cursor-pointer"
@@ -109,7 +109,7 @@ function FrontSide({
         </div>
 
         <>
-          <div className="flex gap-1 w-full px-1 items-center justify-between">
+          <div className="flex gap-1 w-full px-1 items-center justify-around">
             {labelsToDisplay.slice(0, 2).map((label: LabelType) => (
               <Label
                 key={label.id}
@@ -174,7 +174,7 @@ function BackSide({
   }
 
   return (
-    <div className="w-72">
+    <div className="w-full">
       <div className="flex flex-col w-full h-[100%] justify-center items-center">
         <section className="w-full h-12">
           <div className="flex h-full items-center justify-between p-4">
@@ -206,7 +206,7 @@ function BackSide({
             </div>
           </div>
         </section>
-        <section className=" w-full px-4 h-32">
+        <section className="w-full px-4 h-32">
           <p className="break-all"> {description ?? "Empty description"}</p>
         </section>
         <section className="w-full h-12 px-4 flex gap-1 items-center justify-end">

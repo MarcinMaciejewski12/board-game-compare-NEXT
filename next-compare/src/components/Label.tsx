@@ -18,11 +18,14 @@ export default function Label({
   idTable,
 }: LabelProps) {
   return (
-    <div className={cn("max-w-full rounded", color, spanClasses)} title={name}>
+    <div
+      className={cn("max-w-full rounded h-4 opacity-75", color, spanClasses)}
+      title={name}
+    >
       <div className="flex items-center gap-1 px-1">
-        <h1 className="text-sm truncate">{name}</h1>
+        <h1 className="text-[10px] truncate">{name}</h1>
         <div className={cn("w-4", color)}>
-          {idTable?.includes(id) && <Check className="w-4 h-4" />}
+          {idTable?.includes(id) && <Check className="w-3 h-3" />}
         </div>
       </div>
     </div>
