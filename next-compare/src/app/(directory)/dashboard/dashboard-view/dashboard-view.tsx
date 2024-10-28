@@ -100,26 +100,23 @@ export default function DashboardView() {
           placeholder="Search games"
         />
       </div>
-      <section className="sm:grid  gap-2 mb-2 w-full h-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-8 flex items-center flex-col">
-        {gamesData?.map((data: Games) => {
-          return (
-            <div key={data.id}>
-              <DashboardCard
-                userId={user?.id as string}
-                unique_board_id={data.unique_board_id}
-                game_name={data.game_name}
-                id={data.id}
-                difficulty={data.difficulty}
-                max_players={data.max_players}
-                min_players={data.min_players}
-                photo={data.photo}
-                playtime={data.playtime}
-                description={data.description}
-                labels={data.labels}
-              />
-            </div>
-          );
-        }) ?? "Add first scoresheet"}
+      <section className="w-full flex flex-col items-center gap-2 md:grid md:grid-cols-2 h-full lg:grid lg:grid-cols-3 xl:grid-cols-4">
+        {gamesData?.map((data: Games) => (
+          <DashboardCard
+            key={data.id}
+            userId={user?.id as string}
+            unique_board_id={data.unique_board_id}
+            game_name={data.game_name}
+            id={data.id}
+            difficulty={data.difficulty}
+            max_players={data.max_players}
+            min_players={data.min_players}
+            photo={data.photo}
+            playtime={data.playtime}
+            description={data.description}
+            labels={data.labels}
+          />
+        )) ?? "Add first scoresheet"}
       </section>
     </div>
   );

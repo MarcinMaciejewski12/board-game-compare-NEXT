@@ -32,7 +32,6 @@ export default function ScoreboardView() {
   >([]);
   const { user } = useUser();
   const pathname = usePathname().split("/").pop();
-  console.log("data", data);
   const scoreData = JSON.parse(data?.score_sheet ?? "[]") as ScoreData[];
   const router = useRouter();
 
@@ -41,12 +40,11 @@ export default function ScoreboardView() {
       const data = await axios.get(
         `/api/user-games/get-user-games/get-particular-game?id=${pathname}`,
       );
-      console.log(data);
+
       setData(data.data.result[0]);
     };
     dataHandler();
   }, [pathname]);
-  console.log(data);
   const addPlayer = () => {
     setPlayerCount(playerCount + 1);
     setPlayerInputs([...playerInputs, {}]);
@@ -112,7 +110,7 @@ export default function ScoreboardView() {
             </div>
             {Array.from({ length: playerCount }).map((_, playerIndex) => (
               <Input
-                className="p-2 lg:h-16"
+                className="p-2 h-16"
                 key={playerIndex}
                 placeholder={`Player ${playerIndex + 1} name`}
                 type={"text"}
@@ -122,7 +120,7 @@ export default function ScoreboardView() {
               />
             ))}
           </div>
-          {scoreData.map((item, fieldIndex) => (
+          {scoreData.map((item) => (
             <div key={item.id} className="flex">
               <div
                 className={`min-w-48 border border-black h-16 flex items-center justify-center`}

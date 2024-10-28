@@ -89,7 +89,7 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
   };
 
   return (
-    <div className="w-[65vw]  h-full bg-white rounded shadow-xl flex flex-col items-center gap-2 p-4">
+    <div className="w-[65vw] h-full bg-white rounded shadow-xl flex flex-col items-center gap-2 p-4 sm:flex sm:flex-col">
       <h1 className="text-default font-bold text-xl">Basic game information</h1>
       <div className="w-full h-full">
         <form
@@ -97,7 +97,7 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
           onSubmit={(e) => e.preventDefault()}
           noValidate={false}
         >
-          <div className="flex gap-2">
+          <div className="flex gap-2 sm:flex-col">
             <div className="w-[50%] h-full flex flex-col gap-4 p-2 bg-primary rounded">
               <Input
                 value={gameName}

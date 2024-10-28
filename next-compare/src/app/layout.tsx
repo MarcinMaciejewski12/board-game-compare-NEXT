@@ -24,7 +24,7 @@ export default async function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${inter.className} sm:overflow-hidden`}>
+        <body className={`${inter.className} `}>
           <UserContextProvider>
             <Header />
             <div className="flex">
@@ -35,7 +35,7 @@ export default async function RootLayout({
                 <Sidebar />
               </div>
 
-              <div className="px-2 bg-secondary w-full h-[calc(100vh-var(--default-header-height))]  sm:h-[calc(100vh-var(--default-header-height))] sm:overflow-auto sm:rounded-tr-[1rem] sm:rounded-tl-[1rem] pb-[4.375rem]">
+              <div className="px-2 bg-secondary w-full sm:rounded-tl-[1rem] sm:rounded-tr-sm pb-[4.375rem]">
                 <div>
                   <HeaderArrow />
                 </div>
