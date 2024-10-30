@@ -7,13 +7,14 @@ import { Button } from "@/components/button";
 import React, { useEffect, useRef } from "react";
 import { useScoreSheetMultiContext } from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";
 import axios from "axios";
+import { useParams, usePathname, useRouter } from "next/navigation";
 
 interface ScoreCreatorProps {
   submitStep: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
   prevStep?: () => void;
   editedScoreSheetId?: string;
 }
-// TODO: Refactor needed(move functions to dedicated lib folder)
+
 export default function ScoreCreator({
   submitStep,
   prevStep,
@@ -30,6 +31,8 @@ export default function ScoreCreator({
     setGameName,
     gameName,
   } = useScoreSheetMultiContext();
+
+  const { id } = useParams();
 
   useEffect(() => {
     if (editedScoreSheetId) {
@@ -112,13 +115,15 @@ export default function ScoreCreator({
     };
     setReorderValues((prevState) => [...prevState, newField]);
   };
-
+  // TODO: REFACTOR THIS CODE ASAP!
   return (
     <main>
-      {gameName && <h1>{gameName}</h1>}
+      {id && <h1>{gameName}</h1>}
       <div>
-        <div className="w-72 border border-black bg-white h-24 flex items-center rounded-lg justify-center p-4 mb-4">
-          <span className="text-2xl text-default">Game fields</span>
+        <div className="w-full flex items-center justify-center">
+          <div className="w-52 lg:w-72 border border-black bg-white h-24 flex items-center rounded-lg justify-center p-4 mb-4">
+            <span className="text-2xl text-default">Game fields</span>
+          </div>
         </div>
         <Reorder.Group
           onReorder={setReorderValues}
@@ -136,49 +141,51 @@ export default function ScoreCreator({
               >
                 <div
                   style={{ backgroundColor: reorder.color }}
-                  className="bg-white h-24  border border-black rounded-lg flex items-center justify-center"
+                  className="bg-white h-24 w-52 lg:w-72 border border-black rounded-lg flex items-center justify-center"
                 >
                   <Input
                     style={{ backgroundColor: reorder.color }}
                     className="border-none"
                     placeholder="Field name"
                     type="text"
-                    value={reorder.placeholder}
+                    value={id && reorder.placeholder}
                     onChange={(e) => handleInputChange(e, index)}
                   />
                 </div>
-                <div className="relative">
-                  <div className="flex gap-3 items-center">
-                    <div
-                      style={{ backgroundColor: reorder.color }}
-                      onClick={() => {
-                        handleToggle(index);
-                      }}
-                      className="w-[38px] h-[38px] rounded-lg border-[2px] border-white cursor-pointer shadow-colorPicker"
-                    />
-                  </div>
-                  {openIndex === index && (
-                    <div
-                      className="absolute left-0 rounded-[9px] shadow-colorPicker z-50"
-                      //@ts-ignore
-                      ref={popover}
-                    >
-                      <HexColorPicker
-                        color={color}
-                        onChange={handleColorChange}
+                <div className="flex flex-col gap-2 items-center justify-center lg:flex-row">
+                  <div className="relative">
+                    <div className="flex gap-3 items-center">
+                      <div
+                        style={{ backgroundColor: reorder.color }}
+                        onClick={() => {
+                          handleToggle(index);
+                        }}
+                        className="w-[38px] h-[38px] rounded-lg border-[2px] border-white cursor-pointer shadow-colorPicker"
                       />
                     </div>
-                  )}
+                    {openIndex === index && (
+                      <div
+                        className="absolute right-0  md:left-0 rounded-[9px] shadow-colorPicker z-50"
+                        //@ts-ignore
+                        ref={popover}
+                      >
+                        <HexColorPicker
+                          color={color}
+                          onChange={handleColorChange}
+                        />
+                      </div>
+                    )}
+                  </div>
+                  <X
+                    className="h-8 w-8 cursor-pointer"
+                    onClick={() => removeReorderItem(reorder.id)}
+                  />
                 </div>
-                <X
-                  className="h-8 w-8 cursor-pointer"
-                  onClick={() => removeReorderItem(reorder.id)}
-                />
               </Reorder.Item>
             );
           })}
         </Reorder.Group>
-        <div className="flex flex-col max-w-72 gap-4 mt-10 mb-10">
+        <div className="flex items-center justify-center bg-red-200 flex-col lg:max-w-72 gap-4 mt-10 mb-10">
           <Button
             className="mt-4"
             nameToDisplay="Add score field"

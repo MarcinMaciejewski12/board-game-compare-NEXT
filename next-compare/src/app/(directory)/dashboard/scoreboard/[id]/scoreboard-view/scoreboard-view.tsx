@@ -130,7 +130,7 @@ export default function ScoreboardView() {
               </div>
               {Array.from({ length: playerCount }).map((_, playerIndex) => (
                 <Input
-                  className="p-2 lg:h-16"
+                  className="p-2 h-16"
                   key={playerIndex}
                   placeholder={`Player ${playerIndex + 1} ${item.placeholder}`}
                   type={"number"}
