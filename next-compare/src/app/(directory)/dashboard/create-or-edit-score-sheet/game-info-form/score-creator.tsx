@@ -63,13 +63,13 @@ export default function ScoreCreator({
 
   return (
     <div className="flex flex-col">
-      <>
+      <div className="w-full flex justify-center">
         {id && (
           <h1 className="text-[52px] lg:text-[72px] text-default font-extrabold">
             {gameName}
           </h1>
         )}
-      </>
+      </div>
       <>
         <div className="w-full flex items-center justify-center">
           <div className="w-52 lg:w-72 border border-black bg-white h-24 flex items-center rounded-lg justify-center p-4 mb-4">

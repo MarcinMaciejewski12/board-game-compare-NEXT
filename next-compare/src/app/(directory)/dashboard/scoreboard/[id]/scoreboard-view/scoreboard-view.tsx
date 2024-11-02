@@ -90,7 +90,7 @@ export default function ScoreboardView() {
   return (
     <div className="w-full h-full">
       <header className="flex items-center justify-center">
-        <h1 className="text-[72px] text-default font-extrabold">
+        <h1 className="text-[52px]  lg:text-[72px] text-default font-extrabold p-2">
           {data?.game_name}
         </h1>
       </header>
@@ -159,10 +159,10 @@ export default function ScoreboardView() {
         </div>
       </main>
       {data && !(playerCount >= data.max_players) && (
-        <div className="w-full flex items-center justify-center mt-4">
+        <div className="w-full flex items-center justify-center p-4 ">
           <Button
             nameToDisplay="Add player"
-            className="flex font-medium cursor-pointer justify-center  items-center"
+            className="flex font-medium cursor-pointer justify-center items-center"
             onClick={addPlayer}
             size="sm"
             variant="withoutBackground"
@@ -170,7 +170,7 @@ export default function ScoreboardView() {
         </div>
       )}
 
-      <div className="flex flex-col mt-4 items-center justify-center">
+      <div className="flex flex-col items-center justify-center p-4">
         <Button
           onClick={() => sendPlayedGame()}
           nameToDisplay={"Save scoresheet"}

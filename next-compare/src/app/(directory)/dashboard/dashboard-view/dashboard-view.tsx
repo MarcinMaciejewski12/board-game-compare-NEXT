@@ -70,6 +70,7 @@ export default function DashboardView() {
       )
     : games;
 
+  //   TODO: create default view for pages [dashboard, games-list]
   return (
     <div className="w-full h-full">
       <div className="hidden sm:block">

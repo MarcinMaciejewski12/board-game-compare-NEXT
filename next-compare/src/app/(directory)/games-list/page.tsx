@@ -20,16 +20,19 @@ export default function GamesList() {
       )
     : data?.data;
 
+  //   TODO: create default view for pages [dashboard, games-list]
   return (
-    <>
-      <Input
-        variant="searchbar"
-        className="mb-3"
-        onChange={(e) => setSearch(e.target.value)}
-        type="search"
-        placeholder="Search games"
-      />
-      <section className="grid gap-2 w-full h-full overflow-auto grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <div className="w-full h-full">
+      <div className="flex justify-center pb-2 sm:block">
+        <Input
+          variant="searchbar"
+          className="mb-3"
+          onChange={(e) => setSearch(e.target.value)}
+          type="search"
+          placeholder="Search games"
+        />
+      </div>
+      <section className="w-full flex flex-col items-center gap-2 md:grid md:grid-cols-2 h-full lg:grid lg:grid-cols-3 xl:grid-cols-4">
         {gamesData
           ? gamesData?.map((data: Games) => {
               return (
@@ -50,6 +53,6 @@ export default function GamesList() {
             })
           : "Loading..."}
       </section>
-    </>
+    </div>
   );
 }

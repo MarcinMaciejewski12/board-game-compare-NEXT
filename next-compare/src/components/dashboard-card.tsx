@@ -43,7 +43,7 @@ export default function DashboardCard({
   labels,
 }: DashboardCardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
-
+  // TODO: Add to shelf functionality, add to favorites
   return (
     <motion.div className="min-h-[23rem] w-72 shadow-xl rounded-lg bg-white">
       {isFlipped ? (
