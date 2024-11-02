@@ -20,12 +20,7 @@ export interface ScoreData {
 }
 
 export default function ScoreboardView() {
-  const [data, setData] = useState<Data>({
-    board_id: "",
-    game_name: "",
-    max_players: 0,
-    score_sheet: "[]",
-  });
+  const [data, setData] = useState<Data | null>(null);
   const [playerCount, setPlayerCount] = useState<number>(0);
   const [playerInputs, setPlayerInputs] = useState<
     Array<{ [key: string]: string }>
@@ -163,7 +158,7 @@ export default function ScoreboardView() {
           </div>
         </div>
       </main>
-      {!(playerCount >= data.max_players) && (
+      {data && !(playerCount >= data.max_players) && (
         <div className="w-full flex items-center justify-center mt-4">
           <Button
             nameToDisplay="Add player"

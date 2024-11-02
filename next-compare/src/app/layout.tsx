@@ -27,7 +27,7 @@ export default async function RootLayout({
         <body className={`${inter.className} `}>
           <UserContextProvider>
             <Header />
-            <div className="flex">
+            <div className="flex h-full">
               <div
                 className="w-defaultSidebarWidth hidden sm:flex"
                 style={{ height: "calc(100vh - var(--default-header-height))" }}

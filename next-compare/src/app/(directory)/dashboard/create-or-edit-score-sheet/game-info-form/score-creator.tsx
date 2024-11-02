@@ -4,8 +4,12 @@ import { Input } from "@/components/input";
 import { HexColorPicker } from "react-colorful";
 import { X } from "lucide-react";
 import { Button } from "@/components/button";
+import { Palette } from "lucide-react";
 import React, { useEffect, useRef } from "react";
-import { useScoreSheetMultiContext } from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";
+import {
+  ReorderValue,
+  useScoreSheetMultiContext,
+} from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";
 import axios from "axios";
 import { useParams, usePathname, useRouter } from "next/navigation";
 
@@ -52,30 +56,101 @@ export default function ScoreCreator({
     }
   }, [editedScoreSheetId]);
 
-  const handleToggle = (index: number) => {
-    if (openIndex === index) {
-      setOpenIndex(null);
-    } else {
-      setColor(reorderValues[index].color);
-      setOpenIndex(index);
-    }
+  const addGameFieldHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    const newField = {
+      id: reorderValues.length + Math.floor(Math.random() * 1e11),
+      placeholder: "Field name",
+      color: "#fff",
+    };
+    setReorderValues((prevState) => [...prevState, newField]);
   };
 
-  const handleColorChange = (color: string) => {
-    setColor(color);
-    if (openIndex !== null) {
-      setReorderValues((prevState) =>
-        prevState.map((item, idx) =>
-          idx === openIndex ? { ...item, color } : item,
-        ),
-      );
-    }
-  };
+  return (
+    <div>
+      {id && (
+        <h1 className="text-[52px] lg:text-[72px] text-default font-extrabold">
+          {gameName}
+        </h1>
+      )}
+      <div className="w-full flex items-center justify-center">
+        <div className="w-52 lg:w-72 border border-black bg-white h-24 flex items-center rounded-lg justify-center p-4 mb-4">
+          <span className="text-2xl text-default">Game fields</span>
+        </div>
+      </div>
+      <Reorder.Group
+        onReorder={setReorderValues}
+        values={reorderValues}
+        axis="y"
+        className="flex min-h-full w-full items-center flex-col gap-4"
+      >
+        <ReorderItem
+          reorderValues={reorderValues}
+          openIndex={openIndex}
+          reorderValuesSetter={setReorderValues}
+          id={id}
+          openIndexSetter={setOpenIndex}
+          popover={popover}
+          colorSetter={setColor}
+          prevState={prevStep}
+          submitStep={submitStep}
+          color={color}
+        />
+      </Reorder.Group>
+      {/*TODO: add buttons here, improve layout!*/}
+      {/*<div className="flex items-center justify-center bg-red-200 flex-col lg:max-w-72 gap-4 mt-10 mb-10">*/}
+      {/*  <Button*/}
+      {/*    className="mt-4"*/}
+      {/*    nameToDisplay="Add score field"*/}
+      {/*    variant="withoutBackground"*/}
+      {/*    size="lg"*/}
+      {/*    onClick={(e) => addGameFieldHandler(e)}*/}
+      {/*  />*/}
+      {/*  <Button*/}
+      {/*    className="mt-4"*/}
+      {/*    nameToDisplay={*/}
+      {/*      editedScoreSheetId ? "Edit score board" : "Save score board"*/}
+      {/*    }*/}
+      {/*    variant="default"*/}
+      {/*    size="lg"*/}
+      {/*    //@ts-ignore*/}
+      {/*    onClick={(e) => submitStep(e)}*/}
+      {/*  />*/}
+      {/*</div>*/}
+    </div>
+  );
+}
 
+interface ReorderValuesProps {
+  id: string | string[];
+  reorderValues: ReorderValue[];
+  openIndex: number | null;
+  reorderValuesSetter: React.Dispatch<React.SetStateAction<ReorderValue[]>>;
+  openIndexSetter: React.Dispatch<React.SetStateAction<number | null>>;
+  popover: React.RefObject<HTMLDivElement>;
+  colorSetter: React.Dispatch<React.SetStateAction<string>>;
+  prevState: (() => void) | undefined;
+  submitStep: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
+  color: string;
+}
+
+function ReorderItem({
+  reorderValues,
+  openIndex,
+  reorderValuesSetter,
+  id,
+  openIndexSetter,
+  popover,
+  colorSetter,
+  prevState,
+  submitStep,
+  color,
+}: ReorderValuesProps) {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (popover.current && !popover.current.contains(event.target as Node)) {
-        setOpenIndex(null);
+        openIndexSetter(null);
       }
     };
 
@@ -90,121 +165,85 @@ export default function ScoreCreator({
     index: number,
   ) => {
     const newPlaceholder = e.target.value;
-    setReorderValues((prevState) =>
+    reorderValuesSetter((prevState) =>
       prevState.map((item, idx) =>
         idx === index ? { ...item, placeholder: newPlaceholder } : item,
       ),
     );
   };
 
-  const removeReorderItem = (id: number) => {
+  const handleToggle = (index: number) => {
+    if (openIndex === index) {
+      openIndexSetter(null);
+    } else {
+      colorSetter(reorderValues[index].color);
+      openIndexSetter(index);
+    }
+  };
+
+  const handleColorChange = (color: string) => {
+    colorSetter(color);
+    if (openIndex !== null) {
+      reorderValuesSetter((prevState) =>
+        prevState.map((item, idx) =>
+          idx === openIndex ? { ...item, color } : item,
+        ),
+      );
+    }
+  };
+
+  const removeReorderItem = (id: number): void => {
     const filterAndRemoveGameField = reorderValues.filter(
       (item) => item.id !== id,
     );
-
-    setReorderValues(filterAndRemoveGameField);
+    reorderValuesSetter(filterAndRemoveGameField);
   };
 
-  const addGameFieldHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
-    const newField = {
-      id: reorderValues.length + Math.floor(Math.random() * 1e11),
-      placeholder: "Field name",
-      color: "#fff",
-    };
-    setReorderValues((prevState) => [...prevState, newField]);
-  };
-  // TODO: REFACTOR THIS CODE ASAP!
-  return (
-    <main>
-      {id && <h1>{gameName}</h1>}
-      <div>
-        <div className="w-full flex items-center justify-center">
-          <div className="w-52 lg:w-72 border border-black bg-white h-24 flex items-center rounded-lg justify-center p-4 mb-4">
-            <span className="text-2xl text-default">Game fields</span>
+  return reorderValues.map((reorder, index) => (
+    <Reorder.Item
+      value={reorder}
+      key={reorder.id}
+      dragListener={!(openIndex === index)}
+    >
+      <div
+        style={{ backgroundColor: reorder.color }}
+        className="bg-white h-24 w-52 lg:w-72 border border-black rounded-lg flex items-center justify-center"
+      >
+        <Input
+          style={{ backgroundColor: reorder.color }}
+          className="border-none"
+          placeholder="Field name"
+          type="text"
+          value={id && reorder.placeholder}
+          onChange={(e) => handleInputChange(e, index)}
+        />
+        <div className="flex flex-col justify-around items-end h-full">
+          <X
+            className="h-5 w-5 cursor-pointer"
+            onClick={() => removeReorderItem(reorder.id)}
+          />
+          <div className="relative">
+            <div className="flex gap-3 items-center">
+              <Palette
+                onClick={() => {
+                  console.log(index);
+                  console.log("siemano");
+                  handleToggle(index);
+                }}
+              />
+            </div>
+            {openIndex === index && (
+              <div
+                className="absolute right-0  md:left-0 rounded-[9px] shadow-colorPicker z-50"
+                //@ts-ignore
+                ref={popover}
+              >
+                <HexColorPicker color={color} onChange={handleColorChange} />
+              </div>
+            )}
           </div>
         </div>
-        <Reorder.Group
-          onReorder={setReorderValues}
-          values={reorderValues}
-          className="flex min-h-full flex-col gap-4"
-          axis="y"
-        >
-          {reorderValues.map((reorder, index) => {
-            return (
-              <Reorder.Item
-                value={reorder}
-                key={reorder.id}
-                className="flex gap-4 w-full items-center"
-                dragListener={!(openIndex === index)}
-              >
-                <div
-                  style={{ backgroundColor: reorder.color }}
-                  className="bg-white h-24 w-52 lg:w-72 border border-black rounded-lg flex items-center justify-center"
-                >
-                  <Input
-                    style={{ backgroundColor: reorder.color }}
-                    className="border-none"
-                    placeholder="Field name"
-                    type="text"
-                    value={id && reorder.placeholder}
-                    onChange={(e) => handleInputChange(e, index)}
-                  />
-                </div>
-                <div className="flex flex-col gap-2 items-center justify-center lg:flex-row">
-                  <div className="relative">
-                    <div className="flex gap-3 items-center">
-                      <div
-                        style={{ backgroundColor: reorder.color }}
-                        onClick={() => {
-                          handleToggle(index);
-                        }}
-                        className="w-[38px] h-[38px] rounded-lg border-[2px] border-white cursor-pointer shadow-colorPicker"
-                      />
-                    </div>
-                    {openIndex === index && (
-                      <div
-                        className="absolute right-0  md:left-0 rounded-[9px] shadow-colorPicker z-50"
-                        //@ts-ignore
-                        ref={popover}
-                      >
-                        <HexColorPicker
-                          color={color}
-                          onChange={handleColorChange}
-                        />
-                      </div>
-                    )}
-                  </div>
-                  <X
-                    className="h-8 w-8 cursor-pointer"
-                    onClick={() => removeReorderItem(reorder.id)}
-                  />
-                </div>
-              </Reorder.Item>
-            );
-          })}
-        </Reorder.Group>
-        <div className="flex items-center justify-center bg-red-200 flex-col lg:max-w-72 gap-4 mt-10 mb-10">
-          <Button
-            className="mt-4"
-            nameToDisplay="Add score field"
-            variant="withoutBackground"
-            size="lg"
-            onClick={(e) => addGameFieldHandler(e)}
-          />
-          <Button
-            className="mt-4"
-            nameToDisplay={
-              editedScoreSheetId ? "Edit score board" : "Save score board"
-            }
-            variant="default"
-            size="lg"
-            //@ts-ignore
-            onClick={(e) => submitStep(e)}
-          />
-        </div>
       </div>
-    </main>
-  );
+    </Reorder.Item>
+  ));
 }

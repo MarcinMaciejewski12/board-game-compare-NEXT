@@ -20,11 +20,11 @@ interface ContextDataInterface {
   setLabelTable: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
-type ReorderValue = {
+export interface ReorderValue {
   id: number;
   placeholder: string;
   color: string;
-};
+}
 
 type GameInfo = {
   max_player: number;
