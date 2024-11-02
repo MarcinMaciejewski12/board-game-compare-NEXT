@@ -86,7 +86,7 @@ export default function ScoreboardView() {
       return sum + parseInt(playerInputs[playerIndex]?.[key] || "0", 10);
     }, 0);
   };
-
+  // TODO: refactor this piece of code. It's not clear what it does
   return (
     <div className="w-full h-full">
       <header className="flex items-center justify-center">
