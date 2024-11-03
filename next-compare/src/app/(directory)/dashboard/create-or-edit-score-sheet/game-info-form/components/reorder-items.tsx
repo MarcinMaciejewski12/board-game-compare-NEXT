@@ -1,9 +1,11 @@
 import { ReorderValue } from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Reorder } from "framer-motion";
 import { Input } from "@/components/input";
 import { Palette, X } from "lucide-react";
 import { HexColorPicker } from "react-colorful";
+import { cn } from "@/lib/utils";
+import { createPortal } from "react-dom";
 
 interface ReorderValuesProps {
   id: string | string[];
@@ -14,6 +16,7 @@ interface ReorderValuesProps {
   popover: React.RefObject<HTMLDivElement>;
   colorSetter: React.Dispatch<React.SetStateAction<string>>;
   color: string;
+  horizontalView?: boolean;
 }
 
 export default function ReorderItem({
@@ -25,7 +28,9 @@ export default function ReorderItem({
   popover,
   colorSetter,
   color,
+  horizontalView,
 }: ReorderValuesProps) {
+  const [popoverStyle, setPopoverStyle] = useState({ top: 0, left: 0 });
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (popover.current && !popover.current.contains(event.target as Node)) {
@@ -57,9 +62,12 @@ export default function ReorderItem({
     } else {
       colorSetter(reorderValues[index].color);
       openIndexSetter(index);
+      if (popover.current) {
+        const rect = popover.current.getBoundingClientRect();
+        setPopoverStyle({ top: rect.bottom, left: rect.left });
+      }
     }
   };
-
   const handleColorChange = (color: string) => {
     colorSetter(color);
     if (openIndex !== null) {
@@ -82,6 +90,7 @@ export default function ReorderItem({
     <Reorder.Item
       value={reorder}
       key={reorder.id}
+      className={cn(horizontalView ? "cursor-ew-resize" : "cursor-ns-resize")}
       dragListener={!(openIndex === index)}
     >
       <div
@@ -103,17 +112,16 @@ export default function ReorderItem({
           />
           <div className="relative">
             <div className="flex gap-3 items-center">
+              {/*TODO: try portal here*/}
               <Palette
                 onClick={() => {
-                  console.log(index);
-                  console.log("siemano");
                   handleToggle(index);
                 }}
               />
             </div>
             {openIndex === index && (
               <div
-                className="absolute right-0  md:left-0 rounded-[9px] shadow-colorPicker z-50"
+                className="absolute right-0 md:left-0 rounded-[9px] shadow-colorPicker z-50"
                 ref={popover}
               >
                 <HexColorPicker color={color} onChange={handleColorChange} />

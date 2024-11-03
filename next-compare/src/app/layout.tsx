@@ -8,6 +8,7 @@ import Sidebar from "@/components/sidebars/sidebar";
 import HeaderArrow from "@/components/header-arrow";
 import { Toaster } from "@/components/ui/toaster";
 import MobileBottomNavigation from "@/components/mobile-bottom-navigation";
+import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,24 +25,29 @@ export default async function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${inter.className} `}>
+        <body className={`${inter.className}`}>
           <UserContextProvider>
             <Header />
             <div className="flex h-full">
               <div
-                className="w-defaultSidebarWidth hidden sm:flex"
+                className="min-w-[4.375rem] w-defaultSidebarWidth hidden sm:flex"
                 style={{ height: "calc(100vh - var(--default-header-height))" }}
               >
                 <Sidebar />
               </div>
 
-              <div className="px-2 bg-secondary w-full sm:rounded-tl-[1rem] sm:rounded-tr-sm pb-[4.375rem]">
+              <div
+                style={{ height: "calc(100vh - var(--default-header-height))" }}
+                className={cn(
+                  "px-2 sm:max-w-[calc(100vw-90px)] bg-secondary h-full w-full sm:rounded-tl-[1rem] sm:rounded-tr-sm pb-[4.375rem]",
+                )}
+              >
                 <div>
                   <HeaderArrow />
                 </div>
                 {children}
               </div>
-              <div className="hidden sm:block w-[20px]" />
+              <div className="hidden sm:block min-w-[20px]" />
             </div>
             <div className="w-full fixed bottom-0 z-20 bg-primary h-defaultHeaderHeight sm:hidden">
               <MobileBottomNavigation />
