@@ -95,7 +95,7 @@ export default function ReorderItem({
     >
       <div
         style={{ backgroundColor: reorder.color }}
-        className="bg-white h-24 w-52 lg:w-72 border border-black rounded-lg flex items-center justify-center"
+        className="bg-white h-24 w-72 border border-black rounded-lg flex items-center justify-center"
       >
         <Input
           style={{ backgroundColor: reorder.color }}
