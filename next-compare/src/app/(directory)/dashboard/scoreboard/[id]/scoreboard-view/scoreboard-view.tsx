@@ -20,19 +20,13 @@ export interface ScoreData {
 }
 
 export default function ScoreboardView() {
-  const [data, setData] = useState<Data>({
-    board_id: "",
-    game_name: "",
-    max_players: 0,
-    score_sheet: "[]",
-  });
+  const [data, setData] = useState<Data | null>(null);
   const [playerCount, setPlayerCount] = useState<number>(0);
   const [playerInputs, setPlayerInputs] = useState<
     Array<{ [key: string]: string }>
   >([]);
   const { user } = useUser();
   const pathname = usePathname().split("/").pop();
-  console.log("data", data);
   const scoreData = JSON.parse(data?.score_sheet ?? "[]") as ScoreData[];
   const router = useRouter();
 
@@ -41,12 +35,11 @@ export default function ScoreboardView() {
       const data = await axios.get(
         `/api/user-games/get-user-games/get-particular-game?id=${pathname}`,
       );
-      console.log(data);
+
       setData(data.data.result[0]);
     };
     dataHandler();
   }, [pathname]);
-  console.log(data);
   const addPlayer = () => {
     setPlayerCount(playerCount + 1);
     setPlayerInputs([...playerInputs, {}]);
@@ -93,11 +86,11 @@ export default function ScoreboardView() {
       return sum + parseInt(playerInputs[playerIndex]?.[key] || "0", 10);
     }, 0);
   };
-
+  // TODO: refactor this piece of code. It's not clear what it does
   return (
     <div className="w-full h-full">
       <header className="flex items-center justify-center">
-        <h1 className="text-[72px] text-default font-extrabold">
+        <h1 className="text-[52px]  lg:text-[72px] text-default font-extrabold p-2">
           {data?.game_name}
         </h1>
       </header>
@@ -112,7 +105,7 @@ export default function ScoreboardView() {
             </div>
             {Array.from({ length: playerCount }).map((_, playerIndex) => (
               <Input
-                className="p-2 lg:h-16"
+                className="p-2 h-16"
                 key={playerIndex}
                 placeholder={`Player ${playerIndex + 1} name`}
                 type={"text"}
@@ -122,7 +115,7 @@ export default function ScoreboardView() {
               />
             ))}
           </div>
-          {scoreData.map((item, fieldIndex) => (
+          {scoreData.map((item) => (
             <div key={item.id} className="flex">
               <div
                 className={`min-w-48 border border-black h-16 flex items-center justify-center`}
@@ -132,7 +125,7 @@ export default function ScoreboardView() {
               </div>
               {Array.from({ length: playerCount }).map((_, playerIndex) => (
                 <Input
-                  className="p-2 lg:h-16"
+                  className="p-2 h-16"
                   key={playerIndex}
                   placeholder={`Player ${playerIndex + 1} ${item.placeholder}`}
                   type={"number"}
@@ -165,11 +158,11 @@ export default function ScoreboardView() {
           </div>
         </div>
       </main>
-      {!(playerCount >= data.max_players) && (
-        <div className="w-full flex items-center justify-center mt-4">
+      {data && !(playerCount >= data.max_players) && (
+        <div className="w-full flex items-center justify-center p-4 ">
           <Button
             nameToDisplay="Add player"
-            className="flex font-medium cursor-pointer justify-center  items-center"
+            className="flex font-medium cursor-pointer justify-center items-center"
             onClick={addPlayer}
             size="sm"
             variant="withoutBackground"
@@ -177,7 +170,7 @@ export default function ScoreboardView() {
         </div>
       )}
 
-      <div className="flex flex-col mt-4 items-center justify-center">
+      <div className="flex flex-col items-center justify-center p-4">
         <Button
           onClick={() => sendPlayedGame()}
           nameToDisplay={"Save scoresheet"}

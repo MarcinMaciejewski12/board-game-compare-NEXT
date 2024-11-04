@@ -38,7 +38,7 @@ export default function Header() {
       </div>
       {/*    HERE IS HEADER FOR MOBILE DEVICES     */}
       <div
-        className="lg:hidden h-defaultHeaderHeight bg-primary drop-shadow-lg shadow-2xl z-20 top-0 sticky flex items-center justify-around
+        className="sm:hidden lg:hidden h-defaultHeaderHeight bg-primary drop-shadow-lg shadow-2xl z-20 top-0 sticky flex items-center justify-around
       "
       >
         <h1 className="text-white">BoardGameCompare.</h1>
@@ -54,7 +54,6 @@ export default function Header() {
             />
           </Link>
         )}
-        {/*<Burger navigationIsOpenHandler={() => setIsOpen(!isOpen)} />*/}
       </div>
     </>
   );

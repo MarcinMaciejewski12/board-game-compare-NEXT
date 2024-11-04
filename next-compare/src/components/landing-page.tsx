@@ -13,7 +13,7 @@ export default function LandingPage() {
   }
 
   return (
-    <div className="overflow-hidden -z-10">
+    <div className="overflow-hidden">
       <section className="min-w-full h-[80vh] flex">
         <div className="w-1/2 h-full flex justify-center items-center">
           <h1 className="text-center text-default font-poppins font-bold text-4xl">

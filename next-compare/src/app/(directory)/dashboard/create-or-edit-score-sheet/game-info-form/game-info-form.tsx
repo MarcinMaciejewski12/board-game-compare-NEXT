@@ -89,7 +89,7 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
   };
 
   return (
-    <div className="w-[65vw]  h-full bg-white rounded shadow-xl flex flex-col items-center gap-2 p-4">
+    <div className="w-[90vw] h-full bg-white rounded shadow-xl flex flex-col items-center gap-2 p-4">
       <h1 className="text-default font-bold text-xl">Basic game information</h1>
       <div className="w-full h-full">
         <form
@@ -97,8 +97,8 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
           onSubmit={(e) => e.preventDefault()}
           noValidate={false}
         >
-          <div className="flex gap-2">
-            <div className="w-[50%] h-full flex flex-col gap-4 p-2 bg-primary rounded">
+          <div className="flex flex-col md:flex-row gap-2">
+            <div className="w-full h-full flex flex-col gap-4 p-2 bg-primary rounded sm:w-[50%]">
               <Input
                 value={gameName}
                 label="Game Name"
@@ -113,8 +113,9 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
                 className="w-full"
               />
 
-              <div className="flex gap-2 justify-between items-end">
+              <div className="flex flex-col w-full gap-2 justify-between md:items-end md:flex-row">
                 <Input
+                  className="w-full md:w-[45%]"
                   name="min_player"
                   onChange={dialogHandler}
                   label="Players"
@@ -129,6 +130,7 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
                 />
                 <Input
                   onChange={dialogHandler}
+                  className="w-full md:w-[45%]"
                   name="max_player"
                   placeholder="Max players"
                   variant="default"
@@ -143,6 +145,7 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
 
               <Input
                 label="Difficulty"
+                className="w-full"
                 type="number"
                 max={10}
                 min={1}
@@ -159,6 +162,7 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
                 label="Playtime"
                 variant="default"
                 type="number"
+                className="w-full"
                 placeholder="Playtime"
                 name="playtime"
                 onChange={dialogHandler}
@@ -182,7 +186,7 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
               </div>
             </div>
 
-            <div className="w-[50%] h-full">
+            <div className="w-full md:w-[50%] h-full">
               <div className="flex flex-col gap-4">
                 <Textarea
                   placeholder="Write a short description of the game"
@@ -191,7 +195,7 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
                   className="bg-white outline-none resize-none min-h-[26vh] w-full"
                 />
 
-                <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-2">
+                <div className="grid w-full grid-cols-3 md:grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-2 mb-4">
                   {labels.map((item) => (
                     <div
                       onClick={() => isCheckedHandler(item.id)}

@@ -4,7 +4,7 @@ import EditScoreSheetView from "@/app/(directory)/dashboard/create-or-edit-score
 export default function EditScoreSheet({ params }: { params: { id: string } }) {
   return (
     <ScoreSheetMultiFormContextProvider>
-      <EditScoreSheetView id={params.id} />;
+      <EditScoreSheetView id={params.id} />
     </ScoreSheetMultiFormContextProvider>
   );
 }

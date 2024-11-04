@@ -19,6 +19,7 @@ export default function MultiStepForm() {
   const prevStep = () => setStep((prevStep) => prevStep - 1);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    // TODO: add horizontal view to data(field in database already exists)
     e.preventDefault();
     const data = {
       details: gameInfo,
