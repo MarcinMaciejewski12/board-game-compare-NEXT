@@ -72,7 +72,7 @@ export default function DashboardView() {
 
   //   TODO: create default view for pages [dashboard, games-list]
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full ">
       <div className="hidden sm:block">
         <h1 className="text-default text-5xl font-bold mb-2">
           {isSignedIn && `Hello ${user.username}`}
@@ -101,7 +101,7 @@ export default function DashboardView() {
           placeholder="Search games"
         />
       </div>
-      <section className="w-full flex flex-col items-center gap-2 md:grid md:grid-cols-2 h-full lg:grid lg:grid-cols-3 xl:grid-cols-4">
+      <section className="w-full overflow-auto max-h-[45rem] flex flex-col items-center gap-2 md:grid md:grid-cols-2 h-full lg:grid lg:grid-cols-3 xl:grid-cols-4">
         {gamesData?.map((data: Games) => (
           <DashboardCard
             key={data.id}
