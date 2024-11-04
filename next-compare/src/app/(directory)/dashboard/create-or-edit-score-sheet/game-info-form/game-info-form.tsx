@@ -27,9 +27,9 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
 
   const nextStepValidation = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-
+    nextStep();
     if (formRef.current?.checkValidity()) {
-      nextStep();
+      // nextStep();
     } else {
       const formElements = formRef.current?.elements;
       const newErrorMessages: { [key: string]: string } = {};

@@ -31,6 +31,7 @@ export async function POST(request: NextRequest) {
         unique_board_id: uid(),
         game_score_board: JSON.stringify(body.gameFields),
         labels: JSON.stringify(body.labels),
+        horizontal: body.horizontalView,
       })
       .returning();
 

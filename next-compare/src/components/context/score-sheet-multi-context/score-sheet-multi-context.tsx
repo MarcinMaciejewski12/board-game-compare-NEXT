@@ -18,6 +18,8 @@ interface ContextDataInterface {
   setGameInfo: React.Dispatch<React.SetStateAction<GameInfo>>;
   labelTable: number[];
   setLabelTable: React.Dispatch<React.SetStateAction<number[]>>;
+  horizontalView: boolean;
+  setHorizontalView: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface ReorderValue {
@@ -33,6 +35,8 @@ type GameInfo = {
   playtime: string;
   description: string;
   isSharedToCommunity: boolean;
+  // horizontalView: boolean;
+  // setHorizontalView: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const ScoreSheetMultiFormContext = createContext<ContextDataInterface>({
@@ -48,6 +52,8 @@ const ScoreSheetMultiFormContext = createContext<ContextDataInterface>({
   setGameInfo: () => {},
   labelTable: [],
   setLabelTable: () => {},
+  horizontalView: false,
+  setHorizontalView: () => {},
 });
 
 export function ScoreSheetMultiFormContextProvider({ children }: ContextProps) {
@@ -64,7 +70,7 @@ export function ScoreSheetMultiFormContextProvider({ children }: ContextProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [color, setColor] = useState("#fff");
   const [labelTable, setLabelTable] = useState<number[]>([]);
-
+  const [horizontalView, setHorizontalView] = useState<boolean>(false);
   const contextData: ContextDataInterface = {
     gameName,
     setGameName,
@@ -78,6 +84,8 @@ export function ScoreSheetMultiFormContextProvider({ children }: ContextProps) {
     setGameInfo,
     labelTable,
     setLabelTable,
+    horizontalView,
+    setHorizontalView,
   };
 
   return (
