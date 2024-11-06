@@ -47,7 +47,7 @@ export default function ScoreboardView() {
     setPlayerCount(playerCount + 1);
     setPlayerInputs([...playerInputs, {}]);
   };
-
+  console.log(playerCount);
   const handleInputChange = (
     playerIndex: number,
     fieldName: string,
@@ -61,7 +61,7 @@ export default function ScoreboardView() {
 
     setPlayerInputs(newPlayerInputs);
   };
-
+  console.log(scoreData);
   const sendPlayedGame = async () => {
     const playerScores = playerInputs.map((inputs, playerIndex) => ({
       ...inputs,
@@ -89,7 +89,7 @@ export default function ScoreboardView() {
       return sum + parseInt(playerInputs[playerIndex]?.[key] || "0", 10);
     }, 0);
   };
-  // TODO: refactor this piece of code. It's not clear what it does
+
   return (
     <div className="w-full h-full">
       {/*GAME NAME*/}
@@ -100,17 +100,34 @@ export default function ScoreboardView() {
       </div>
 
       {/*DISPLAY SCORE FIELDS*/}
-      <div className="flex items-center flex-col justify-center bg-red-200">
-        <div className="min-w-48 max-w-72 border border-black bg-white h-16 rounded-xl flex items-center justify-center">
-          <span>
-            Players name <br />
-            Game fields
-          </span>
+      <div className="flex">
+        <div
+          className={cn(
+            "bg-red-200 flex",
+            data?.horizontal ? "flex-row" : "flex-col",
+          )}
+        >
+          <div className="min-w-48 max-w-52 border border-black bg-white h-16 rounded-xl flex items-center justify-center">
+            <span>
+              Players name <br />
+              Game fields
+            </span>
+          </div>
+          {scoreData.map((score: ScoreData) => (
+            <div
+              key={score.id}
+              className={`min-w-48 max-w-52 rounded-xl border  border-black h-16 flex items-center justify-center`}
+              style={{ backgroundColor: score.color }}
+            >
+              <span>{score.placeholder}</span>
+            </div>
+          ))}
         </div>
-        <DisplayScoreFields
-          handleInputChange={handleInputChange}
-          playerCount={playerCount}
+        <DisplayPLayersAndScoresFields
           horizontal={data?.horizontal ?? false}
+          playerCount={playerCount}
+          handleInputChange={handleInputChange}
+          scoreData={scoreData}
         />
       </div>
 
@@ -216,7 +233,7 @@ export default function ScoreboardView() {
   );
 }
 
-interface DisplayScoreFieldsProps {
+interface DisplayPLayersAndScoresFieldsProps {
   playerCount: number;
   handleInputChange: (
     playerIndex: number,
@@ -224,16 +241,18 @@ interface DisplayScoreFieldsProps {
     value: string,
   ) => void;
   horizontal: boolean;
+  scoreData: ScoreData[];
 }
 
-function DisplayScoreFields({
+function DisplayPLayersAndScoresFields({
   playerCount,
-  handleInputChange,
   horizontal,
-}: DisplayScoreFieldsProps) {
+  handleInputChange,
+  scoreData,
+}: DisplayPLayersAndScoresFieldsProps) {
   return (
-    <div>
-      <div className={cn("flex", !horizontal ? "flex-row" : "flex-col")}>
+    <div className="flex flex-col">
+      <div className={cn("flex", horizontal ? "flex-col" : "flex-row")}>
         {Array.from({ length: playerCount }).map((_, playerIndex) => (
           <Input
             className="p-2 h-16"
@@ -246,11 +265,81 @@ function DisplayScoreFields({
           />
         ))}
       </div>
+      <div className={cn("flex", horizontal ? "flex-row" : "flex-col")}>
+        {/*{Array.from({ length: scoreData.length }).map((_, playerIndex) => (*/}
+        {/*  <Input*/}
+        {/*    className="p-2 h-16"*/}
+        {/*    key={playerIndex}*/}
+        {/*    placeholder={`Player ${playerIndex + 1} asd`}*/}
+        {/*    type="number"*/}
+        {/*    // onChange={(e) =>*/}
+        {/*    // handleInputChange(*/}
+        {/*    //   playerIndex,*/}
+        {/*    //   item.placeholder === "" ? item.color : item.placeholder,*/}
+        {/*    //   e.target.value,*/}
+        {/*    //  // )*/}
+        {/*    // }*/}
+        {/*  />*/}
+        {/*))}*/}
+      </div>
     </div>
   );
 }
 
-function DisplayScoreData(data: ScoreData[]) {
-  console.log("data", data);
-  return data.map((item) => <div key={item.id}></div>);
-}
+//
+// function DisplayPlayersFields({
+//   playerCount,
+//   handleInputChange,
+//   horizontal,
+// }: DisplayScoreFieldsProps) {
+//   return (
+//     <div>
+//       <div className={cn("flex", !horizontal ? "flex-row" : "flex-col")}>
+//         {Array.from({ length: playerCount }).map((_, playerIndex) => (
+//           <Input
+//             className="p-2 h-16"
+//             key={playerIndex}
+//             placeholder={`Player ${playerIndex + 1} name`}
+//             type={"text"}
+//             onChange={(e) =>
+//               handleInputChange(playerIndex, "name", e.target.value)
+//             }
+//           />
+//         ))}
+//       </div>
+//     </div>
+//   );
+// }
+//
+// interface DisplayScoreDataProps {
+//   data: ScoreData[];
+//   playerCount: number;
+// }
+//
+// function DisplayScoreData({ data, playerCount }: DisplayScoreDataProps) {
+//   return data.map((score) => (
+//     <div key={score.id} className={cn("flex")}>
+//       <div
+//         className={`min-w-48 rounded-xl border  border-black h-16 flex items-center justify-center`}
+//         style={{ backgroundColor: score.color }}
+//       >
+//         <span>{score.placeholder}</span>
+//       </div>
+//       {Array.from({ length: playerCount }).map((_, playerIndex) => (
+//         <Input
+//           className="p-2 h-16"
+//           key={playerIndex}
+//           placeholder={`Player ${playerIndex + 1} ${score.placeholder}`}
+//           type="number"
+//           // onChange={(e) =>
+//           // handleInputChange(
+//           //   playerIndex,
+//           //   item.placeholder === "" ? item.color : item.placeholder,
+//           //   e.target.value,
+//           //  // )
+//           // }
+//         />
+//       ))}
+//     </div>
+//   ));
+// }
