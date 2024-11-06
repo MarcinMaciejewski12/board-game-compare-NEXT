@@ -5,12 +5,14 @@ import { usePathname, useRouter } from "next/navigation";
 import axios from "axios";
 import { Input } from "@/components/input";
 import { Button } from "@/components/button";
+import { cn } from "@/lib/utils";
 
 export interface Data {
   board_id: string;
   game_name: string;
   max_players: number;
   score_sheet: string;
+  horizontal: boolean;
 }
 
 export interface ScoreData {
@@ -40,6 +42,7 @@ export default function ScoreboardView() {
     };
     dataHandler();
   }, [pathname]);
+
   const addPlayer = () => {
     setPlayerCount(playerCount + 1);
     setPlayerInputs([...playerInputs, {}]);
@@ -97,7 +100,27 @@ export default function ScoreboardView() {
       </div>
 
       {/*DISPLAY SCORE FIELDS*/}
-      {/*  TODO  */}
+      <div className="flex items-center flex-col justify-center bg-red-200">
+        <div className="min-w-48 max-w-72 border border-black bg-white h-16 rounded-xl flex items-center justify-center">
+          <span>
+            Players name <br />
+            Game fields
+          </span>
+        </div>
+        <DisplayScoreFields
+          handleInputChange={handleInputChange}
+          playerCount={playerCount}
+          horizontal={data?.horizontal ?? false}
+        />
+      </div>
+
+      <Button
+        nameToDisplay="Add player"
+        className="flex font-medium cursor-pointer justify-center items-center"
+        onClick={addPlayer}
+        size="sm"
+        variant="withoutBackground"
+      />
     </div>
     // <div className="w-full h-full">
     //   <header className="flex items-center justify-center">
@@ -191,4 +214,43 @@ export default function ScoreboardView() {
     //   </div>
     // </div>
   );
+}
+
+interface DisplayScoreFieldsProps {
+  playerCount: number;
+  handleInputChange: (
+    playerIndex: number,
+    fieldName: string,
+    value: string,
+  ) => void;
+  horizontal: boolean;
+}
+
+function DisplayScoreFields({
+  playerCount,
+  handleInputChange,
+  horizontal,
+}: DisplayScoreFieldsProps) {
+  return (
+    <div>
+      <div className={cn("flex", !horizontal ? "flex-row" : "flex-col")}>
+        {Array.from({ length: playerCount }).map((_, playerIndex) => (
+          <Input
+            className="p-2 h-16"
+            key={playerIndex}
+            placeholder={`Player ${playerIndex + 1} name`}
+            type={"text"}
+            onChange={(e) =>
+              handleInputChange(playerIndex, "name", e.target.value)
+            }
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function DisplayScoreData(data: ScoreData[]) {
+  console.log("data", data);
+  return data.map((item) => <div key={item.id}></div>);
 }
