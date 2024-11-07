@@ -7,6 +7,21 @@ import { Input } from "@/components/input";
 import { Button } from "@/components/button";
 import { cn } from "@/lib/utils";
 
+interface DisplayPlayersFieldsProps {
+  handleInputChange: (
+    playerIndex: number,
+    fieldName: string,
+    value: string,
+  ) => void;
+  horizontal: boolean;
+  inputFields: InputFields[];
+}
+
+interface DisplayScoreFieldsProps {
+  horizontal: boolean;
+  data: ScoreData[];
+}
+
 export interface Data {
   board_id: string;
   game_name: string;
@@ -21,13 +36,20 @@ export interface ScoreData {
   placeholder: string;
 }
 
+interface InputFields {
+  name: string;
+  fields: { [key: string]: string }[];
+}
+
 export default function ScoreboardView() {
   const [data, setData] = useState<Data | null>(null);
   const [playerCount, setPlayerCount] = useState<number>(0);
   const [playerInputs, setPlayerInputs] = useState<
     Array<{ [key: string]: string }>
   >([]);
-  const [inputFields, setInputFields] = useState<{}[] | null>(null);
+  const [inputFields, setInputFields] = useState<InputFields[] | undefined>(
+    undefined,
+  );
   const { user } = useUser();
   const pathname = usePathname().split("/").pop();
   const scoreData = JSON.parse(data?.score_sheet ?? "[]") as ScoreData[];
@@ -109,40 +131,19 @@ export default function ScoreboardView() {
           {data?.game_name}
         </h1>
       </div>
-
-      {/*DISPLAY SCORE FIELDS*/}
-      <div className={cn("flex", data?.horizontal ? "flex-col" : "flex-row")}>
-        <div
-          className={cn(
-            "bg-red-200 flex",
-            data?.horizontal ? "flex-row" : "flex-col",
-          )}
-        >
-          <div className="min-w-48 w-52 border border-black bg-white h-16 rounded-xl flex items-center justify-center">
-            <span>
-              Players name <br />
-              Game fields
-            </span>
-          </div>
-          {scoreData.map((score: ScoreData) => (
-            <div
-              key={score.id}
-              className={`min-w-48 w-52 rounded-xl border  border-black h-16 flex items-center justify-center`}
-              style={{ backgroundColor: score.color }}
-            >
-              <span>{score.placeholder}</span>
-            </div>
-          ))}
-        </div>
-        <DisplayPLayersAndScoresFields
+      <div className={cn("flex", data?.horizontal && "flex-col")}>
+        {/*DISPLAY SCORE FIELDS*/}
+        <DisplayScoreFields
+          data={scoreData}
           horizontal={data?.horizontal ?? false}
-          playerCount={playerCount}
+        />
+        {/*DISPLAY PLAYERS FIELDS*/}
+        <DisplayPlayersFields
+          horizontal={data?.horizontal ?? false}
           handleInputChange={handleInputChange}
-          scoreData={scoreData}
-          inputFields={inputFields}
+          inputFields={inputFields ?? []}
         />
       </div>
-
       <Button
         nameToDisplay="Add player"
         className="flex font-medium cursor-pointer justify-center items-center"
@@ -154,25 +155,11 @@ export default function ScoreboardView() {
   );
 }
 
-interface DisplayPLayersAndScoresFieldsProps {
-  playerCount: number;
-  handleInputChange: (
-    playerIndex: number,
-    fieldName: string,
-    value: string,
-  ) => void;
-  horizontal: boolean;
-  scoreData: ScoreData[];
-  inputFields: any;
-}
-
-function DisplayPLayersAndScoresFields({
-  playerCount,
+function DisplayPlayersFields({
   horizontal,
   handleInputChange,
-  scoreData,
   inputFields,
-}: DisplayPLayersAndScoresFieldsProps) {
+}: DisplayPlayersFieldsProps): React.ReactNode {
   return (
     <div>
       <div className={cn("flex", horizontal ? "flex-col" : "flex-row")}>
@@ -204,6 +191,28 @@ function DisplayPLayersAndScoresFields({
           );
         })}
       </div>
+    </div>
+  );
+}
+
+function DisplayScoreFields({ horizontal, data }: DisplayScoreFieldsProps) {
+  return (
+    <div className={cn("flex", horizontal ? "flex-row" : "flex-col")}>
+      <div className="min-w-48 w-52 border border-black bg-white h-16 rounded-xl flex items-center justify-center">
+        <span>
+          Players name <br />
+          Game fields
+        </span>
+      </div>
+      {data.map((score: ScoreData) => (
+        <div
+          key={score.id}
+          className={`min-w-48 w-52 rounded-xl border  border-black h-16 flex items-center justify-center`}
+          style={{ backgroundColor: score.color }}
+        >
+          <span>{score.placeholder}</span>
+        </div>
+      ))}
     </div>
   );
 }
