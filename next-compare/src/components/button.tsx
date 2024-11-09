@@ -6,9 +6,9 @@ const buttonVariants = cva("", {
   variants: {
     variant: {
       default:
-        "bg-buttonAndShadowColor rounded-md text-white hover:bg-buttonAndShadowColor/90",
+        "bg-buttonAndShadowColor cursor-pointer rounded-md text-white hover:bg-buttonAndShadowColor/90",
       withoutBackground:
-        "border-2 shadow-xl text-black border-black rounded-md ",
+        "border-2 shadow-xl text-black border-black cursor-pointer rounded-md ",
     },
     size: {
       loginSize: "h-8 rounded-md px-8 shadow-xl",

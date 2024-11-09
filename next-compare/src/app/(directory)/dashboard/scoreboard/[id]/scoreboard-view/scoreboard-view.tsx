@@ -8,13 +8,13 @@ import { Button } from "@/components/button";
 import { cn } from "@/lib/utils";
 
 interface DisplayPlayersFieldsProps {
-  handleInputChange: (
-    playerIndex: number,
-    fieldName: string,
-    value: string,
-  ) => void;
   horizontal: boolean;
   inputFields: InputFields[];
+  playerInputsHandler: (
+    playerName: string,
+    name: string,
+    index: number,
+  ) => void;
 }
 
 interface DisplayScoreFieldsProps {
@@ -44,17 +44,19 @@ interface InputFields {
 export default function ScoreboardView() {
   const [data, setData] = useState<Data | null>(null);
   const [playerCount, setPlayerCount] = useState<number>(0);
-  const [playerInputs, setPlayerInputs] = useState<
-    Array<{ [key: string]: string }>
-  >([]);
   const [inputFields, setInputFields] = useState<InputFields[] | undefined>(
     undefined,
   );
+  const [nameAndPoints, setNameAndPoints] = useState<
+    { [key: string]: number | string }[] | undefined
+  >(undefined);
+
   const { user } = useUser();
   const pathname = usePathname().split("/").pop();
   const scoreData = JSON.parse(data?.score_sheet ?? "[]") as ScoreData[];
   const router = useRouter();
 
+  // DON'T LOOK AT THIS EFFECT, DATA WILL BE EXECUTED IN SERVER ACTIONS IN THE NEAREST FUTURE
   useEffect(() => {
     const dataHandler = async () => {
       const data = await axios.get(
@@ -69,127 +71,117 @@ export default function ScoreboardView() {
   const addPlayer = () => {
     setPlayerCount(playerCount + 1);
     const newInputs = scoreData.map((score) => ({
-      [score.placeholder || score.color]: "", // Przykładowo placeholder lub color z score
+      [score.placeholder || score.color]: "",
     }));
 
     setInputFields((prevState) => [
-      ...(prevState || []),
+      ...(prevState ?? []),
       {
         name: `Player ${playerCount + 1} name`,
-        fields: [...playerInputs, ...newInputs],
+        fields: newInputs,
       },
     ]);
   };
 
-  const handleInputChange = (
-    playerIndex: number,
-    fieldName: string,
-    value: string,
+  const playerInputsHandler = (
+    playerName: string,
+    name: string,
+    index: number,
   ) => {
-    const newPlayerInputs = [...playerInputs];
-    newPlayerInputs[playerIndex] = {
-      ...newPlayerInputs[playerIndex],
-      [fieldName]: value,
-    };
-
-    setPlayerInputs(newPlayerInputs);
-  };
-
-  const sendPlayedGame = async () => {
-    const playerScores = playerInputs.map((inputs, playerIndex) => ({
-      ...inputs,
-      totalScore: totalScore(playerIndex),
-    }));
-
-    const data = {
-      user_id: user?.id,
-      unique_board_id: pathname,
-      game_score_board: JSON.stringify(playerScores),
-    };
-
-    try {
-      await axios.post("/api/played-games", data);
-      router.push("/dashboard");
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const totalScore = (playerIndex: number) => {
-    return scoreData.reduce((sum, item) => {
-      const key = item?.placeholder === "" ? item.color : item.placeholder;
-
-      return sum + parseInt(playerInputs[playerIndex]?.[key] || "0", 10);
-    }, 0);
+    setNameAndPoints((prevState) => {
+      const newState = [...(prevState ?? [])];
+      if (!newState[index]) {
+        newState[index] = {};
+      }
+      newState[index][name] = playerName;
+      return newState;
+    });
   };
 
   return (
     <div className="w-full h-full">
-      {/*GAME NAME*/}
       <div className="w-full flex justify-center">
         <h1 className="text-[52px] lg:text-[72px] text-default font-extrabold">
           {data?.game_name}
         </h1>
       </div>
+
       <div className={cn("flex", data?.horizontal && "flex-col")}>
-        {/*DISPLAY SCORE FIELDS*/}
+        {/*DISPLAY CELLS WITH SCORE FIELD NAME AND ATTACHED COLOR*/}
         <DisplayScoreFields
           data={scoreData}
           horizontal={data?.horizontal ?? false}
         />
-        {/*DISPLAY PLAYERS FIELDS*/}
+        {/*ADDING ACTUAL DATA TO SCORE BOARD*/}
         <DisplayPlayersFields
+          playerInputsHandler={playerInputsHandler}
           horizontal={data?.horizontal ?? false}
-          handleInputChange={handleInputChange}
           inputFields={inputFields ?? []}
         />
       </div>
-      <Button
-        nameToDisplay="Add player"
-        className="flex font-medium cursor-pointer justify-center items-center"
-        onClick={addPlayer}
-        size="sm"
-        variant="withoutBackground"
-      />
+
+      <div className="w-full flex  justify-center mt-6">
+        <div className="flex-col flex gap-4">
+          {Number(data?.max_players ?? 0) > playerCount && (
+            <Button
+              nameToDisplay="Add player"
+              onClick={addPlayer}
+              size="sm"
+              variant="withoutBackground"
+            />
+          )}
+          <Button
+            nameToDisplay="Show total points"
+            variant="default"
+            size="default"
+          />
+        </div>
+      </div>
     </div>
   );
 }
 
 function DisplayPlayersFields({
+  playerInputsHandler,
   horizontal,
-  handleInputChange,
   inputFields,
 }: DisplayPlayersFieldsProps): React.ReactNode {
   return (
-    <div>
-      <div className={cn("flex", horizontal ? "flex-col" : "flex-row")}>
-        {inputFields?.map((fieldObject: any, idx: number) => {
-          return (
-            <div
+    <div className="w-full max-w-full bg-gray-300 overflow-hidden">
+      <div
+        className={cn(
+          "flex overflow-x-auto",
+          horizontal ? "flex-col" : "flex-row",
+        )}
+      >
+        {inputFields?.map((fieldObject: InputFields, idx: number) => (
+          <div key={fieldObject.name} className={cn("", horizontal && "flex")}>
+            <Input
+              className="p-2 w-52 rounded-xl h-16"
               key={fieldObject.name}
-              className={cn("", horizontal && "flex")}
-            >
-              <Input
-                className="p-2 w-52 rounded-xl h-16"
-                key={fieldObject.name}
-                placeholder={`Player ${idx + 1} name`}
-                type="text"
-              />
-              {fieldObject.fields.map((field: any, index: number) => {
-                return Object.entries(field).map(([name, value]) => {
-                  return (
-                    <Input
-                      className="p-2 w-52 rounded-xl h-16"
-                      key={field.placeholder}
-                      placeholder={name}
-                      type={"text"}
-                    />
-                  );
-                });
-              })}
-            </div>
-          );
-        })}
+              placeholder={`Player ${idx + 1} name`}
+              type="text"
+              name={fieldObject.name}
+              onChange={(e) =>
+                playerInputsHandler(e.target.value, fieldObject.name, idx)
+              }
+            />
+            {fieldObject.fields.map((field: { [p: string]: string }) => {
+              return Object.entries(field).map(([name, value]) => (
+                <Input
+                  className="p-2 w-52 rounded-xl h-16"
+                  key={idx}
+                  placeholder={name}
+                  name={name}
+                  type="number"
+                  onChange={(e) =>
+                    playerInputsHandler(e.target.value, name, idx)
+                  }
+                />
+              ));
+            })}
+          </div>
+        ))}
       </div>
     </div>
   );
