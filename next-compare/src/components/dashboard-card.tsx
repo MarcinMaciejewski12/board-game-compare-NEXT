@@ -25,7 +25,7 @@ interface DashboardCardProps {
   unique_board_id?: string;
   isFlippedState?: boolean;
   setIsFlippedState?: React.Dispatch<React.SetStateAction<boolean>>;
-  userId: string;
+  userId?: string;
   description?: string | null;
   labels?: string;
 }
@@ -185,7 +185,7 @@ function BackSide({
             <span className="text-xl font-medium">{game_name}</span>
             <Trash
               onClick={() =>
-                deleteGameHandler(unique_board_id as string, userId)
+                deleteGameHandler(unique_board_id as string, userId ?? "")
               }
               className="cursor-pointer"
             />

@@ -1,6 +1,7 @@
 import { Input } from "@/components/input";
 import { Button } from "@/components/button";
 import Link from "next/link";
+import DashboardCard from "@/components/dashboard-card";
 
 interface TableProps<T> {
   data: T[];
@@ -27,6 +28,11 @@ export default function Table<T>({ data, isDashboard = false }: TableProps<T>) {
             />
           </Link>
         )}
+      </div>
+      <div className="w-full h-full bg-red-200">
+        {data.map((item, index) => {
+          return <DashboardCard />;
+        })}
       </div>
     </div>
   );
