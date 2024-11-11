@@ -16,7 +16,7 @@ export const users = pgTable("users", {
   created_at: timestamp("created_at"),
   email: text("email"),
   premium_user: boolean("premium_user"),
-  board_games: text("board_games"),
+  board_games: jsonb("board_games"),
 });
 
 export const playedGames = pgTable("played_games", {
