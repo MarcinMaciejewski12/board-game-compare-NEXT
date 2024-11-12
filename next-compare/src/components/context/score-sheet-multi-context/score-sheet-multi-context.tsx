@@ -35,8 +35,6 @@ type GameInfo = {
   playtime: string;
   description: string;
   isSharedToCommunity: boolean;
-  // horizontalView: boolean;
-  // setHorizontalView: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const ScoreSheetMultiFormContext = createContext<ContextDataInterface>({

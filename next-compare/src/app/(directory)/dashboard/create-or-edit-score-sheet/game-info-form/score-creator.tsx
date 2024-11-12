@@ -87,7 +87,7 @@ export default function ScoreCreator({
               nameToDisplay="Add score field"
               variant="withoutBackground"
               size="sm"
-              onClick={(e) => addGameFieldHandler(e)}
+              onClick={addGameFieldHandler}
             />
             <MoveHorizontal
               className={"cursor-pointer"}
@@ -109,20 +109,8 @@ export default function ScoreCreator({
             : "flex-col max-h-96 overflow-y-auto",
         )}
       >
-        <ReorderItem
-          id={id}
-          reorderValues={reorderValues}
-          reorderValuesSetter={setReorderValues}
-          openIndex={openIndex}
-          openIndexSetter={setOpenIndex}
-          color={color}
-          colorSetter={setColor}
-          popover={popover}
-          horizontalView={horizontalView}
-        />
+        <ReorderItem id={id} popover={popover} />
       </Reorder.Group>
-
-      {/*BUTTON SECTION*/}
       <div className="flex items-center justify-center mt-2">
         <Button
           nameToDisplay={

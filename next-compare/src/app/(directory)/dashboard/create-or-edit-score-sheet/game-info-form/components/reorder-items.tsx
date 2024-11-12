@@ -1,4 +1,7 @@
-import { ReorderValue } from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";
+import {
+  ReorderValue,
+  useScoreSheetMultiContext,
+} from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";
 import React, { useEffect, useRef, useState } from "react";
 import { Reorder } from "framer-motion";
 import { Input } from "@/components/input";
@@ -9,32 +12,32 @@ import { createPortal } from "react-dom";
 
 interface ReorderValuesProps {
   id: string | string[];
-  reorderValues: ReorderValue[];
-  openIndex: number | null;
-  reorderValuesSetter: React.Dispatch<React.SetStateAction<ReorderValue[]>>;
-  openIndexSetter: React.Dispatch<React.SetStateAction<number | null>>;
+  // reorderValues: ReorderValue[];
+  // openIndex: number | null;
+  // reorderValuesSetter: React.Dispatch<React.SetStateAction<ReorderValue[]>>;
+  // openIndexSetter: React.Dispatch<React.SetStateAction<number | null>>;
   popover: React.RefObject<HTMLDivElement>;
-  colorSetter: React.Dispatch<React.SetStateAction<string>>;
-  color: string;
-  horizontalView?: boolean;
+  // colorSetter: React.Dispatch<React.SetStateAction<string>>;
+  // color: string;
+  // horizontalView?: boolean;
 }
 
-export default function ReorderItem({
-  reorderValues,
-  openIndex,
-  reorderValuesSetter,
-  id,
-  openIndexSetter,
-  popover,
-  colorSetter,
-  color,
-  horizontalView,
-}: ReorderValuesProps) {
+export default function ReorderItem({ id, popover }: ReorderValuesProps) {
+  const {
+    openIndex,
+    setOpenIndex,
+    color,
+    setColor,
+    reorderValues,
+    setReorderValues,
+    horizontalView,
+  } = useScoreSheetMultiContext();
+
   const [popoverStyle, setPopoverStyle] = useState({ top: 0, left: 0 });
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (popover.current && !popover.current.contains(event.target as Node)) {
-        openIndexSetter(null);
+        setOpenIndex(null);
       }
     };
 
@@ -49,7 +52,7 @@ export default function ReorderItem({
     index: number,
   ) => {
     const newPlaceholder = e.target.value;
-    reorderValuesSetter((prevState) =>
+    setReorderValues((prevState) =>
       prevState.map((item, idx) =>
         idx === index ? { ...item, placeholder: newPlaceholder } : item,
       ),
@@ -58,10 +61,10 @@ export default function ReorderItem({
 
   const handleToggle = (index: number) => {
     if (openIndex === index) {
-      openIndexSetter(null);
+      setOpenIndex(null);
     } else {
-      colorSetter(reorderValues[index].color);
-      openIndexSetter(index);
+      setColor(reorderValues[index].color);
+      setOpenIndex(index);
       if (popover.current) {
         const rect = popover.current.getBoundingClientRect();
         setPopoverStyle({ top: rect.bottom, left: rect.left });
@@ -69,9 +72,9 @@ export default function ReorderItem({
     }
   };
   const handleColorChange = (color: string) => {
-    colorSetter(color);
+    setColor(color);
     if (openIndex !== null) {
-      reorderValuesSetter((prevState) =>
+      setReorderValues((prevState) =>
         prevState.map((item, idx) =>
           idx === openIndex ? { ...item, color } : item,
         ),
@@ -83,7 +86,7 @@ export default function ReorderItem({
     const filterAndRemoveGameField = reorderValues.filter(
       (item) => item.id !== id,
     );
-    reorderValuesSetter(filterAndRemoveGameField);
+    setReorderValues(filterAndRemoveGameField);
   };
 
   return reorderValues.map((reorder, index) => (

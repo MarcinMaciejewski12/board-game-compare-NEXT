@@ -107,12 +107,10 @@ export default function ScoreboardView() {
       </div>
 
       <div className={cn("flex", data?.horizontal && "flex-col")}>
-        {/*DISPLAY CELLS WITH SCORE FIELD NAME AND ATTACHED COLOR*/}
         <DisplayScoreFields
           data={scoreData}
           horizontal={data?.horizontal ?? false}
         />
-        {/*ADDING ACTUAL DATA TO SCORE BOARD*/}
         <DisplayPlayersFields
           playerInputsHandler={playerInputsHandler}
           horizontal={data?.horizontal ?? false}
@@ -122,6 +120,7 @@ export default function ScoreboardView() {
 
       <div className="w-full flex  justify-center mt-6">
         <div className="flex-col flex gap-4">
+          {/*IF PLAYER COUNT IS BIGGER THAN BOARD GAME MAX PLAYERS HIDE THE BUTTON*/}
           {Number(data?.max_players ?? 0) > playerCount && (
             <Button
               nameToDisplay="Add player"
@@ -143,8 +142,8 @@ export default function ScoreboardView() {
 
 function DisplayPlayersFields({
   playerInputsHandler,
-  horizontal,
-  inputFields,
+  horizontal = false,
+  inputFields = [],
 }: DisplayPlayersFieldsProps): React.ReactNode {
   return (
     <div className="w-full max-w-full bg-gray-300 overflow-hidden">
@@ -154,36 +153,53 @@ function DisplayPlayersFields({
           horizontal ? "flex-col" : "flex-row",
         )}
       >
-        {inputFields?.map((fieldObject: InputFields, idx: number) => (
-          <div key={fieldObject.name} className={cn("", horizontal && "flex")}>
+        {inputFields?.map((field: InputFields, idx: number) => (
+          <div key={field.name} className={cn("", horizontal && "flex")}>
             <Input
               className="p-2 w-52 rounded-xl h-16"
-              key={fieldObject.name}
+              key={field.name}
               placeholder={`Player ${idx + 1} name`}
               type="text"
-              name={fieldObject.name}
+              name={field.name}
               onChange={(e) =>
-                playerInputsHandler(e.target.value, fieldObject.name, idx)
+                playerInputsHandler(e.target.value, field.name, idx)
               }
             />
-            {fieldObject.fields.map((field: { [p: string]: string }) => {
-              return Object.entries(field).map(([name, value]) => (
-                <Input
-                  className="p-2 w-52 rounded-xl h-16"
-                  key={idx}
-                  placeholder={name}
-                  name={name}
-                  type="number"
-                  onChange={(e) =>
-                    playerInputsHandler(e.target.value, name, idx)
-                  }
-                />
-              ));
-            })}
+
+            <FieldsMapper
+              field={field}
+              playerInputsHandler={playerInputsHandler}
+              index={idx}
+            />
           </div>
         ))}
       </div>
     </div>
+  );
+}
+
+interface FieldsMapperProps {
+  field: InputFields;
+  playerInputsHandler: any;
+  index: number;
+}
+
+function FieldsMapper({
+  field,
+  playerInputsHandler,
+  index,
+}: FieldsMapperProps) {
+  return field.fields.map((field: { [p: string]: string }) =>
+    Object.entries(field).map(([name]) => (
+      <Input
+        className="p-2 w-52 rounded-xl h-16"
+        key={index}
+        placeholder={name}
+        name={name}
+        type="number"
+        onChange={(e) => playerInputsHandler(e.target.value, name, index)}
+      />
+    )),
   );
 }
 

@@ -23,7 +23,7 @@ export default function MultiStepForm() {
     const data = {
       details: gameInfo,
       gameFields: reorderValues,
-      user_id: user?.id,
+      userId: user?.id,
       gameName,
       labels: labelTable,
       horizontalView,
