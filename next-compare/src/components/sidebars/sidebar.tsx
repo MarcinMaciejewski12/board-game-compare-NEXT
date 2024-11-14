@@ -18,7 +18,7 @@ export default async function Sidebar() {
                 <List color={"white"} />
               </NavLink>
             </div>
-            <NavLink href={"/calendar"}>
+            <NavLink href={"/settings"}>
               <Settings color={"white"} />
             </NavLink>
           </div>

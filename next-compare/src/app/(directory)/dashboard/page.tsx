@@ -23,7 +23,9 @@ export default async function Dashboard() {
 
   return (
     <UserContextProvider>
-      <DashboardView data={games.data} />
+      <div className="overflow-hidden">
+        <DashboardView data={games.data} />
+      </div>
     </UserContextProvider>
   );
 }

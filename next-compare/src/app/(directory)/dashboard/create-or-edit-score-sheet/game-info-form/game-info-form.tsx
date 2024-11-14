@@ -4,7 +4,7 @@ import { Button } from "@/components/button";
 import { useScoreSheetMultiContext } from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";
 import { Textarea } from "@/components/ui/textarea";
 import { labels } from "@/app/(directory)/dashboard/lib/labels";
-import Label from "@/components/Label";
+import Label from "@/components/label";
 
 type GameInfoFormProps = {
   nextStep: () => void;
