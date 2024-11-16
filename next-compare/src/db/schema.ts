@@ -42,4 +42,5 @@ export const allScoreBoards = pgTable("all_score_boards", {
   is_shared_to_community: boolean("is_shared_to_community"),
   game_score_board: json("game_score_board"),
   labels: jsonb("labels"),
+  horizontal: boolean("horizontal"),
 });

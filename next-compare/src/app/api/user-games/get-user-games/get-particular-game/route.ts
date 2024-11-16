@@ -14,6 +14,7 @@ export async function GET(req: NextRequest) {
         board_id: allScoreBoards.unique_board_id,
         game_name: allScoreBoards.game_name,
         score_sheet: allScoreBoards.game_score_board,
+        horizontal: allScoreBoards.horizontal,
       })
       .from(allScoreBoards)
       .where(eq(allScoreBoards.unique_board_id, id));

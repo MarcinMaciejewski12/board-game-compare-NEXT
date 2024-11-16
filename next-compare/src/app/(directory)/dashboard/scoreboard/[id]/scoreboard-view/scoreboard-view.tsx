@@ -1,16 +1,33 @@
 "use client";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { usePathname, useRouter } from "next/navigation";
 import axios from "axios";
 import { Input } from "@/components/input";
 import { Button } from "@/components/button";
+import { cn } from "@/lib/utils";
+
+interface DisplayPlayersFieldsProps {
+  horizontal: boolean;
+  inputFields: InputFields[];
+  playerInputsHandler: (
+    playerName: string,
+    name: string,
+    index: number,
+  ) => void;
+}
+
+interface DisplayScoreFieldsProps {
+  horizontal: boolean;
+  data: ScoreData[];
+}
 
 export interface Data {
   board_id: string;
   game_name: string;
   max_players: number;
   score_sheet: string;
+  horizontal: boolean;
 }
 
 export interface ScoreData {
@@ -19,17 +36,27 @@ export interface ScoreData {
   placeholder: string;
 }
 
+interface InputFields {
+  name: string;
+  fields: { [key: string]: string }[];
+}
+
 export default function ScoreboardView() {
   const [data, setData] = useState<Data | null>(null);
   const [playerCount, setPlayerCount] = useState<number>(0);
-  const [playerInputs, setPlayerInputs] = useState<
-    Array<{ [key: string]: string }>
-  >([]);
+  const [inputFields, setInputFields] = useState<InputFields[] | undefined>(
+    undefined,
+  );
+  const [nameAndPoints, setNameAndPoints] = useState<
+    { [key: string]: number | string }[] | undefined
+  >(undefined);
+
   const { user } = useUser();
   const pathname = usePathname().split("/").pop();
   const scoreData = JSON.parse(data?.score_sheet ?? "[]") as ScoreData[];
   const router = useRouter();
 
+  // DON'T LOOK AT THIS EFFECT, DATA WILL BE EXECUTED IN SERVER ACTIONS IN THE NEAREST FUTURE
   useEffect(() => {
     const dataHandler = async () => {
       const data = await axios.get(
@@ -40,144 +67,160 @@ export default function ScoreboardView() {
     };
     dataHandler();
   }, [pathname]);
+
   const addPlayer = () => {
     setPlayerCount(playerCount + 1);
-    setPlayerInputs([...playerInputs, {}]);
-  };
-
-  const handleInputChange = (
-    playerIndex: number,
-    fieldName: string,
-    value: string,
-  ) => {
-    const newPlayerInputs = [...playerInputs];
-    newPlayerInputs[playerIndex] = {
-      ...newPlayerInputs[playerIndex],
-      [fieldName]: value,
-    };
-
-    setPlayerInputs(newPlayerInputs);
-  };
-
-  const sendPlayedGame = async () => {
-    const playerScores = playerInputs.map((inputs, playerIndex) => ({
-      ...inputs,
-      totalScore: totalScore(playerIndex),
+    const newInputs = scoreData.map((score) => ({
+      [score.placeholder || score.color]: "",
     }));
 
-    const data = {
-      user_id: user?.id,
-      unique_board_id: pathname,
-      game_score_board: JSON.stringify(playerScores),
-    };
-
-    try {
-      await axios.post("/api/played-games", data);
-      router.push("/dashboard");
-    } catch (e) {
-      console.error(e);
-    }
+    setInputFields((prevState) => [
+      ...(prevState ?? []),
+      {
+        name: `Player ${playerCount + 1} name`,
+        fields: newInputs,
+      },
+    ]);
   };
 
-  const totalScore = (playerIndex: number) => {
-    return scoreData.reduce((sum, item) => {
-      const key = item?.placeholder === "" ? item.color : item.placeholder;
-
-      return sum + parseInt(playerInputs[playerIndex]?.[key] || "0", 10);
-    }, 0);
+  const playerInputsHandler = (
+    playerName: string,
+    name: string,
+    index: number,
+  ) => {
+    setNameAndPoints((prevState) => {
+      const newState = [...(prevState ?? [])];
+      if (!newState[index]) {
+        newState[index] = {};
+      }
+      newState[index][name] = playerName;
+      return newState;
+    });
   };
-  // TODO: refactor this piece of code. It's not clear what it does
+
   return (
     <div className="w-full h-full">
-      <header className="flex items-center justify-center">
-        <h1 className="text-[52px]  lg:text-[72px] text-default font-extrabold p-2">
+      <div className="w-full flex justify-center">
+        <h1 className="text-[52px] lg:text-[72px] text-default font-extrabold">
           {data?.game_name}
         </h1>
-      </header>
-      <main className="flex items-center justify-around w-full">
-        <div className="overflow-y-auto">
-          <div className="flex">
-            <div className="min-w-48 border border-black bg-white h-16 flex items-center justify-center">
-              <span>
-                Players name <br />
-                Game fields
-              </span>
-            </div>
-            {Array.from({ length: playerCount }).map((_, playerIndex) => (
-              <Input
-                className="p-2 h-16"
-                key={playerIndex}
-                placeholder={`Player ${playerIndex + 1} name`}
-                type={"text"}
-                onChange={(e) =>
-                  handleInputChange(playerIndex, "name", e.target.value)
-                }
-              />
-            ))}
-          </div>
-          {scoreData.map((item) => (
-            <div key={item.id} className="flex">
-              <div
-                className={`min-w-48 border border-black h-16 flex items-center justify-center`}
-                style={{ backgroundColor: item.color }}
-              >
-                <span>{item.placeholder}</span>
-              </div>
-              {Array.from({ length: playerCount }).map((_, playerIndex) => (
-                <Input
-                  className="p-2 h-16"
-                  key={playerIndex}
-                  placeholder={`Player ${playerIndex + 1} ${item.placeholder}`}
-                  type={"number"}
-                  onChange={(e) =>
-                    handleInputChange(
-                      playerIndex,
-                      item.placeholder === "" ? item.color : item.placeholder,
-                      e.target.value,
-                    )
-                  }
-                />
-              ))}
-            </div>
-          ))}
-          {/*SUMMARY ROW*/}
-          <div className="flex">
-            <div className="min-w-48 border border-black bg-white h-10 flex items-center justify-center">
-              Total
-            </div>
-            <div className="flex">
-              {Array.from({ length: playerCount }).map((_, playerIndex) => (
-                <Input
-                  className="p-2 lg:h-10"
-                  key={playerIndex}
-                  value={totalScore(playerIndex)}
-                  readOnly
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-      </main>
-      {data && !(playerCount >= data.max_players) && (
-        <div className="w-full flex items-center justify-center p-4 ">
-          <Button
-            nameToDisplay="Add player"
-            className="flex font-medium cursor-pointer justify-center items-center"
-            onClick={addPlayer}
-            size="sm"
-            variant="withoutBackground"
-          />
-        </div>
-      )}
+      </div>
 
-      <div className="flex flex-col items-center justify-center p-4">
-        <Button
-          onClick={() => sendPlayedGame()}
-          nameToDisplay={"Save scoresheet"}
-          variant="default"
-          size="xl"
+      <div className={cn("flex", data?.horizontal && "flex-col")}>
+        <DisplayScoreFields
+          data={scoreData}
+          horizontal={data?.horizontal ?? false}
+        />
+        <DisplayPlayersFields
+          playerInputsHandler={playerInputsHandler}
+          horizontal={data?.horizontal ?? false}
+          inputFields={inputFields ?? []}
         />
       </div>
+
+      <div className="w-full flex  justify-center mt-6">
+        <div className="flex-col flex gap-4">
+          {/*IF PLAYER COUNT IS BIGGER THAN BOARD GAME MAX PLAYERS HIDE THE BUTTON*/}
+          {Number(data?.max_players ?? 0) > playerCount && (
+            <Button
+              nameToDisplay="Add player"
+              onClick={addPlayer}
+              size="sm"
+              variant="withoutBackground"
+            />
+          )}
+          <Button
+            nameToDisplay="Show total points"
+            variant="default"
+            size="default"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DisplayPlayersFields({
+  playerInputsHandler,
+  horizontal = false,
+  inputFields = [],
+}: DisplayPlayersFieldsProps): React.ReactNode {
+  return (
+    <div className="w-full max-w-full bg-gray-300 overflow-hidden">
+      <div
+        className={cn(
+          "flex overflow-x-auto",
+          horizontal ? "flex-col" : "flex-row",
+        )}
+      >
+        {inputFields?.map((field: InputFields, idx: number) => (
+          <div key={field.name} className={cn("", horizontal && "flex")}>
+            <Input
+              className="p-2 w-52 rounded-xl h-16"
+              key={field.name}
+              placeholder={`Player ${idx + 1} name`}
+              type="text"
+              name={field.name}
+              onChange={(e) =>
+                playerInputsHandler(e.target.value, field.name, idx)
+              }
+            />
+
+            <FieldsMapper
+              field={field}
+              playerInputsHandler={playerInputsHandler}
+              index={idx}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+interface FieldsMapperProps {
+  field: InputFields;
+  playerInputsHandler: any;
+  index: number;
+}
+
+function FieldsMapper({
+  field,
+  playerInputsHandler,
+  index,
+}: FieldsMapperProps) {
+  return field.fields.map((field: { [p: string]: string }) =>
+    Object.entries(field).map(([name]) => (
+      <Input
+        className="p-2 w-52 rounded-xl h-16"
+        key={index}
+        placeholder={name}
+        name={name}
+        type="number"
+        onChange={(e) => playerInputsHandler(e.target.value, name, index)}
+      />
+    )),
+  );
+}
+
+function DisplayScoreFields({ horizontal, data }: DisplayScoreFieldsProps) {
+  return (
+    <div className={cn("flex", horizontal ? "flex-row" : "flex-col")}>
+      <div className="min-w-48 w-52 border border-black bg-white h-16 rounded-xl flex items-center justify-center">
+        <span>
+          Players name <br />
+          Game fields
+        </span>
+      </div>
+      {data.map((score: ScoreData) => (
+        <div
+          key={score.id}
+          className={`min-w-48 w-52 rounded-xl border  border-black h-16 flex items-center justify-center`}
+          style={{ backgroundColor: score.color }}
+        >
+          <span>{score.placeholder}</span>
+        </div>
+      ))}
     </div>
   );
 }
