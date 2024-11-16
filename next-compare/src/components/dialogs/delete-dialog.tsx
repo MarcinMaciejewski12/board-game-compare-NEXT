@@ -1,5 +1,6 @@
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -9,48 +10,50 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/button";
 import { Trash } from "lucide-react";
+import { deleteGameFromUserAccount } from "@/app/(directory)/dashboard/actions";
 
 interface DeleteGameDialogProps {
-  deleteFunction: (
-    userId: string,
-    gameId: string,
-  ) => Promise<{
-    status: boolean;
-    data: undefined;
-    message: string;
-  }>;
   uniqueBoardId: string;
   userId: string;
+  gameName: string;
 }
 
 export default function DeleteGameDialog({
-  deleteFunction,
   uniqueBoardId,
   userId,
+  gameName,
 }: DeleteGameDialogProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Trash
-          // onClick={() =>
-          //   deleteGameFromUserAccount(uniqueBoardId, user?.id ?? "")
-          // }
+          // onClick={() => deleteGameFromUserAccount(uniqueBoardId, userId)}
           className="cursor-pointer text-default"
         />
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Delete game</DialogTitle>
-          <DialogDescription>
-            You are deleting the game <strong>Game Name</strong>. Are you sure
+          <DialogTitle className="text-default">Delete game</DialogTitle>
+          <DialogDescription className="text-white">
+            You are deleting the game{" "}
+            <strong className="text-default">{gameName}</strong>. Are you sure
             you want to delete this game?
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
+          <DialogClose asChild>
+            <Button
+              className="w-24 h-8"
+              type="button"
+              variant="dialogCancel"
+              nameToDisplay="Close"
+            />
+          </DialogClose>
           <Button
-            onClick={() => deleteFunction(uniqueBoardId, userId)}
+            onClick={() => deleteGameFromUserAccount(uniqueBoardId, userId)}
+            className="w-24 h-8"
             type="submit"
-            variant="default"
+            variant="dialogDelete"
             nameToDisplay="Delete"
           />
         </DialogFooter>

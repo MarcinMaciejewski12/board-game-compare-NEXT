@@ -5,8 +5,8 @@ import { Button } from "@/components/button";
 import { Pencil, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import { Trash, History, Info, ArrowLeft, Users, Clock } from "lucide-react";
-import { deleteGameFromUserAccount } from "@/app/(directory)/dashboard/actions";
+import { History, Info, ArrowLeft, Users, Clock } from "lucide-react";
+
 import { useUser } from "@clerk/nextjs";
 import DeleteGameDialog from "@/components/dialogs/delete-dialog";
 
@@ -138,11 +138,10 @@ function CardBackSide({
           onClick={() => setIsFlipped(!isFlipped)}
         />
         <span className="text-xl font-medium text-default">{name}</span>
-
         <DeleteGameDialog
-          deleteFunction={() =>
-            deleteGameFromUserAccount(uniqueBoardId, user?.id ?? "")
-          }
+          gameName={name}
+          userId={user?.id ?? ""}
+          uniqueBoardId={uniqueBoardId}
         />
         {/*<Trash*/}
         {/*  // onClick={() =>*/}
