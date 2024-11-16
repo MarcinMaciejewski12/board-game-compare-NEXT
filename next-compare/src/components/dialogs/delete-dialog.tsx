@@ -26,10 +26,7 @@ export default function DeleteGameDialog({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Trash
-          // onClick={() => deleteGameFromUserAccount(uniqueBoardId, userId)}
-          className="cursor-pointer text-default"
-        />
+        <Trash className="cursor-pointer text-default" />
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

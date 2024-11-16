@@ -76,15 +76,12 @@ function CardFrontSide({
   setIsFlipped,
   isFlipped,
 }: CardFrontSideProps) {
-  const reverseCardHandler = () => {
-    setIsFlipped(!isFlipped);
-  };
   return (
     <div className="w-full h-full">
       <div className="w-full h-[60%] relative">
         <Info
           className="absolute text-white end-2 top-2 cursor-pointer"
-          onClick={reverseCardHandler}
+          onClick={() => setIsFlipped(!isFlipped)}
         />
         <Image
           src={sevenWonders}
@@ -143,12 +140,6 @@ function CardBackSide({
           userId={user?.id ?? ""}
           uniqueBoardId={uniqueBoardId}
         />
-        {/*<Trash*/}
-        {/*  // onClick={() =>*/}
-        {/*  //   deleteGameFromUserAccount(uniqueBoardId, user?.id ?? "")*/}
-        {/*  // }*/}
-        {/*  className="cursor-pointer text-default"*/}
-        {/*/>*/}
       </div>
       <div className="h-[70%]">
         <GameInfo

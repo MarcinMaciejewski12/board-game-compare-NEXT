@@ -1,8 +1,10 @@
+"use client";
 import { Input } from "@/components/input";
 import { Button } from "@/components/button";
 import Link from "next/link";
 import DashboardCard from "@/components/dashboard-card";
 import { Games } from "@/app/(directory)/dashboard/lib/dashboard-types";
+import { useEffect, useState } from "react";
 
 interface TableProps<T> {
   data: T[];
@@ -13,14 +15,25 @@ export default function CardTable<T extends Games>({
   data,
   isDashboard = false,
 }: TableProps<T>) {
+  const [search, setSearch] = useState("");
+  const [filteredData, setFilteredData] = useState<T[]>(data);
+
+  useEffect(() => {
+    setFilteredData(
+      data.filter((item) =>
+        item.game_name.toLowerCase().includes(search.toLowerCase()),
+      ),
+    );
+  }, [search, data]);
+
   return (
     <div className="w-full h-full">
       <div className="w-full  justify-center sm:justify-between max-h-16 flex items-center mb-2">
         <Input
           className="h-12"
           variant="searchbar"
-          // onChange={(e) => setSearch(e.target.value)}
-          type="search"
+          onChange={(e) => setSearch(e.target.value)}
+          type="text"
           placeholder="Search games"
         />
         <div className="hidden sm:block">
@@ -37,7 +50,7 @@ export default function CardTable<T extends Games>({
         </div>
       </div>
       <div className="w-full flex flex-col items-center gap-2 md:grid md:grid-cols-2 lg:grid lg:grid-cols-3 xl:grid-cols-4">
-        {data.map((item, index) => {
+        {filteredData.map((item, index) => {
           return (
             <DashboardCard
               key={index}
