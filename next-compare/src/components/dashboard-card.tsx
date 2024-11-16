@@ -197,9 +197,9 @@ function GameInfo({
           <TrendingUp className="size-8" />: {difficulty}/10
         </div>
       </div>
-      <text className="text-sm text-center">
+      <p className="text-sm text-center">
         {description ? description : "No description available for this game."}
-      </text>
+      </p>
     </div>
   );
 }
