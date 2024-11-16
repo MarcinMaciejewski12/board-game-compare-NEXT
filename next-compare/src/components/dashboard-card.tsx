@@ -142,7 +142,7 @@ function CardBackSide({
         />
       </div>
       <div className="h-[70%]">
-        <GameInfo
+        <BaseGameInformation
           maxPlayers={maxPlayers}
           minPlayers={minPlayers}
           playtime={playtime}
@@ -175,7 +175,7 @@ interface GameInfoProps {
   difficulty: number;
   description?: string | null;
 }
-function GameInfo({
+function BaseGameInformation({
   minPlayers,
   maxPlayers,
   playtime,
