@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import GameInfoForm from "@/app/(directory)/dashboard/create-or-edit-score-sheet/game-info-form/game-info-form";
 import ScoreCreator from "@/app/(directory)/dashboard/create-or-edit-score-sheet/game-info-form/score-creator";
-import axios from "axios";
 import {
   GameInfo,
   useScoreSheetMultiContext,
@@ -10,7 +9,7 @@ import {
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/hooks/use-toast";
-import { AddGame } from "@/app/(directory)/dashboard/create-or-edit-score-sheet/actions";
+import { addGame } from "@/app/(directory)/dashboard/create-or-edit-score-sheet/actions";
 
 export default function MultiStepForm() {
   const [step, setStep] = useState(1);
@@ -45,9 +44,7 @@ export default function MultiStepForm() {
       labels: labelTable,
       gameFields: reorderValues,
     };
-
-    console.log(data);
-    await AddGame(user?.id ?? "", data);
+    await addGame(user?.id ?? "", data);
 
     toast({
       title: `Added ${gameName} to your inventory!`,

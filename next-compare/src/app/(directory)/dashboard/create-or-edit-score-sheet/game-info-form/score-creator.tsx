@@ -3,11 +3,11 @@ import { Reorder } from "framer-motion";
 import { Button } from "@/components/button";
 import React, { useEffect, useRef, useState } from "react";
 import { useScoreSheetMultiContext } from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";
-import axios from "axios";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import ReorderItem from "@/app/(directory)/dashboard/create-or-edit-score-sheet/game-info-form/components/reorder-items";
 import { cn } from "@/lib/utils";
 import { MoveHorizontal } from "lucide-react";
+import { getEditingGameFields } from "@/app/(directory)/dashboard/create-or-edit-score-sheet/actions";
 
 interface ScoreCreatorProps {
   submitStep: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
@@ -30,19 +30,20 @@ export default function ScoreCreator({
     horizontalView,
     setHorizontalView,
   } = useScoreSheetMultiContext();
-
-  const { id } = useParams();
+  const router = useRouter();
 
   useEffect(() => {
     if (editedScoreSheetId) {
       const getEditedFields = async () => {
         try {
-          const data = await axios.get(
-            `/api/user-games/get-user-games/get-particular-game?id=${editedScoreSheetId}`,
-          );
-          const scoreSheet = JSON.parse(data.data.result[0].score_sheet);
-          setGameName(data.data.result[0].game_name);
-          setReorderValues(scoreSheet);
+          const res = await getEditingGameFields(editedScoreSheetId);
+          if (!res.status) {
+            console.error("Failed to get edited fields");
+            router.push("/dashboard");
+          } else {
+            setGameName(res.data?.gameName ?? "");
+            setReorderValues(res.data?.result ?? []);
+          }
         } catch (e) {
           console.error(e);
         }
@@ -66,7 +67,7 @@ export default function ScoreCreator({
     <div className="w-full h-full">
       {/*DISPLAY GAME NAME IN EDIT MODE*/}
       <div className="w-full flex justify-center">
-        {id && (
+        {editedScoreSheetId && (
           <h1 className="text-[52px] lg:text-[72px] text-default font-extrabold">
             {gameName}
           </h1>
@@ -105,7 +106,7 @@ export default function ScoreCreator({
             : "flex-col max-h-96 overflow-y-auto",
         )}
       >
-        <ReorderItem id={id} popover={popover} />
+        <ReorderItem id={editedScoreSheetId} popover={popover} />
       </Reorder.Group>
       <div className="flex items-center justify-center mt-2">
         <Button
