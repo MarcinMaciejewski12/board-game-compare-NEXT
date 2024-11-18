@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
   const gameId = searchParams.get("id");
   try {
     if (gameId) return;
-
+    return;
     const body = await request.json();
 
     const result = await db

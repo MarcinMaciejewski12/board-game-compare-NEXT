@@ -17,10 +17,6 @@ export async function getUserGames(id: string) {
       ? getUserBoardGames[0].games
       : [];
 
-    if (!userGames) {
-      throw new Error("User games not found");
-    }
-
     const games = await db
       .select()
       .from(allScoreBoards)

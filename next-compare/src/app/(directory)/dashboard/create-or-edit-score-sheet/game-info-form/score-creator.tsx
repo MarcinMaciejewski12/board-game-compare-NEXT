@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import { MoveHorizontal } from "lucide-react";
 
 interface ScoreCreatorProps {
-  submitStep: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
+  submitStep: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
   prevStep?: () => void;
   editedScoreSheetId?: string;
 }
@@ -18,14 +18,11 @@ interface ScoreCreatorProps {
 export default function ScoreCreator({
   submitStep,
   editedScoreSheetId,
+  prevStep,
 }: ScoreCreatorProps) {
   const popover = useRef<HTMLDivElement>(null);
 
   const {
-    openIndex,
-    setOpenIndex,
-    color,
-    setColor,
     reorderValues,
     setReorderValues,
     setGameName,
@@ -97,7 +94,6 @@ export default function ScoreCreator({
         </div>
       </div>
 
-      {/*DISPLAY REORDER GROUP*/}
       <Reorder.Group
         onReorder={setReorderValues}
         values={reorderValues}
@@ -113,13 +109,10 @@ export default function ScoreCreator({
       </Reorder.Group>
       <div className="flex items-center justify-center mt-2">
         <Button
-          nameToDisplay={
-            editedScoreSheetId ? "Edit score board" : "Save score board"
-          }
+          nameToDisplay={editedScoreSheetId ? "Save changes" : "Save new board"}
           variant="default"
           size="lg"
-          //@ts-ignore
-          onClick={(e) => submitStep(e)}
+          onClick={submitStep}
         />
       </div>
     </div>

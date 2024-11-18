@@ -3,10 +3,14 @@ import React, { useState } from "react";
 import GameInfoForm from "@/app/(directory)/dashboard/create-or-edit-score-sheet/game-info-form/game-info-form";
 import ScoreCreator from "@/app/(directory)/dashboard/create-or-edit-score-sheet/game-info-form/score-creator";
 import axios from "axios";
-import { useScoreSheetMultiContext } from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";
+import {
+  GameInfo,
+  useScoreSheetMultiContext,
+} from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/hooks/use-toast";
+import { AddGame } from "@/app/(directory)/dashboard/create-or-edit-score-sheet/actions";
 
 export default function MultiStepForm() {
   const [step, setStep] = useState(1);
@@ -17,29 +21,39 @@ export default function MultiStepForm() {
   const router = useRouter();
   const nextStep = () => setStep((prevStep) => prevStep + 1);
   const prevStep = () => setStep((prevStep) => prevStep - 1);
+  const {
+    max_player,
+    min_player,
+    difficulty,
+    playtime,
+    isSharedToCommunity,
+    description,
+  } = (gameInfo as GameInfo) ?? {};
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
     const data = {
-      details: gameInfo,
-      gameFields: reorderValues,
-      userId: user?.id,
+      max_player,
+      min_player,
+      difficulty,
+      description,
+      playtime,
+      isSharedToCommunity,
       gameName,
-      labels: labelTable,
       horizontalView,
+      labels: labelTable,
+      gameFields: reorderValues,
     };
 
-    try {
-      axios.post("/api/add-or-edit-score-sheet", data).then(() => {
-        router.push("/dashboard");
-        toast({
-          title: `Added ${gameName} to your inventory!`,
-          className: "bg-white",
-        });
-      });
-    } catch (e) {
-      console.error(e);
-    }
+    console.log(data);
+    await AddGame(user?.id ?? "", data);
+
+    toast({
+      title: `Added ${gameName} to your inventory!`,
+      className: "bg-white",
+    });
+    router.push("/dashboard");
   };
 
   switch (step) {

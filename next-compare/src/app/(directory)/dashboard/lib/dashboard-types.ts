@@ -4,16 +4,16 @@ import React from "react";
 export interface Games {
   difficulty: number;
   created_at: string;
-  game_name: string;
-  game_score_board: string;
+  gameName: string;
+  gameScoreBoard: string;
   id: string;
-  is_shared_to_community: boolean;
-  max_players: number;
-  min_players: number;
+  isSharedToCommunity: boolean;
+  maxPlayers: number;
+  minPlayers: number;
   photo: string;
   playtime: string;
-  unique_board_id: string;
-  user_id: string;
+  uniqueBoardId: string;
+  userId: string;
   description: string;
   labels: string;
 }
