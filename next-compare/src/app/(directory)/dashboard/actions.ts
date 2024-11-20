@@ -22,33 +22,62 @@ export async function getUserGames(id: string) {
       .from(allScoreBoards)
       .where(inArray(allScoreBoards.unique_board_id, userGames));
 
-    const processedGames: Games[] = games.map((game: any) => ({
-      ...game,
+    const mappedData: Games[] = games.map((game) => ({
       difficulty: game.difficulty ?? 0,
-      created_at: game.created_at ? game.created_at.toISOString() : "",
-      game_score_board: game.game_score_board ?? "",
-      game_name: game.game_name ?? "",
-      min_players: game.min_players ?? 0,
-      max_players: game.max_players ?? 0,
+      createdAt: game.created_at ? game.created_at.toISOString() : "",
+      gameName: game.game_name ?? "",
+      id: game.id,
+      isSharedToCommunity: game.is_shared_to_community ?? false,
+      labels: Array.isArray(game.labels) ? game.labels : [],
+      maxPlayers: game.max_players ?? 0,
+      minPlayers: game.min_players ?? 0,
       photo: game.photo ?? "",
       playtime: game.playtime ?? "",
-      unique_board_id: game.unique_board_id ?? "",
-      user_id: game.user_id ?? "",
+      uniqueBoardId: game.unique_board_id ?? "",
+      userId: game.user_id ?? "",
       description: game.description ?? "",
-      labels: game.labels ?? "",
+      horizontalView: game.horizontal ?? false,
+      gameScoreBoard: String(game.game_score_board),
     }));
 
     return {
       status: true,
-      data: processedGames,
+      data: mappedData,
       message: "User games fetched successfully",
     };
   } catch (e) {
     console.error(e);
     return {
       status: false,
-      data: [],
+      data: undefined,
       message: "Error fetching user games",
+    };
+  }
+}
+
+export async function getScoreBoardSheet(gameId: string) {
+  try {
+    const result = await db
+      .select({
+        max_players: allScoreBoards.max_players,
+        board_id: allScoreBoards.unique_board_id,
+        game_name: allScoreBoards.game_name,
+        score_sheet: allScoreBoards.game_score_board,
+        horizontal: allScoreBoards.horizontal,
+      })
+      .from(allScoreBoards)
+      .where(eq(allScoreBoards.unique_board_id, gameId));
+    return {
+      status: true,
+      data: result,
+      message: "Game score board fetched successfully",
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      status: false,
+      data: undefined,
+      message: "Error fetching game score board",
     };
   }
 }

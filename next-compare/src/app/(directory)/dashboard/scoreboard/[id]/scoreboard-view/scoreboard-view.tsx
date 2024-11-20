@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useUser } from "@clerk/nextjs";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import axios from "axios";
 import { Input } from "@/components/input";
 import { Button } from "@/components/button";
@@ -41,7 +40,11 @@ interface InputFields {
   fields: { [key: string]: string }[];
 }
 
-export default function ScoreboardView() {
+interface ScoreboardViewProps {
+  board: Data | undefined;
+}
+
+export default function ScoreboardView({ board }: ScoreboardViewProps) {
   const [data, setData] = useState<Data | null>(null);
   const [playerCount, setPlayerCount] = useState<number>(0);
   const [inputFields, setInputFields] = useState<InputFields[] | undefined>(
@@ -51,22 +54,20 @@ export default function ScoreboardView() {
     { [key: string]: number | string }[] | undefined
   >(undefined);
 
-  const { user } = useUser();
-  const pathname = usePathname().split("/").pop();
+  // const pathname = usePathname().split("/").pop();
   const scoreData = JSON.parse(data?.score_sheet ?? "[]") as ScoreData[];
-  const router = useRouter();
 
   // DON'T LOOK AT THIS EFFECT, DATA WILL BE EXECUTED IN SERVER ACTIONS IN THE NEAREST FUTURE
-  useEffect(() => {
-    const dataHandler = async () => {
-      const data = await axios.get(
-        `/api/user-games/get-user-games/get-particular-game?id=${pathname}`,
-      );
-
-      setData(data.data.result[0]);
-    };
-    dataHandler();
-  }, [pathname]);
+  // useEffect(() => {
+  //   const dataHandler = async () => {
+  //     const data = await axios.get(
+  //       `/api/user-games/get-user-games/get-particular-game?id=${pathname}`,
+  //     );
+  //
+  //     setData(data.data.result[0]);
+  //   };
+  //   dataHandler();
+  // }, [pathname]);
 
   const addPlayer = () => {
     setPlayerCount(playerCount + 1);

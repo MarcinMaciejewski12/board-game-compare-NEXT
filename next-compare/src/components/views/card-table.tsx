@@ -4,27 +4,58 @@ import { Button } from "@/components/button";
 import Link from "next/link";
 import DashboardCard from "@/components/dashboard-card";
 import { Games } from "@/app/(directory)/dashboard/lib/dashboard-types";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { toast } from "@/components/hooks/use-toast";
+import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
+import { addToShelf } from "@/app/(directory)/games-list/actions";
 
 interface TableProps<T> {
   data: T[];
   isDashboard?: boolean;
 }
 
-export default function CardTable<T extends Games>({
+export default React.memo(function CardTable<T extends Games>({
   data,
   isDashboard = false,
 }: TableProps<T>) {
   const [search, setSearch] = useState("");
   const [filteredData, setFilteredData] = useState<T[]>(data);
+  const router = useRouter();
+  const { user } = useUser();
 
   useEffect(() => {
     setFilteredData(
       data.filter((item) =>
-        item.game_name.toLowerCase().includes(search.toLowerCase()),
+        item.gameName.toLowerCase().includes(search.toLowerCase()),
       ),
     );
   }, [search, data]);
+
+  const addToShelfHandler = async (gameId: string): Promise<void> => {
+    try {
+      const res = await addToShelf(user?.id ?? "", gameId);
+      if (res.status) {
+        toast({
+          title: res.message,
+          className: "bg-white",
+        });
+        if (res.data) {
+          router.push("/dashboard");
+        }
+      } else {
+        toast({
+          title: `Failed to add game to your shelf!`,
+          className: "bg-red-500",
+        });
+      }
+    } catch (e) {
+      toast({
+        title: `Something went wrong!`,
+        className: "bg-red-500",
+      });
+    }
+  };
 
   return (
     <div className="w-full h-full">
@@ -53,20 +84,22 @@ export default function CardTable<T extends Games>({
         {filteredData.map((item, index) => {
           return (
             <DashboardCard
+              isDashboard={isDashboard}
               key={index}
-              gameName={item.game_name}
-              uniqueBoardId={item.unique_board_id}
+              gameName={item.gameName}
+              uniqueBoardId={item.uniqueBoardId}
               difficulty={item.difficulty}
-              minPlayers={item.min_players}
-              maxPlayers={item.max_players}
+              minPlayers={item.minPlayers}
+              maxPlayers={item.maxPlayers}
               playtime={item.playtime}
               description={item.description}
               labels={item.labels}
               id={item.id}
+              addToShelfHandler={addToShelfHandler}
             />
           );
         })}
       </div>
     </div>
   );
-}
+});

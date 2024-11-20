@@ -9,6 +9,7 @@ import {
   jsonb,
 } from "drizzle-orm/pg-core";
 import { timestamp } from "drizzle-orm/pg-core/columns/timestamp";
+import { InferModel } from "drizzle-orm";
 
 export const users = pgTable("users", {
   user_id: text("user_id"),

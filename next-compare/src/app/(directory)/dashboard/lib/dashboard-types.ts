@@ -3,10 +3,10 @@ import React from "react";
 // Dashboard interfaces
 export interface Games {
   difficulty: number;
-  created_at: string;
+  createdAt: string;
   gameName: string;
   gameScoreBoard: string;
-  id: string;
+  id: number;
   isSharedToCommunity: boolean;
   maxPlayers: number;
   minPlayers: number;
@@ -15,7 +15,8 @@ export interface Games {
   uniqueBoardId: string;
   userId: string;
   description: string;
-  labels: string;
+  labels: number[];
+  horizontalView: boolean;
 }
 // ------------------
 
