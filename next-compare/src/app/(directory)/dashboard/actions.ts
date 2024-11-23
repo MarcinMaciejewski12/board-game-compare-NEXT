@@ -3,7 +3,10 @@ import { db } from "@/db";
 import { allScoreBoards, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { inArray } from "drizzle-orm/sql/expressions/conditions";
-import { Games } from "@/app/(directory)/dashboard/lib/dashboard-types";
+import {
+  Games,
+  ScoreboardFields,
+} from "@/app/(directory)/dashboard/lib/dashboard-types";
 import { revalidatePath } from "next/cache";
 
 export async function getUserGames(id: string) {
@@ -55,7 +58,11 @@ export async function getUserGames(id: string) {
   }
 }
 
-export async function getScoreBoardSheet(gameId: string) {
+export async function getScoreBoardSheet(gameId: string): Promise<{
+  status: boolean;
+  data: ScoreboardFields | undefined;
+  message: string;
+}> {
   try {
     const result = await db
       .select({
@@ -67,9 +74,18 @@ export async function getScoreBoardSheet(gameId: string) {
       })
       .from(allScoreBoards)
       .where(eq(allScoreBoards.unique_board_id, gameId));
+
+    const mappedData = {
+      maxPlayers: result[0].max_players ?? 1,
+      boardId: result[0].board_id,
+      gameName: result[0].game_name ?? "",
+      scoreSheet: result[0].score_sheet as unknown as string,
+      horizontal: result[0].horizontal ?? false,
+    };
+
     return {
       status: true,
-      data: result,
+      data: mappedData,
       message: "Game score board fetched successfully",
     };
   } catch (e) {

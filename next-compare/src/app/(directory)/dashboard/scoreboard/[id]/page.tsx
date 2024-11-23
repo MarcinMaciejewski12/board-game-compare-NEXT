@@ -11,5 +11,5 @@ export default async function Scoreboard({
     return <div>Failed to get score board</div>;
   }
 
-  return <ScoreboardView board={data.data ?? []} />;
+  return <ScoreboardView board={data.data} />;
 }
