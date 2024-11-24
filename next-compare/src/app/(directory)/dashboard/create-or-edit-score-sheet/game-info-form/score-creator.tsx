@@ -3,7 +3,7 @@ import { Reorder } from "framer-motion";
 import { Button } from "@/components/button";
 import React, { useEffect, useRef, useState } from "react";
 import { useScoreSheetMultiContext } from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import ReorderItem from "@/app/(directory)/dashboard/create-or-edit-score-sheet/game-info-form/components/reorder-items";
 import { cn } from "@/lib/utils";
 import { MoveHorizontal } from "lucide-react";
@@ -21,7 +21,6 @@ export default function ScoreCreator({
   prevStep,
 }: ScoreCreatorProps) {
   const popover = useRef<HTMLDivElement>(null);
-
   const {
     reorderValues,
     setReorderValues,
@@ -29,7 +28,10 @@ export default function ScoreCreator({
     gameName,
     horizontalView,
     setHorizontalView,
+    gameInfo,
   } = useScoreSheetMultiContext();
+
+  console.log(gameInfo);
   const router = useRouter();
 
   useEffect(() => {
@@ -102,7 +104,7 @@ export default function ScoreCreator({
         className={cn(
           "flex w-full gap-2 items-center",
           horizontalView
-            ? "overflow-x-auto flex-row"
+            ? "overflow-x-auto flex-row h-72 items-start"
             : "flex-col max-h-96 overflow-y-auto",
         )}
       >

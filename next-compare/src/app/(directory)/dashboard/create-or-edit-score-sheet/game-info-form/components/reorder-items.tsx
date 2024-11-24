@@ -120,7 +120,6 @@ export default function ReorderItem({ id, popover }: ReorderValuesProps) {
                 className="absolute right-0 md:left-0 rounded-[9px] shadow-colorPicker z-50"
                 ref={popover}
               >
-                {/*TODO: popup is not positioned absolute in horizontal view(need to use portal here)*/}
                 <HexColorPicker color={color} onChange={handleColorChange} />
               </div>
             )}
