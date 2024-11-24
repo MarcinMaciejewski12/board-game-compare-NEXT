@@ -9,7 +9,7 @@ import {
   LabelType,
   playTime,
 } from "@/app/(directory)/dashboard/lib/labels";
-import Label from "@/components/label";
+
 import MultiStepCombobox from "@/app/(directory)/dashboard/create-or-edit-score-sheet/game-info-form/components/multi-step-combobox";
 import { Info } from "lucide-react";
 
@@ -18,14 +18,8 @@ type GameInfoFormProps = {
 };
 
 export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
-  const {
-    setGameInfo,
-    setGameName,
-    gameName,
-    gameInfo,
-    labelTable,
-    setLabelTable,
-  } = useScoreSheetMultiContext();
+  const { setGameInfo, setGameName, gameName, gameInfo } =
+    useScoreSheetMultiContext();
   const [errorMessage, setErrorMessage] = useState<{ [key: string]: string }>(
     {},
   );
@@ -85,13 +79,6 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
     } else {
       setErrorMessage((prev) => ({ ...prev, [name]: "" }));
     }
-  };
-
-  const isCheckedHandler = (id: number) => {
-    if (labelTable.includes(id)) {
-      return setLabelTable([...labelTable.filter((item) => item !== id)]);
-    }
-    return setLabelTable([...labelTable, id]);
   };
 
   return (
