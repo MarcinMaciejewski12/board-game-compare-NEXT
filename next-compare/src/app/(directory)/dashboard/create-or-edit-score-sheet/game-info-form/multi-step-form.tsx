@@ -1,6 +1,5 @@
 "use client";
-import React, { useState } from "react";
-import GameInfoForm from "@/app/(directory)/dashboard/create-or-edit-score-sheet/game-info-form/game-info-form";
+import React, { lazy, Suspense, useState } from "react";
 import ScoreCreator from "@/app/(directory)/dashboard/create-or-edit-score-sheet/game-info-form/score-creator";
 import {
   GameInfo,
@@ -10,6 +9,13 @@ import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/hooks/use-toast";
 import { addGame } from "@/app/(directory)/dashboard/create-or-edit-score-sheet/actions";
+import MultiStepFormSkeleton from "@/app/(directory)/dashboard/create-or-edit-score-sheet/game-info-form/loading";
+const GameInfoForm = lazy(
+  () =>
+    import(
+      "@/app/(directory)/dashboard/create-or-edit-score-sheet/game-info-form/game-info-form"
+    ),
+);
 
 export default function MultiStepForm() {
   const [step, setStep] = useState(1);
@@ -55,12 +61,19 @@ export default function MultiStepForm() {
 
   switch (step) {
     case 1:
-      return <GameInfoForm nextStep={nextStep} />;
-
+      return (
+        <Suspense fallback={<MultiStepFormSkeleton component="gameInfoForm" />}>
+          <GameInfoForm nextStep={nextStep} />
+        </Suspense>
+      );
     case 2:
       return <ScoreCreator prevStep={prevStep} submitStep={onSubmit} />;
 
     default:
-      return <GameInfoForm nextStep={nextStep} />;
+      return (
+        <Suspense fallback={<MultiStepFormSkeleton component="gameInfoForm" />}>
+          <GameInfoForm nextStep={nextStep} />
+        </Suspense>
+      );
   }
 }
