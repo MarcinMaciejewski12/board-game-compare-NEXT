@@ -77,48 +77,9 @@ export const labels: LabelType[] = [
   },
 ];
 
-export const difficultyLevels: { id: number; name: number }[] = [
-  {
-    id: 1,
-    name: 1,
-  },
-  {
-    id: 2,
-    name: 2,
-  },
-  {
-    id: 3,
-    name: 3,
-  },
-  {
-    id: 4,
-    name: 4,
-  },
-  {
-    id: 5,
-    name: 5,
-  },
-  {
-    id: 6,
-    name: 6,
-  },
-  {
-    id: 7,
-    name: 7,
-  },
-  {
-    id: 8,
-    name: 8,
-  },
-  {
-    id: 9,
-    name: 9,
-  },
-  {
-    id: 10,
-    name: 10,
-  },
-];
+const difficultyLevelsArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+export const difficultyLevels: { id: number; name: number }[] =
+  difficultyLevelsArray.map((level) => ({ id: level, name: level }));
 
 export const playTime: { id: number; name: string }[] = [
   {

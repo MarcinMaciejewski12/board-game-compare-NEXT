@@ -52,7 +52,8 @@ export default function MultiStepCombobox<T extends Label>({
 }: MultiStepComboboxProps<T>) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<string | string[]>("");
-  const { gameInfo, setGameInfo } = useScoreSheetMultiContext();
+  const { setGameInfo } = useScoreSheetMultiContext();
+
   function selectValuesHandler(currentValue: string, value: string | string[]) {
     if (multipleChoices) {
       if (Array.isArray(value) && value.includes(currentValue)) {
@@ -78,8 +79,6 @@ export default function MultiStepCombobox<T extends Label>({
     return value === name && <Check />;
   }
 
-  console.log("value", value);
-  console.log(gameInfo);
   return (
     <div>
       <p className="text-sm font-bold text-default">

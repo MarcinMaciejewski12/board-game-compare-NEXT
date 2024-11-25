@@ -1,7 +1,7 @@
 "use client";
 import { Reorder } from "framer-motion";
 import { Button } from "@/components/button";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useScoreSheetMultiContext } from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";
 import { useRouter } from "next/navigation";
 import ReorderItem from "@/app/(directory)/dashboard/create-or-edit-score-sheet/game-info-form/components/reorder-items";
@@ -28,10 +28,8 @@ export default function ScoreCreator({
     gameName,
     horizontalView,
     setHorizontalView,
-    gameInfo,
   } = useScoreSheetMultiContext();
 
-  console.log(gameInfo);
   const router = useRouter();
 
   useEffect(() => {

@@ -21,12 +21,6 @@ export interface Games {
 // ------------------
 
 // Scoreboard interfaces
-// export interface Data {
-//   board_id: string;
-//   game_name: string;
-//   max_players: number;
-//   score_sheet: string;
-// }
 export interface ScoreboardFields {
   maxPlayers: number;
   boardId: string;
