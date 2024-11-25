@@ -44,8 +44,8 @@ export default function ScoreboardView({ board }: ScoreboardViewProps) {
   const [nameAndPoints, setNameAndPoints] = useState<
     { [key: string]: number | string }[] | undefined
   >(undefined);
-
-  const scoreData: ScoreData[] = JSON.parse(board?.scoreSheet ?? "[]");
+  console.log(board);
+  const scoreData: ScoreData[] = board?.scoreSheet ?? [];
 
   const addPlayer = () => {
     setPlayerCount(playerCount + 1);

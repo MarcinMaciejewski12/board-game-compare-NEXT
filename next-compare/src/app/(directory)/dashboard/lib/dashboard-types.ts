@@ -31,7 +31,7 @@ export interface ScoreboardFields {
   maxPlayers: number;
   boardId: string;
   gameName: string;
-  scoreSheet: string;
+  scoreSheet: ScoreData[];
   horizontal: boolean;
 }
 
