@@ -11,9 +11,8 @@ import { useUser } from "@clerk/nextjs";
 import DeleteGameDialog from "@/components/dialogs/delete-dialog";
 
 interface DashboardCardProps {
-  difficulty?: number;
   gameName: string;
-  id?: string;
+  id?: number;
   maxPlayers: number;
   minPlayers: number;
   photo?: string;
@@ -22,7 +21,10 @@ interface DashboardCardProps {
   isFlippedState?: boolean;
   setIsFlippedState?: React.Dispatch<React.SetStateAction<boolean>>;
   description?: string | null;
-  labels?: string;
+  labels?: number[];
+  isDashboard?: boolean;
+  addToShelfHandler?: (gameId: string) => Promise<void>;
+  difficulty?: number;
 }
 
 export default function DashboardCard({
@@ -35,6 +37,8 @@ export default function DashboardCard({
   uniqueBoardId,
   description,
   labels,
+  isDashboard = false,
+  addToShelfHandler,
 }: DashboardCardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -46,6 +50,8 @@ export default function DashboardCard({
           uniqueBoardId={uniqueBoardId}
           isFlipped={isFlipped}
           setIsFlipped={setIsFlipped}
+          isDashboard={isDashboard}
+          addToShelfHandler={addToShelfHandler}
         />
       ) : (
         <CardBackSide
@@ -58,6 +64,7 @@ export default function DashboardCard({
           uniqueBoardId={uniqueBoardId}
           isFlipped={isFlipped}
           setIsFlipped={setIsFlipped}
+          isDashboard={isDashboard}
         />
       )}
     </div>
@@ -69,12 +76,16 @@ interface CardFrontSideProps {
   uniqueBoardId: string;
   setIsFlipped: React.Dispatch<React.SetStateAction<boolean>>;
   isFlipped: boolean;
+  isDashboard?: boolean;
+  addToShelfHandler?: (gameId: string) => Promise<void>;
 }
 function CardFrontSide({
   name,
-  uniqueBoardId,
+  uniqueBoardId = "",
   setIsFlipped,
   isFlipped,
+  isDashboard,
+  addToShelfHandler,
 }: CardFrontSideProps) {
   return (
     <div className="w-full h-full">
@@ -91,13 +102,25 @@ function CardFrontSide({
       </div>
       <div className="w-full h-[40%] flex flex-col items-center justify-around">
         <h1 className="text-2xl text-default font-medium">{name}</h1>
-        <Link href={`/dashboard/scoreboard/${uniqueBoardId}`}>
+
+        {isDashboard ? (
+          <Link href={`/dashboard/scoreboard/${uniqueBoardId}`}>
+            <Button
+              nameToDisplay="Add score"
+              variant="default"
+              className="px-2 h-8"
+            />
+          </Link>
+        ) : (
           <Button
-            nameToDisplay={"Add score"}
+            onClick={() =>
+              addToShelfHandler && addToShelfHandler(uniqueBoardId)
+            }
+            nameToDisplay="Add to shelf"
             variant="default"
             className="px-2 h-8"
           />
-        </Link>
+        )}
       </div>
     </div>
   );
@@ -113,6 +136,7 @@ interface CardBackSideProps {
   isFlipped: boolean;
   setIsFlipped: React.Dispatch<React.SetStateAction<boolean>>;
   description?: string | null;
+  isDashboard: boolean;
 }
 function CardBackSide({
   name,
@@ -124,6 +148,7 @@ function CardBackSide({
   uniqueBoardId,
   setIsFlipped,
   isFlipped,
+  isDashboard,
 }: CardBackSideProps) {
   const { user } = useUser();
 
@@ -135,11 +160,13 @@ function CardBackSide({
           onClick={() => setIsFlipped(!isFlipped)}
         />
         <span className="text-xl font-medium text-default">{name}</span>
-        <DeleteGameDialog
-          gameName={name}
-          userId={user?.id ?? ""}
-          uniqueBoardId={uniqueBoardId}
-        />
+        {isDashboard && (
+          <DeleteGameDialog
+            gameName={name}
+            userId={user?.id ?? ""}
+            uniqueBoardId={uniqueBoardId}
+          />
+        )}
       </div>
       <div className="h-[70%]">
         <BaseGameInformation
@@ -150,20 +177,22 @@ function CardBackSide({
           description={description}
         />
       </div>
-      <div className="h-[15%] flex items-center justify-end px-4 border-t gap-2 w-full">
-        <Link
-          href={`/dashboard/create-or-edit-score-sheet/edit-score-sheet/${uniqueBoardId}`}
-        >
-          <div className="w-8 h-8 rounded bg-buttonAndShadowColor flex justify-center items-center">
-            <Pencil className="w-5 h-5 text-white" />
-          </div>
-        </Link>
-        <Link href={`/dashboard/history/${uniqueBoardId}`}>
-          <div className="w-8 h-8 border rounded flex items-center justify-center">
-            <History className="cursor-pointer h-6 w-6 text-default " />
-          </div>
-        </Link>
-      </div>
+      {isDashboard && (
+        <div className="h-[15%] flex items-center justify-end px-4 border-t gap-2 w-full">
+          <Link
+            href={`/dashboard/create-or-edit-score-sheet/edit-score-sheet/${uniqueBoardId}`}
+          >
+            <div className="w-8 h-8 rounded bg-buttonAndShadowColor flex justify-center items-center">
+              <Pencil className="w-5 h-5 text-white" />
+            </div>
+          </Link>
+          <Link href={`/dashboard/history/${uniqueBoardId}`}>
+            <div className="w-8 h-8 border rounded flex items-center justify-center">
+              <History className="cursor-pointer h-6 w-6 text-default " />
+            </div>
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

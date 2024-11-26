@@ -1,11 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { useUser } from "@clerk/nextjs";
-import { usePathname, useRouter } from "next/navigation";
-import axios from "axios";
+import React, { useState } from "react";
 import { Input } from "@/components/input";
 import { Button } from "@/components/button";
 import { cn } from "@/lib/utils";
+import { ScoreboardFields } from "@/app/(directory)/dashboard/lib/dashboard-types";
 
 interface DisplayPlayersFieldsProps {
   horizontal: boolean;
@@ -22,14 +20,6 @@ interface DisplayScoreFieldsProps {
   data: ScoreData[];
 }
 
-export interface Data {
-  board_id: string;
-  game_name: string;
-  max_players: number;
-  score_sheet: string;
-  horizontal: boolean;
-}
-
 export interface ScoreData {
   color: string;
   id: number;
@@ -41,32 +31,21 @@ interface InputFields {
   fields: { [key: string]: string }[];
 }
 
-export default function ScoreboardView() {
-  const [data, setData] = useState<Data | null>(null);
+interface ScoreboardViewProps {
+  board: ScoreboardFields | undefined;
+}
+
+export default function ScoreboardView({ board }: ScoreboardViewProps) {
   const [playerCount, setPlayerCount] = useState<number>(0);
   const [inputFields, setInputFields] = useState<InputFields[] | undefined>(
     undefined,
   );
+
   const [nameAndPoints, setNameAndPoints] = useState<
     { [key: string]: number | string }[] | undefined
   >(undefined);
 
-  const { user } = useUser();
-  const pathname = usePathname().split("/").pop();
-  const scoreData = JSON.parse(data?.score_sheet ?? "[]") as ScoreData[];
-  const router = useRouter();
-
-  // DON'T LOOK AT THIS EFFECT, DATA WILL BE EXECUTED IN SERVER ACTIONS IN THE NEAREST FUTURE
-  useEffect(() => {
-    const dataHandler = async () => {
-      const data = await axios.get(
-        `/api/user-games/get-user-games/get-particular-game?id=${pathname}`,
-      );
-
-      setData(data.data.result[0]);
-    };
-    dataHandler();
-  }, [pathname]);
+  const scoreData: ScoreData[] = JSON.parse(board?.scoreSheet ?? "[]");
 
   const addPlayer = () => {
     setPlayerCount(playerCount + 1);
@@ -102,18 +81,18 @@ export default function ScoreboardView() {
     <div className="w-full h-full">
       <div className="w-full flex justify-center">
         <h1 className="text-[52px] lg:text-[72px] text-default font-extrabold">
-          {data?.game_name}
+          {board?.gameName}
         </h1>
       </div>
 
-      <div className={cn("flex", data?.horizontal && "flex-col")}>
+      <div className={cn("flex", board?.horizontal && "flex-col")}>
         <DisplayScoreFields
           data={scoreData}
-          horizontal={data?.horizontal ?? false}
+          horizontal={board?.horizontal ?? false}
         />
         <DisplayPlayersFields
           playerInputsHandler={playerInputsHandler}
-          horizontal={data?.horizontal ?? false}
+          horizontal={board?.horizontal ?? false}
           inputFields={inputFields ?? []}
         />
       </div>
@@ -121,7 +100,7 @@ export default function ScoreboardView() {
       <div className="w-full flex  justify-center mt-6">
         <div className="flex-col flex gap-4">
           {/*IF PLAYER COUNT IS BIGGER THAN BOARD GAME MAX PLAYERS HIDE THE BUTTON*/}
-          {Number(data?.max_players ?? 0) > playerCount && (
+          {Number(board?.maxPlayers ?? 0) > playerCount && (
             <Button
               nameToDisplay="Add player"
               onClick={addPlayer}
@@ -146,7 +125,7 @@ function DisplayPlayersFields({
   inputFields = [],
 }: DisplayPlayersFieldsProps): React.ReactNode {
   return (
-    <div className="w-full max-w-full bg-gray-300 overflow-hidden">
+    <div className="w-full max-w-full overflow-hidden">
       <div
         className={cn(
           "flex overflow-x-auto",

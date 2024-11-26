@@ -33,13 +33,3 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-
-// export async function GET(req: NextRequest, res: NextResponse) {
-//   try {
-//     const data = await db.select().from(playedGames);
-//
-//   } catch (e) {
-//     console.error(e);
-//     return NextResponse.json({ success: false, error: e });
-//   }
-// }

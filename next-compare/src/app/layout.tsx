@@ -9,6 +9,7 @@ import HeaderArrow from "@/components/header-arrow";
 import { Toaster } from "@/components/ui/toaster";
 import MobileBottomNavigation from "@/components/mobile-bottom-navigation";
 import { cn } from "@/lib/utils";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -46,6 +47,7 @@ export default async function RootLayout({
                   <HeaderArrow />
                 </div>
                 {children}
+                <SpeedInsights />
               </div>
               <div className="hidden sm:block min-w-[20px]" />
             </div>

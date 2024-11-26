@@ -11,15 +11,8 @@ import { cn } from "@/lib/utils";
 import { createPortal } from "react-dom";
 
 interface ReorderValuesProps {
-  id: string | string[];
-  // reorderValues: ReorderValue[];
-  // openIndex: number | null;
-  // reorderValuesSetter: React.Dispatch<React.SetStateAction<ReorderValue[]>>;
-  // openIndexSetter: React.Dispatch<React.SetStateAction<number | null>>;
+  id: string | undefined;
   popover: React.RefObject<HTMLDivElement>;
-  // colorSetter: React.Dispatch<React.SetStateAction<string>>;
-  // color: string;
-  // horizontalView?: boolean;
 }
 
 export default function ReorderItem({ id, popover }: ReorderValuesProps) {

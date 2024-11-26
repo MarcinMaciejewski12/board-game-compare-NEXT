@@ -9,6 +9,7 @@ import {
   jsonb,
 } from "drizzle-orm/pg-core";
 import { timestamp } from "drizzle-orm/pg-core/columns/timestamp";
+import { InferModel } from "drizzle-orm";
 
 export const users = pgTable("users", {
   user_id: text("user_id"),
@@ -40,7 +41,7 @@ export const allScoreBoards = pgTable("all_score_boards", {
   description: text("description"),
   photo: text("photo"),
   is_shared_to_community: boolean("is_shared_to_community"),
-  game_score_board: json("game_score_board"),
+  game_score_board: jsonb("game_score_board"),
   labels: jsonb("labels"),
   horizontal: boolean("horizontal"),
 });

@@ -28,7 +28,7 @@ export interface ReorderValue {
   color: string;
 }
 
-type GameInfo = {
+export type GameInfo = {
   max_player: number;
   min_player: number;
   difficulty: number;
