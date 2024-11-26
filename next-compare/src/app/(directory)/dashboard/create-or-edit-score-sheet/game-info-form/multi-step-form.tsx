@@ -9,7 +9,8 @@ import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/hooks/use-toast";
 import { addGame } from "@/app/(directory)/dashboard/create-or-edit-score-sheet/actions";
-import MultiStepFormSkeleton from "@/app/(directory)/dashboard/create-or-edit-score-sheet/game-info-form/loading";
+
+import AddScoreBoardSkeleton from "@/app/(directory)/dashboard/create-or-edit-score-sheet/game-info-form/components/loading-view";
 const GameInfoForm = lazy(
   () =>
     import(
@@ -62,7 +63,7 @@ export default function MultiStepForm() {
   switch (step) {
     case 1:
       return (
-        <Suspense fallback={<MultiStepFormSkeleton component="gameInfoForm" />}>
+        <Suspense fallback={<AddScoreBoardSkeleton />}>
           <GameInfoForm nextStep={nextStep} />
         </Suspense>
       );
@@ -71,8 +72,8 @@ export default function MultiStepForm() {
 
     default:
       return (
-        <Suspense fallback={<MultiStepFormSkeleton component="gameInfoForm" />}>
-          <GameInfoForm nextStep={nextStep} />
+        <Suspense fallback={<AddScoreBoardSkeleton />}>
+          <GameInfoForm nextStep={nextStep} />;
         </Suspense>
       );
   }
