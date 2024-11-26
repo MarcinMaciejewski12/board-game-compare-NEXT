@@ -1,7 +1,7 @@
 export type LabelType = {
   id: number;
-  name: string;
-  color: string;
+  name: string | number;
+  color?: string;
 };
 
 export const labels: LabelType[] = [
@@ -74,5 +74,44 @@ export const labels: LabelType[] = [
     id: 14,
     name: "Worker Placement",
     color: "bg-cyan-500",
+  },
+];
+
+const difficultyLevelsArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+export const difficultyLevels: { id: number; name: number }[] =
+  difficultyLevelsArray.map((level) => ({ id: level, name: level }));
+
+export const playTime: { id: number; name: string }[] = [
+  {
+    id: 1,
+    name: "15",
+  },
+  {
+    id: 2,
+    name: "30",
+  },
+  {
+    id: 3,
+    name: "45",
+  },
+  {
+    id: 4,
+    name: "60",
+  },
+  {
+    id: 5,
+    name: "90",
+  },
+  {
+    id: 6,
+    name: "120",
+  },
+  {
+    id: 7,
+    name: "180",
+  },
+  {
+    id: 8,
+    name: "240",
   },
 ];

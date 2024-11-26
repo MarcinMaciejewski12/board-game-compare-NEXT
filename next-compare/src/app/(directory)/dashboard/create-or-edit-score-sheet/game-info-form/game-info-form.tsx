@@ -3,22 +3,23 @@ import React, { useRef, useState } from "react";
 import { Button } from "@/components/button";
 import { useScoreSheetMultiContext } from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";
 import { Textarea } from "@/components/ui/textarea";
-import { labels } from "@/app/(directory)/dashboard/lib/labels";
-import Label from "@/components/label";
+import {
+  difficultyLevels,
+  labels,
+  LabelType,
+  playTime,
+} from "@/app/(directory)/dashboard/lib/labels";
+
+import MultiStepCombobox from "@/app/(directory)/dashboard/create-or-edit-score-sheet/game-info-form/components/multi-step-combobox";
+import { Info } from "lucide-react";
 
 type GameInfoFormProps = {
   nextStep: () => void;
 };
 
 export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
-  const {
-    setGameInfo,
-    setGameName,
-    gameName,
-    gameInfo,
-    labelTable,
-    setLabelTable,
-  } = useScoreSheetMultiContext();
+  const { setGameInfo, setGameName, gameName, gameInfo } =
+    useScoreSheetMultiContext();
   const [errorMessage, setErrorMessage] = useState<{ [key: string]: string }>(
     {},
   );
@@ -80,15 +81,8 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
     }
   };
 
-  const isCheckedHandler = (id: number) => {
-    if (labelTable.includes(id)) {
-      return setLabelTable([...labelTable.filter((item) => item !== id)]);
-    }
-    return setLabelTable([...labelTable, id]);
-  };
-
   return (
-    <div className="w-[90vw] h-full bg-white rounded shadow-xl flex flex-col items-center gap-2 p-4">
+    <div className="w-[70vw] h-full bg-white rounded shadow-xl flex flex-col items-center gap-2 p-4">
       <h1 className="text-default font-bold text-xl">Basic game information</h1>
       <div className="w-full h-full">
         <form
@@ -141,46 +135,56 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
                   onBlur={handleBlur}
                 />
               </div>
+              <div className="flex justify-between">
+                <MultiStepCombobox<LabelType>
+                  gameInfoName="difficulty"
+                  commandEmpty="difficulty"
+                  inputPlaceholder={"Select difficulty..."}
+                  values={difficultyLevels}
+                  buttonChildren={"Select difficulty..."}
+                  comboboxLabel={"Difficulty"}
+                  required
+                  suffixText="/10"
+                  className="w-[150px]"
+                  searchDisabled={true}
+                />
+                <MultiStepCombobox
+                  commandEmpty={"playtime"}
+                  gameInfoName="playtime"
+                  values={playTime}
+                  inputPlaceholder={"Select playtime..."}
+                  buttonChildren={"Select playtime..."}
+                  suffixText={"min"}
+                  className={"w-[150px]"}
+                  comboboxLabel={"Playtime"}
+                  searchDisabled={true}
+                  required
+                />
+              </div>
 
-              <Input
-                label="Difficulty"
-                className="w-full"
-                type="number"
-                max={10}
-                min={1}
-                placeholder="Difficulty"
-                name="difficulty"
-                variant="default"
-                onChange={dialogHandler}
-                required
-                errorMessage={errorMessage["difficulty"]}
-                onBlur={handleBlur}
-                suffixText="/10"
+              <MultiStepCombobox<LabelType>
+                gameInfoName={"labels"}
+                inputPlaceholder={"Select labels..."}
+                values={labels}
+                buttonChildren={"Select Labels..."}
+                commandEmpty={"labels"}
+                comboboxLabel={"Labels"}
+                multipleChoices
               />
-              <Input
-                label="Playtime"
-                variant="default"
-                type="number"
-                className="w-full"
-                placeholder="Playtime"
-                name="playtime"
-                onChange={dialogHandler}
-                required
-                errorMessage={errorMessage["playtime"]}
-                onBlur={handleBlur}
-                suffixText={"min"}
-              />
-              <div className="flex gap-1 justify-center items-center font-medium">
+              <div className="flex gap-2 justify-center items-center font-medium">
                 <input
                   type="checkbox"
                   id="checkbox"
                   name="isSharedToCommunity"
                   checked={gameInfo?.isSharedToCommunity}
                   onChange={dialogHandler}
+                  className="w-4 h-4 cursor-pointer text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                 />
-                <label htmlFor="checkbox" className="text-sm">
-                  Share with community (other gamers could use your score
-                  board!)
+                <label
+                  htmlFor="checkbox"
+                  className="text-sm flex items-center gap-2 text-default"
+                >
+                  Share with community {<Info />}
                 </label>
               </div>
             </div>
@@ -193,25 +197,14 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
                   onChange={dialogHandler}
                   className="bg-white outline-none resize-none min-h-[26vh] w-full"
                 />
-
-                <div className="grid w-full grid-cols-3 md:grid-cols-[repeat(auto-fit,minmax(100px,1fr))] gap-2 mb-4">
-                  {labels.map((item) => (
-                    <div
-                      onClick={() => isCheckedHandler(item.id)}
-                      className="flex w-full items-center justify-center max-w-full"
-                      key={item.id}
-                      title={item.name}
-                    >
-                      <Label
-                        id={item.id}
-                        name={item.name}
-                        color={item.color}
-                        idTable={labelTable}
-                        spanClasses="cursor-pointer"
-                      />
-                    </div>
-                  ))}
-                </div>
+                <Input
+                  label="Game image"
+                  type="file"
+                  name="gamePhoto"
+                  accept="image/*"
+                  onChange={dialogHandler}
+                  className="w-full"
+                />
               </div>
             </div>
           </div>

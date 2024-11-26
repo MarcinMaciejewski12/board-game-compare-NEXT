@@ -6,6 +6,7 @@ import { inArray } from "drizzle-orm/sql/expressions/conditions";
 import {
   Games,
   ScoreboardFields,
+  ScoreData,
 } from "@/app/(directory)/dashboard/lib/dashboard-types";
 import { revalidatePath } from "next/cache";
 
@@ -79,7 +80,7 @@ export async function getScoreBoardSheet(gameId: string): Promise<{
       maxPlayers: result[0].max_players ?? 1,
       boardId: result[0].board_id,
       gameName: result[0].game_name ?? "",
-      scoreSheet: result[0].score_sheet as unknown as string,
+      scoreSheet: result[0].score_sheet as unknown as ScoreData[],
       horizontal: result[0].horizontal ?? false,
     };
 

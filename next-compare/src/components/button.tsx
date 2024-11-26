@@ -13,6 +13,8 @@ const buttonVariants = cva("", {
         "bg-red-500 text-white rounded-md w-24 h-8 hover:bg-red-500/80",
       dialogCancel:
         "border-2 shadow-xl text-black border-black rounded-md w-24 h-8",
+      outline:
+        "border border-border text-primary hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none",
     },
     size: {
       loginSize: "h-8 rounded-md px-8 shadow-xl",
