@@ -33,25 +33,25 @@ export default function GamesList() {
         />
       </div>
       <section className="w-full flex flex-col items-center gap-2 md:grid md:grid-cols-2 h-full lg:grid lg:grid-cols-3 xl:grid-cols-4">
-        {gamesData
-          ? gamesData?.map((data: Games) => {
-              return (
-                <div key={data.id}>
-                  <DashboardCard
-                    userId={user?.id as string}
-                    unique_board_id={data.unique_board_id}
-                    game_name={data.game_name}
-                    id={data.id}
-                    difficulty={data.difficulty}
-                    max_players={data.max_players}
-                    min_players={data.min_players}
-                    photo={data.photo}
-                    playtime={data.playtime}
-                  />
-                </div>
-              );
-            })
-          : "Loading..."}
+        {/*{gamesData*/}
+        {/*  ? gamesData?.map((data: Games) => {*/}
+        {/*      return (*/}
+        {/*        <div key={data.id}>*/}
+        {/*          <DashboardCard*/}
+        {/*            userId={user?.id as string}*/}
+        {/*            uniqueBoardId={data.unique_board_id}*/}
+        {/*            game_name={data.game_name}*/}
+        {/*            id={data.id}*/}
+        {/*            difficulty={data.difficulty}*/}
+        {/*            max_players={data.max_players}*/}
+        {/*            min_players={data.min_players}*/}
+        {/*            photo={data.photo}*/}
+        {/*            playtime={data.playtime}*/}
+        {/*          />*/}
+        {/*        </div>*/}
+        {/*      );*/}
+        {/*    })*/}
+        {/*  : "Loading..."}*/}
       </section>
     </div>
   );

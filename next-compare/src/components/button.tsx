@@ -9,6 +9,10 @@ const buttonVariants = cva("", {
         "bg-buttonAndShadowColor cursor-pointer rounded-md text-white hover:bg-buttonAndShadowColor/90",
       withoutBackground:
         "border-2 shadow-xl text-black border-black cursor-pointer rounded-md ",
+      dialogDelete:
+        "bg-red-500 text-white rounded-md w-24 h-8 hover:bg-red-500/80",
+      dialogCancel:
+        "border-2 shadow-xl text-black border-black rounded-md w-24 h-8",
     },
     size: {
       loginSize: "h-8 rounded-md px-8 shadow-xl",

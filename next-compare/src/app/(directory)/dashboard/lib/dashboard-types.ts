@@ -2,8 +2,8 @@ import React from "react";
 
 // Dashboard interfaces
 export interface Games {
-  createdAt: string;
   difficulty: number;
+  created_at: string;
   game_name: string;
   game_score_board: string;
   id: string;

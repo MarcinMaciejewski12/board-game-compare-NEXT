@@ -28,9 +28,9 @@ export default async function RootLayout({
         <body className={`${inter.className} overflow-hidden`}>
           <UserContextProvider>
             <Header />
-            <div className="flex h-full">
+            <div className="flex w-full h-full">
               <div
-                className="min-w-[4.375rem] w-defaultSidebarWidth hidden sm:flex"
+                className="min-w-[4.375rem] sticky top-0 w-defaultSidebarWidth hidden sm:flex"
                 style={{ height: "calc(100vh - var(--default-header-height))" }}
               >
                 <Sidebar />
@@ -39,7 +39,7 @@ export default async function RootLayout({
               <div
                 style={{ height: "calc(100vh - var(--default-header-height))" }}
                 className={cn(
-                  "px-2 sm:max-w-[calc(100vw-90px)] bg-secondary h-full w-full sm:rounded-tl-[1rem] sm:rounded-tr-sm pb-[4.375rem]",
+                  "sm:max-w-[calc(100vw-90px)] overflow-auto bg-secondary h-full w-full sm:rounded-tl-[1rem] sm:rounded-tr-sm",
                 )}
               >
                 <div>

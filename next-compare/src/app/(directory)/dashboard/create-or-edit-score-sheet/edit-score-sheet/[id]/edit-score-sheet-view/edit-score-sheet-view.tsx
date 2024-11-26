@@ -12,7 +12,6 @@ export default function EditScoreSheetView({ id }: { id: string }) {
   const { user } = useUser();
   const { toast } = useToast();
   const router = useRouter();
-
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 

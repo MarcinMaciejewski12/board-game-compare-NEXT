@@ -6,7 +6,8 @@ const inputVariants = cva("", {
   variants: {
     variant: {
       default: "h-12 min-w-48 p-2",
-      searchbar: "h-12 w-72 sm:w-48 p-2",
+      searchbar:
+        "-12 w-72 sm:w-48 p-2 focus-visible:outline-none focus-visible:ring-0",
     },
   },
 });
