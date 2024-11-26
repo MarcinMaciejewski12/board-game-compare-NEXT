@@ -7,6 +7,7 @@ import axios from "axios";
 import { useParams } from "next/navigation";
 import ReorderItem from "@/app/(directory)/dashboard/create-or-edit-score-sheet/game-info-form/components/reorder-items";
 import { cn } from "@/lib/utils";
+import { MoveHorizontal } from "lucide-react";
 
 interface ScoreCreatorProps {
   submitStep: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
@@ -16,11 +17,10 @@ interface ScoreCreatorProps {
 
 export default function ScoreCreator({
   submitStep,
-  // prevStep,
   editedScoreSheetId,
 }: ScoreCreatorProps) {
   const popover = useRef<HTMLDivElement>(null);
-  const [horizontalView, setHorizontalView] = useState<boolean>(false);
+
   const {
     openIndex,
     setOpenIndex,
@@ -30,6 +30,8 @@ export default function ScoreCreator({
     setReorderValues,
     setGameName,
     gameName,
+    horizontalView,
+    setHorizontalView,
   } = useScoreSheetMultiContext();
 
   const { id } = useParams();
@@ -64,61 +66,53 @@ export default function ScoreCreator({
   };
 
   return (
-    <div className={cn("flex flex-col w-[40rem] overflow-hidden z-20")}>
-      <button onClick={() => setHorizontalView(!horizontalView)}>
-        horizontal
-      </button>
-      <div className={cn("flex", horizontalView ? "flex-row" : "flex-col")}>
-        <div className="w-full flex justify-center">
-          {id && (
-            <h1 className="text-[52px] lg:text-[72px] text-default font-extrabold">
-              {gameName}
-            </h1>
-          )}
-        </div>
-        <>
-          <div className="w-full flex items-center justify-center">
-            <div className="w-52 lg:w-72 border border-black bg-white h-24 flex items-center rounded-lg justify-center p-4 mb-4">
-              <span className="text-2xl text-default">Game fields</span>
-            </div>
-          </div>
-
-          {/*REORDER GROUP SECTION*/}
-          <Reorder.Group
-            onReorder={setReorderValues}
-            values={reorderValues}
-            axis={horizontalView ? "x" : "y"}
-            className={cn(
-              "w-full flex items-center gap-4 max-h-80 overflow-auto",
-              horizontalView ? "flex-row" : "flex-col",
-            )}
-          >
-            <ReorderItem
-              id={id}
-              reorderValues={reorderValues}
-              reorderValuesSetter={setReorderValues}
-              openIndex={openIndex}
-              openIndexSetter={setOpenIndex}
-              color={color}
-              colorSetter={setColor}
-              popover={popover}
-              horizontalView={horizontalView}
-            />
-          </Reorder.Group>
-        </>
+    <div className="w-full h-full">
+      {/*DISPLAY GAME NAME IN EDIT MODE*/}
+      <div className="w-full flex justify-center">
+        {id && (
+          <h1 className="text-[52px] lg:text-[72px] text-default font-extrabold">
+            {gameName}
+          </h1>
+        )}
       </div>
 
-      {/*BUTTON SECTION*/}
-      <div className="flex items-center justify-center flex-col lg:max-w-72 gap-4 p-5">
+      {/*STATIC GAME FIELDS CONTAINER*/}
+      <div className="w-full h-32 flex justify-center mb-2">
+        <div className="w-72 h-full bg-white rounded-xl shadow-lg">
+          <div className="w-full h-[50%] flex items-center justify-center">
+            <span className="text-2xl text-default ">Score fields</span>
+          </div>
+          <div className="w-full h-[50%] flex justify-around items-center">
+            <Button
+              nameToDisplay="Add score field"
+              variant="withoutBackground"
+              size="sm"
+              onClick={addGameFieldHandler}
+            />
+            <MoveHorizontal
+              className={"cursor-pointer"}
+              onClick={() => setHorizontalView(!horizontalView)}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/*DISPLAY REORDER GROUP*/}
+      <Reorder.Group
+        onReorder={setReorderValues}
+        values={reorderValues}
+        axis={horizontalView ? "x" : "y"}
+        className={cn(
+          "flex w-full gap-2 items-center",
+          horizontalView
+            ? "overflow-x-auto flex-row"
+            : "flex-col max-h-96 overflow-y-auto",
+        )}
+      >
+        <ReorderItem id={id} popover={popover} />
+      </Reorder.Group>
+      <div className="flex items-center justify-center mt-2">
         <Button
-          className="mt-4"
-          nameToDisplay="Add score field"
-          variant="withoutBackground"
-          size="lg"
-          onClick={(e) => addGameFieldHandler(e)}
-        />
-        <Button
-          className="mt-4"
           nameToDisplay={
             editedScoreSheetId ? "Edit score board" : "Save score board"
           }

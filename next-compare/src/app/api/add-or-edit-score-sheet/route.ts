@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/db";
 import { allScoreBoards, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { v4 as uuidv4 } from "uuid";
 
 export async function POST(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -10,15 +11,11 @@ export async function POST(request: NextRequest) {
     if (gameId) return;
 
     const body = await request.json();
-    const uid = () =>
-      String(Date.now().toString(32) + Math.random().toString(16)).replace(
-        /\./g,
-        "",
-      );
+
     const result = await db
       .insert(allScoreBoards)
       .values({
-        user_id: body.user_id,
+        user_id: body.userId,
         created_at: new Date(),
         game_name: body.gameName,
         min_players: Number(body.details.min_player),
@@ -28,9 +25,10 @@ export async function POST(request: NextRequest) {
         photo: "",
         description: body.details.description,
         is_shared_to_community: body.details.isSharedToCommunity,
-        unique_board_id: uid(),
+        unique_board_id: uuidv4(),
         game_score_board: JSON.stringify(body.gameFields),
         labels: JSON.stringify(body.labels),
+        horizontal: body.horizontalView,
       })
       .returning();
 

@@ -11,7 +11,7 @@ import { useToast } from "@/components/hooks/use-toast";
 export default function MultiStepForm() {
   const [step, setStep] = useState(1);
   const { toast } = useToast();
-  const { gameInfo, gameName, reorderValues, labelTable } =
+  const { gameInfo, gameName, reorderValues, labelTable, horizontalView } =
     useScoreSheetMultiContext();
   const { user } = useUser();
   const router = useRouter();
@@ -19,14 +19,14 @@ export default function MultiStepForm() {
   const prevStep = () => setStep((prevStep) => prevStep - 1);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    // TODO: add horizontal view to data(field in database already exists)
     e.preventDefault();
     const data = {
       details: gameInfo,
       gameFields: reorderValues,
-      user_id: user?.id,
-      gameName: gameName,
+      userId: user?.id,
+      gameName,
       labels: labelTable,
+      horizontalView,
     };
 
     try {
