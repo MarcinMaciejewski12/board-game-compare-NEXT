@@ -1,29 +1,28 @@
 import { UserContextProvider } from "@/components/context/user-context/user-context";
 import { auth } from "@clerk/nextjs/server";
 import { getUserGames } from "@/app/(directory)/dashboard/actions";
-import React, { cache, Suspense } from "react";
+import React, { cache } from "react";
 import { redirect } from "next/navigation";
-import CardLoading from "@/components/views/card-loading";
+
 import CardTable from "@/components/views/card-table";
 
-// const cachedGetUserGames = cache(async (userId: string) => {
-//   return await getUserGames(userId);
-// });
+const cachedGetUserGames = cache(async (userId: string) => {
+  return await getUserGames(userId);
+});
 
 export default async function Dashboard() {
-  const { userId } = await auth();
+  const { userId } = auth();
 
   if (!userId) redirect("/");
-  const games = await getUserGames(userId);
+  const games = await cachedGetUserGames(userId);
 
   return (
     <UserContextProvider>
       <h1 className="text-buttonAndShadowColor text-[2rem] font-bold p-2">
         Your shelf
       </h1>
-      <Suspense fallback={<CardLoading />}>
-        <CardTable isDashboard={true} data={games.data ?? []} />
-      </Suspense>
+
+      <CardTable isDashboard={true} data={games.data ?? []} />
     </UserContextProvider>
   );
 }

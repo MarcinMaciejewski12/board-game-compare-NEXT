@@ -46,8 +46,8 @@ export default async function RootLayout({
                 <div>
                   <HeaderArrow />
                 </div>
-                {children}
                 <SpeedInsights />
+                {children}
               </div>
               <div className="hidden sm:block min-w-[20px]" />
             </div>
