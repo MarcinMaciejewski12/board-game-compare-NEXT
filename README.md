@@ -23,9 +23,4 @@ click link below:
 https://board-game-compare-next.vercel.app/dashboard
 
 
-
-## Screenshots
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
-
-
+Enjoy! 
