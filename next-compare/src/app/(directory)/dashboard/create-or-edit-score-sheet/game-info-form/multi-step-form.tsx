@@ -1,5 +1,5 @@
 "use client";
-import React, { lazy, Suspense, useState } from "react";
+import React, { useState } from "react";
 import ScoreCreator from "@/app/(directory)/dashboard/create-or-edit-score-sheet/game-info-form/score-creator";
 import {
   GameInfo,
@@ -9,20 +9,19 @@ import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/hooks/use-toast";
 import { addGame } from "@/app/(directory)/dashboard/create-or-edit-score-sheet/actions";
-
-import AddScoreBoardSkeleton from "@/app/(directory)/dashboard/create-or-edit-score-sheet/game-info-form/components/loading-view";
-const GameInfoForm = lazy(
-  () =>
-    import(
-      "@/app/(directory)/dashboard/create-or-edit-score-sheet/game-info-form/game-info-form"
-    ),
-);
+import GameInfoForm from "@/app/(directory)/dashboard/create-or-edit-score-sheet/game-info-form/game-info-form";
 
 export default function MultiStepForm() {
   const [step, setStep] = useState(1);
   const { toast } = useToast();
-  const { gameInfo, gameName, reorderValues, labelTable, horizontalView } =
-    useScoreSheetMultiContext();
+  const {
+    gameInfo,
+    gameName,
+    reorderValues,
+    labelTable,
+    horizontalView,
+    image,
+  } = useScoreSheetMultiContext();
   const { user } = useUser();
   const router = useRouter();
   const nextStep = () => setStep((prevStep) => prevStep + 1);
@@ -48,9 +47,11 @@ export default function MultiStepForm() {
       isSharedToCommunity,
       gameName,
       horizontalView,
+
       labels: labelTable,
       gameFields: reorderValues,
     };
+    console.log(image);
     await addGame(user?.id ?? "", data);
 
     toast({
@@ -62,19 +63,11 @@ export default function MultiStepForm() {
 
   switch (step) {
     case 1:
-      return (
-        <Suspense fallback={<AddScoreBoardSkeleton />}>
-          <GameInfoForm nextStep={nextStep} />
-        </Suspense>
-      );
+      return <GameInfoForm nextStep={nextStep} />;
     case 2:
       return <ScoreCreator prevStep={prevStep} submitStep={onSubmit} />;
 
     default:
-      return (
-        <Suspense fallback={<AddScoreBoardSkeleton />}>
-          <GameInfoForm nextStep={nextStep} />;
-        </Suspense>
-      );
+      return <GameInfoForm nextStep={nextStep} />;
   }
 }

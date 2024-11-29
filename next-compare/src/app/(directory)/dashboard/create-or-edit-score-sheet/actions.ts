@@ -23,6 +23,7 @@ interface Game {
 export async function addGame(userId: string, game: Game) {
   if (!userId) return;
   try {
+    return;
     const newGame = await db
       .insert(allScoreBoards)
       .values({
