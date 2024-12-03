@@ -1,6 +1,3 @@
-"use client";
-import sevenWonders from "@/assets/7wonders.jpeg";
-import Image from "next/image";
 import { Button } from "@/components/button";
 import { Pencil, TrendingUp } from "lucide-react";
 import Link from "next/link";
@@ -9,6 +6,8 @@ import { History, Info, ArrowLeft, Users, Clock } from "lucide-react";
 
 import { useUser } from "@clerk/nextjs";
 import DeleteGameDialog from "@/components/dialogs/delete-dialog";
+
+import Avatar from "@/components/avatar";
 
 interface DashboardCardProps {
   gameName: string;
@@ -52,6 +51,7 @@ export default function DashboardCard({
           setIsFlipped={setIsFlipped}
           isDashboard={isDashboard}
           addToShelfHandler={addToShelfHandler}
+          photo={photo ?? ""}
         />
       ) : (
         <CardBackSide
@@ -78,6 +78,7 @@ interface CardFrontSideProps {
   isFlipped: boolean;
   isDashboard?: boolean;
   addToShelfHandler?: (gameId: string) => Promise<void>;
+  photo: string;
 }
 function CardFrontSide({
   name,
@@ -86,6 +87,7 @@ function CardFrontSide({
   isFlipped,
   isDashboard,
   addToShelfHandler,
+  photo = "",
 }: CardFrontSideProps) {
   return (
     <div className="w-full h-full">
@@ -94,11 +96,7 @@ function CardFrontSide({
           className="absolute text-white end-2 top-2 cursor-pointer"
           onClick={() => setIsFlipped(!isFlipped)}
         />
-        <Image
-          src={sevenWonders}
-          alt="game"
-          className="object-fit w-full h-full rounded-xl"
-        />
+        <Avatar img={photo} size={{ w: "300", h: "60%" }} />
       </div>
       <div className="w-full h-[40%] flex flex-col items-center justify-around">
         <h1 className="text-2xl text-default font-medium">{name}</h1>

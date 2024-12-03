@@ -1,3 +1,4 @@
+"use client";
 import { Input } from "@/components/input";
 import React, { useRef, useState } from "react";
 import { Button } from "@/components/button";
@@ -28,8 +29,8 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
 
   const nextStepValidation = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    nextStep();
     if (formRef.current?.checkValidity()) {
-      nextStep();
     } else {
       const formElements = formRef.current?.elements;
       const newErrorMessages: { [key: string]: string } = {};

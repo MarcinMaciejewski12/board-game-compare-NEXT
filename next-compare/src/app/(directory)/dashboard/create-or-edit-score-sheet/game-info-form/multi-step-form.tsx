@@ -10,6 +10,8 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/components/hooks/use-toast";
 import { addGame } from "@/app/(directory)/dashboard/create-or-edit-score-sheet/actions";
 import GameInfoForm from "@/app/(directory)/dashboard/create-or-edit-score-sheet/game-info-form/game-info-form";
+import { v4 as uuidv4 } from "uuid";
+import supabase from "@/lib/supabaseClient";
 
 export default function MultiStepForm() {
   const [step, setStep] = useState(1);
@@ -37,6 +39,8 @@ export default function MultiStepForm() {
 
   const onSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    const fileExt = (image as File)?.name.split(".").pop();
+    const filePath = `${uuidv4()}.${fileExt}`;
 
     const data = {
       max_player,
@@ -47,18 +51,35 @@ export default function MultiStepForm() {
       isSharedToCommunity,
       gameName,
       horizontalView,
-
+      photo: filePath ?? "",
       labels: labelTable,
       gameFields: reorderValues,
     };
-    console.log(image);
-    await addGame(user?.id ?? "", data);
-
-    toast({
-      title: `Added ${gameName} to your inventory!`,
-      className: "bg-white",
-    });
-    router.push("/dashboard");
+    try {
+      const { error: uploadError } = await supabase.storage
+        .from("bgc_test")
+        .upload(filePath, image as File, {
+          contentType: "image/png",
+          upsert: false,
+        });
+      if (uploadError) {
+        console.error("Upload error:", uploadError);
+        throw new Error("Failed to upload image, please try again");
+      }
+      await addGame(user?.id ?? "", data);
+      toast({
+        title: `Added ${gameName} to your inventory!`,
+        className: "bg-white",
+      });
+    } catch (e) {
+      console.error(e);
+      toast({
+        title: `Failed to add ${gameName} to your inventory`,
+        className: "bg-red-500",
+      });
+    } finally {
+      router.push("/dashboard");
+    }
   };
 
   switch (step) {
