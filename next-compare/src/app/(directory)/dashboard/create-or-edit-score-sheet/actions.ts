@@ -54,7 +54,7 @@ export async function addGame(userId: string, game: Game) {
       .where(eq(users.user_id, userId))) as { gamesIds: string[] }[];
 
     const updateUserGames = [
-      ...userGame[0].gamesIds,
+      ...(userGame[0].gamesIds ?? []),
       newGame[0].unique_board_id,
     ];
 

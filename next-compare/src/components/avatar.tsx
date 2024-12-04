@@ -10,6 +10,7 @@ interface AvatarProps {
 export default function Avatar({ img }: AvatarProps) {
   const [avatar, setAvatar] = useState<string | null>(null);
   useEffect(() => {
+    if (!img) return;
     async function downloadAvatar(path: string) {
       try {
         const { data, error } = await supabase.storage
@@ -28,7 +29,7 @@ export default function Avatar({ img }: AvatarProps) {
     }
 
     downloadAvatar(img);
-  }, [supabase]);
+  }, [supabase, img]);
 
   if (!avatar) {
     return (

@@ -52,7 +52,7 @@ export default function MultiStepCombobox<T extends Label>({
 }: MultiStepComboboxProps<T>) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<string | string[]>("");
-  const { setGameInfo } = useScoreSheetMultiContext();
+  const { setGameInfo, gameInfo } = useScoreSheetMultiContext();
 
   function selectValuesHandler(currentValue: string, value: string | string[]) {
     if (multipleChoices) {
@@ -78,7 +78,7 @@ export default function MultiStepCombobox<T extends Label>({
     }
     return value === name && <Check />;
   }
-
+  console.log(gameInfo);
   return (
     <div>
       <p className="text-sm font-bold text-default">
@@ -117,25 +117,29 @@ export default function MultiStepCombobox<T extends Label>({
             <CommandList className="max-h-52">
               <CommandEmpty>No {commandEmpty} found.</CommandEmpty>
               <CommandGroup>
-                {values?.map((label) => {
-                  return (
-                    <CommandItem
-                      key={label.id}
-                      value={String(label.name)}
-                      onSelect={(currentValue) => {
-                        setValue(selectValuesHandler(currentValue, value));
-                        !multipleChoices && setOpen(false);
+                {values?.map((label) => (
+                  <CommandItem
+                    key={label.id}
+                    value={String(label.name)}
+                    onSelect={(currentValue) => {
+                      !multipleChoices && setOpen(false);
+                      setValue((prevValue) => {
+                        const newValue = selectValuesHandler(
+                          currentValue,
+                          prevValue,
+                        );
                         setGameInfo((prevState) => ({
                           ...prevState,
-                          [gameInfoName]: value,
+                          [gameInfoName]: newValue,
                         }));
-                      }}
-                    >
-                      {label.name}
-                      {displayCheckIcon(String(label.name))}
-                    </CommandItem>
-                  );
-                })}
+                        return newValue;
+                      });
+                    }}
+                  >
+                    {label.name}
+                    {displayCheckIcon(String(label.name))}
+                  </CommandItem>
+                ))}
               </CommandGroup>
             </CommandList>
           </Command>
