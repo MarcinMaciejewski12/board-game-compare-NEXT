@@ -5,7 +5,6 @@ import { and, eq } from "drizzle-orm";
 import { v4 as uuidv4 } from "uuid";
 import { ReorderValue } from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";
 import { revalidatePath } from "next/cache";
-import { all } from "axios";
 
 interface Game {
   max_player: number;
@@ -18,10 +17,12 @@ interface Game {
   horizontalView: boolean;
   labels: number[];
   gameFields: ReorderValue[];
+  photo: string;
 }
 
 export async function addGame(userId: string, game: Game) {
   if (!userId) return;
+
   try {
     const newGame = await db
       .insert(allScoreBoards)
@@ -34,7 +35,7 @@ export async function addGame(userId: string, game: Game) {
         max_players: Number(game.max_player),
         difficulty: Number(game.difficulty),
         playtime: game.playtime,
-        photo: "",
+        photo: game.photo,
         description: game.description,
         is_shared_to_community: game.isSharedToCommunity,
         game_score_board: game.gameFields,
@@ -53,7 +54,7 @@ export async function addGame(userId: string, game: Game) {
       .where(eq(users.user_id, userId))) as { gamesIds: string[] }[];
 
     const updateUserGames = [
-      ...userGame[0].gamesIds,
+      ...(userGame[0].gamesIds ?? []),
       newGame[0].unique_board_id,
     ];
 

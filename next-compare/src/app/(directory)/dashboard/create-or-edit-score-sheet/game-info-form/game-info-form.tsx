@@ -1,3 +1,4 @@
+"use client";
 import { Input } from "@/components/input";
 import React, { useRef, useState } from "react";
 import { Button } from "@/components/button";
@@ -18,7 +19,7 @@ type GameInfoFormProps = {
 };
 
 export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
-  const { setGameInfo, setGameName, gameName, gameInfo } =
+  const { setGameInfo, setGameName, gameName, gameInfo, setImage } =
     useScoreSheetMultiContext();
   const [errorMessage, setErrorMessage] = useState<{ [key: string]: string }>(
     {},
@@ -28,6 +29,7 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
 
   const nextStepValidation = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+
     if (formRef.current?.checkValidity()) {
       nextStep();
     } else {
@@ -60,7 +62,10 @@ export default function GameInfoForm({ nextStep }: GameInfoFormProps) {
   const dialogHandler = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
-    const { name, value, type, checked } = e.target as HTMLInputElement;
+    const { name, value, type, checked, files } = e.target as HTMLInputElement;
+    if (files?.[0]) {
+      setImage(files?.[0]);
+    }
     setGameInfo((prevState) => ({
       ...prevState,
       [name]: type === "checkbox" ? checked : value,

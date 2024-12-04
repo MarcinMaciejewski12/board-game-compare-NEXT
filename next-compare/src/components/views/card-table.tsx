@@ -95,6 +95,7 @@ export default React.memo(function CardTable<T extends Games>({
               description={item.description}
               labels={item.labels}
               id={item.id}
+              photo={item.photo}
               addToShelfHandler={addToShelfHandler}
             />
           );

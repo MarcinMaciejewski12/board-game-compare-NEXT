@@ -1,9 +1,9 @@
 import { UserContextProvider } from "@/components/context/user-context/user-context";
 import { auth } from "@clerk/nextjs/server";
 import { getUserGames } from "@/app/(directory)/dashboard/actions";
-import { cache, Suspense } from "react";
+import React, { cache } from "react";
 import { redirect } from "next/navigation";
-import Loading from "@/app/(directory)/dashboard/loading";
+
 import CardTable from "@/components/views/card-table";
 
 const cachedGetUserGames = cache(async (userId: string) => {
@@ -11,7 +11,7 @@ const cachedGetUserGames = cache(async (userId: string) => {
 });
 
 export default async function Dashboard() {
-  const { userId } = await auth();
+  const { userId } = auth();
 
   if (!userId) redirect("/");
   const games = await cachedGetUserGames(userId);
@@ -21,9 +21,8 @@ export default async function Dashboard() {
       <h1 className="text-buttonAndShadowColor text-[2rem] font-bold p-2">
         Your shelf
       </h1>
-      <Suspense fallback={<Loading />}>
-        <CardTable isDashboard={true} data={games.data ?? []} />
-      </Suspense>
+
+      <CardTable isDashboard={true} data={games.data ?? []} />
     </UserContextProvider>
   );
 }

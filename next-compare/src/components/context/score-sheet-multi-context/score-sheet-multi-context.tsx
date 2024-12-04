@@ -20,6 +20,10 @@ interface ContextDataInterface {
   setLabelTable: React.Dispatch<React.SetStateAction<number[]>>;
   horizontalView: boolean;
   setHorizontalView: React.Dispatch<React.SetStateAction<boolean>>;
+  image: string | ArrayBuffer | File | null;
+  setImage: React.Dispatch<
+    React.SetStateAction<string | ArrayBuffer | File | null>
+  >;
 }
 
 export interface ReorderValue {
@@ -52,6 +56,8 @@ const ScoreSheetMultiFormContext = createContext<ContextDataInterface>({
   setLabelTable: () => {},
   horizontalView: false,
   setHorizontalView: () => {},
+  image: null,
+  setImage: () => {},
 });
 
 export function ScoreSheetMultiFormContextProvider({ children }: ContextProps) {
@@ -69,6 +75,7 @@ export function ScoreSheetMultiFormContextProvider({ children }: ContextProps) {
   const [color, setColor] = useState("#fff");
   const [labelTable, setLabelTable] = useState<number[]>([]);
   const [horizontalView, setHorizontalView] = useState<boolean>(false);
+  const [image, setImage] = useState<string | ArrayBuffer | File | null>(null);
   const contextData: ContextDataInterface = {
     gameName,
     setGameName,
@@ -84,6 +91,8 @@ export function ScoreSheetMultiFormContextProvider({ children }: ContextProps) {
     setLabelTable,
     horizontalView,
     setHorizontalView,
+    image,
+    setImage,
   };
 
   return (
