@@ -78,7 +78,7 @@ export default function MultiStepCombobox<T extends Label>({
     }
     return value === name && <Check />;
   }
-  console.log(gameInfo);
+
   return (
     <div>
       <p className="text-sm font-bold text-default">
