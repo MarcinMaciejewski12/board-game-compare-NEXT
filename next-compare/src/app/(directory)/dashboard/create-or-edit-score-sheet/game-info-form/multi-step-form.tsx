@@ -16,6 +16,7 @@ import supabase from "@/lib/supabaseClient";
 export default function MultiStepForm() {
   const [step, setStep] = useState(1);
   const { toast } = useToast();
+
   const {
     gameInfo,
     gameName,
@@ -26,6 +27,7 @@ export default function MultiStepForm() {
   } = useScoreSheetMultiContext();
   const { user } = useUser();
   const router = useRouter();
+
   const nextStep = () => setStep((prevStep) => prevStep + 1);
   const prevStep = () => setStep((prevStep) => prevStep - 1);
   const {
@@ -56,17 +58,25 @@ export default function MultiStepForm() {
       gameFields: reorderValues,
     };
     try {
-      const { error: uploadError } = await supabase.storage
-        .from("bgc_test")
-        .upload(filePath, image as File, {
-          contentType: "image/png",
-          upsert: false,
-        });
-      if (uploadError) {
-        console.error("Upload error:", uploadError);
-        throw new Error("Failed to upload image, please try again");
+      const uploadImagePromise = image
+        ? supabase.storage.from("bgc_test").upload(filePath, image as File, {
+            contentType: "image/png",
+            upsert: false,
+          })
+        : Promise.resolve();
+
+      const addGamePromise = addGame(user?.id ?? "", data);
+      const [img, game] = await Promise.all([
+        uploadImagePromise,
+        addGamePromise,
+      ]);
+
+      console.log("img:", img, "game:", game);
+
+      if ((img as { error: any }).error || game?.status === false) {
+        throw new Error("Failed to upload image or add game");
       }
-      await addGame(user?.id ?? "", data);
+
       toast({
         title: `Added ${gameName} to your inventory!`,
         className: "bg-white",

@@ -5,15 +5,10 @@ import Image from "next/image";
 
 interface AvatarProps {
   img: string;
-  size: {
-    w: string;
-    h: string;
-  };
 }
 
-export default function Avatar({ img, size }: AvatarProps) {
+export default function Avatar({ img }: AvatarProps) {
   const [avatar, setAvatar] = useState<string | null>(null);
-  console.log(img);
   useEffect(() => {
     async function downloadAvatar(path: string) {
       try {
@@ -31,22 +26,26 @@ export default function Avatar({ img, size }: AvatarProps) {
         console.error(e, "Error downloading image");
       }
     }
+
     downloadAvatar(img);
   }, [supabase]);
+
+  if (!avatar) {
+    return (
+      <div className="w-full h-full bg-gray-400 flex items-center justify-center flex-col rounded">
+        <span className="text-2xl text-white font-medium">BGC.</span>
+        <p className="text-l text-white font-medium">No image</p>
+      </div>
+    );
+  }
+
   return (
-    <>
-      {avatar ? (
-        <Image
-          width={200}
-          height={200}
-          src={avatar}
-          alt="Avatar"
-          className="avatar image"
-          style={{ height: 200, width: 200 }}
-        />
-      ) : (
-        <div className="avatar no-image" style={{ height: 200, width: 200 }} />
-      )}
-    </>
+    <Image
+      layout="fill"
+      objectFit={"cover"}
+      src={avatar}
+      alt="Avatar"
+      className="rounded"
+    />
   );
 }
