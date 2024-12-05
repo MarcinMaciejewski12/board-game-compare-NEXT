@@ -4,6 +4,7 @@ import { Input } from "@/components/input";
 import { Button } from "@/components/button";
 import { cn } from "@/lib/utils";
 import { ScoreboardFields } from "@/app/(directory)/dashboard/lib/dashboard-types";
+import { X } from "lucide-react";
 
 interface DisplayPlayersFieldsProps {
   horizontal: boolean;
@@ -13,6 +14,9 @@ interface DisplayPlayersFieldsProps {
     name: string,
     index: number,
   ) => void;
+  setInputFields: React.Dispatch<
+    React.SetStateAction<InputFields[] | undefined>
+  >;
 }
 
 interface DisplayScoreFieldsProps {
@@ -44,7 +48,7 @@ export default function ScoreboardView({ board }: ScoreboardViewProps) {
   const [nameAndPoints, setNameAndPoints] = useState<
     { [key: string]: number | string }[] | undefined
   >(undefined);
-  console.log(board);
+
   const scoreData: ScoreData[] = board?.scoreSheet ?? [];
 
   const addPlayer = () => {
@@ -94,13 +98,14 @@ export default function ScoreboardView({ board }: ScoreboardViewProps) {
           playerInputsHandler={playerInputsHandler}
           horizontal={board?.horizontal ?? false}
           inputFields={inputFields ?? []}
+          setInputFields={setInputFields}
         />
       </div>
 
       <div className="w-full flex  justify-center mt-6">
         <div className="flex-col flex gap-4">
           {/*IF PLAYER COUNT IS BIGGER THAN BOARD GAME MAX PLAYERS HIDE THE BUTTON*/}
-          {Number(board?.maxPlayers ?? 0) > playerCount && (
+          {Number(board?.maxPlayers ?? 0) > (inputFields?.length ?? 0) && (
             <Button
               nameToDisplay="Add player"
               onClick={addPlayer}
@@ -123,7 +128,15 @@ function DisplayPlayersFields({
   playerInputsHandler,
   horizontal = false,
   inputFields = [],
+  setInputFields,
 }: DisplayPlayersFieldsProps): React.ReactNode {
+  function removePlayerHandler(index: number) {
+    const filteredFields = inputFields.filter(
+      (field) => field.name !== inputFields[index].name,
+    );
+    setInputFields(filteredFields);
+  }
+
   return (
     <div className="w-full max-w-full overflow-hidden">
       <div
@@ -133,18 +146,23 @@ function DisplayPlayersFields({
         )}
       >
         {inputFields?.map((field: InputFields, idx: number) => (
-          <div key={field.name} className={cn("", horizontal && "flex")}>
-            <Input
-              className="p-2 w-52 rounded-xl h-16"
-              key={field.name}
-              placeholder={`Player ${idx + 1} name`}
-              type="text"
-              name={field.name}
-              onChange={(e) =>
-                playerInputsHandler(e.target.value, field.name, idx)
-              }
-            />
-
+          <div key={field.name} className={cn(horizontal && "flex")}>
+            <div className="relative">
+              <Input
+                className="h-16 bg-white rounded-xl p-2 w-52"
+                key={field.name}
+                placeholder={`Player ${idx + 1} name`}
+                type="text"
+                name={field.name}
+                onChange={(e) =>
+                  playerInputsHandler(e.target.value, field.name, idx)
+                }
+              />
+              <X
+                className="absolute top-1 text-default right-1 h-4 w-4 cursor-pointer"
+                onClick={() => removePlayerHandler(idx)}
+              />
+            </div>
             <FieldsMapper
               field={field}
               playerInputsHandler={playerInputsHandler}
