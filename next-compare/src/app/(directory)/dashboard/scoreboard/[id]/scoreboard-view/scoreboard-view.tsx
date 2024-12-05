@@ -5,6 +5,15 @@ import { Button } from "@/components/button";
 import { cn } from "@/lib/utils";
 import { ScoreboardFields } from "@/app/(directory)/dashboard/lib/dashboard-types";
 import { X } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import ShowScoreResult from "@/app/(directory)/dashboard/scoreboard/[id]/scoreboard-view/show-score-result-dialog";
 
 interface DisplayPlayersFieldsProps {
   horizontal: boolean;
@@ -113,11 +122,8 @@ export default function ScoreboardView({ board }: ScoreboardViewProps) {
               variant="withoutBackground"
             />
           )}
-          <Button
-            nameToDisplay="Show total points"
-            variant="default"
-            size="default"
-          />
+
+          <ShowScoreResult />
         </div>
       </div>
     </div>

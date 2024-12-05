@@ -42,7 +42,9 @@ export default function ScoreCreator({
             router.push("/dashboard");
           } else {
             setGameName(res.data?.gameName ?? "");
-            setReorderValues(res.data?.result ?? []);
+            setReorderValues(
+              Array.isArray(res.data?.result) ? res.data.result : [],
+            );
           }
         } catch (e) {
           console.error(e);
