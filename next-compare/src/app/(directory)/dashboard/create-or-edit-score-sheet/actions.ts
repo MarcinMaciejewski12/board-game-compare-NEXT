@@ -124,7 +124,7 @@ export async function saveEditedGame(
 export async function getEditingGameFields(gameId: string) {
   try {
     if (!gameId) throw new Error("Game not found");
-    console.log("game id", gameId);
+
     const data = (await db
       .select({
         fields: allScoreBoards.game_score_board,
