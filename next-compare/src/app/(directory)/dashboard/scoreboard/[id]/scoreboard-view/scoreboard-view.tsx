@@ -38,9 +38,15 @@ interface InputFields {
 
 interface ScoreboardViewProps {
   board: ScoreboardFields | undefined;
+  gameId: string;
+  userId: string;
 }
 
-export default function ScoreboardView({ board }: ScoreboardViewProps) {
+export default function ScoreboardView({
+  board,
+  gameId,
+  userId,
+}: ScoreboardViewProps) {
   const [playerCount, setPlayerCount] = useState<number>(0);
   const [inputFields, setInputFields] = useState<InputFields[] | undefined>(
     undefined,
@@ -114,7 +120,12 @@ export default function ScoreboardView({ board }: ScoreboardViewProps) {
             />
           )}
 
-          <ShowScoreResult points={nameAndPoints} />
+          <ShowScoreResult
+            userId={userId}
+            gameId={gameId}
+            disabledButton={!inputFields || inputFields?.length === 0}
+            points={nameAndPoints}
+          />
         </div>
       </div>
     </div>

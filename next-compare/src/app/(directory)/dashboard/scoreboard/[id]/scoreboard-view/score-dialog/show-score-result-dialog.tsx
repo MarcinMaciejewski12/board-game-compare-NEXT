@@ -17,25 +17,32 @@ const animationVariants = {
   },
 };
 
+interface ShowScoreResultProps {
+  points: { [p: string]: string }[] | undefined;
+  disabledButton: boolean;
+  gameId: string;
+  userId: string;
+}
+
 export default function ShowScoreResult({
   points = [],
-}: {
-  points: { [p: string]: string }[] | undefined;
-}) {
-  const [currentStep, setCurrentStep] = useState(4);
+  disabledButton = true,
+  gameId,
+  userId,
+}: ShowScoreResultProps) {
+  const [currentStep, setCurrentStep] = useState(0);
   const [open, setOpen] = useState(false);
   const [shouldAnimate, setShouldAnimate] = useState(false);
-
+  console.log("user adsd", userId);
   useEffect(() => {
     if (open) {
       setShouldAnimate(true);
-      // setCurrentStep(0);
+      setCurrentStep(0);
     }
     return () => setShouldAnimate(false);
   }, [open]);
 
   useEffect(() => {
-    console.log(currentStep);
     if (currentStep < 4) {
       const timer = setTimeout(() => {
         setCurrentStep((prev) => prev + 1);
@@ -45,6 +52,7 @@ export default function ShowScoreResult({
       };
     }
   }, [currentStep, shouldAnimate]);
+
   return (
     <Dialog onOpenChange={() => setOpen(!open)}>
       <DialogTrigger asChild>
@@ -52,9 +60,11 @@ export default function ShowScoreResult({
           nameToDisplay="Show total points"
           variant="default"
           size="default"
+          disabled={disabledButton}
         />
       </DialogTrigger>
-      <DialogContent className="min-w-[80vw] h-[70vh] bg-white">
+
+      <DialogContent className="min-w-[80vw] h-[70vh] bg-primary">
         <motion.div
           variants={animationVariants}
           initial="hidden"
@@ -99,7 +109,7 @@ export default function ShowScoreResult({
               exit={{ opacity: 0, scale: 0.8 }}
               className="absolute"
             >
-              <PointsSummary points={points} />
+              <PointsSummary userId={userId} points={points} gameId={gameId} />
             </motion.div>
           )}
         </motion.div>
