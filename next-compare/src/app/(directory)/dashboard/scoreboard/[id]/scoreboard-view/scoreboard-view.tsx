@@ -5,15 +5,7 @@ import { Button } from "@/components/button";
 import { cn } from "@/lib/utils";
 import { ScoreboardFields } from "@/app/(directory)/dashboard/lib/dashboard-types";
 import { X } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import ShowScoreResult from "@/app/(directory)/dashboard/scoreboard/[id]/scoreboard-view/show-score-result-dialog";
+import ShowScoreResult from "@/app/(directory)/dashboard/scoreboard/[id]/scoreboard-view/score-dialog/show-score-result-dialog";
 
 interface DisplayPlayersFieldsProps {
   horizontal: boolean;
@@ -53,9 +45,8 @@ export default function ScoreboardView({ board }: ScoreboardViewProps) {
   const [inputFields, setInputFields] = useState<InputFields[] | undefined>(
     undefined,
   );
-
   const [nameAndPoints, setNameAndPoints] = useState<
-    { [key: string]: number | string }[] | undefined
+    { [key: string]: string }[] | undefined
   >(undefined);
 
   const scoreData: ScoreData[] = board?.scoreSheet ?? [];
@@ -123,7 +114,7 @@ export default function ScoreboardView({ board }: ScoreboardViewProps) {
             />
           )}
 
-          <ShowScoreResult />
+          <ShowScoreResult points={nameAndPoints} />
         </div>
       </div>
     </div>

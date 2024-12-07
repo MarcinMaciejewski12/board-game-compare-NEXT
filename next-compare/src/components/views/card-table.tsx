@@ -21,6 +21,7 @@ export default React.memo(function CardTable<T extends Games>({
 }: TableProps<T>) {
   const [search, setSearch] = useState("");
   const [filteredData, setFilteredData] = useState<T[]>(data);
+
   const router = useRouter();
   const { user } = useUser();
 
