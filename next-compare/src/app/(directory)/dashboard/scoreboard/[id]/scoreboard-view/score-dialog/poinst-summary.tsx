@@ -60,9 +60,6 @@ export default function PointsSummary({
           className: "bg-red-500",
         });
       }
-
-      // if (res.data) {
-      // router.push("/dashboard");
     } catch (e) {
       console.error(`Can't save your score sheet to database:`, e);
     }
