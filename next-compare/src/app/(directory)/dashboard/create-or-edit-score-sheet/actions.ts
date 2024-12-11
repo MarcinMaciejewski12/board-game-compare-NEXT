@@ -124,6 +124,7 @@ export async function saveEditedGame(
 export async function getEditingGameFields(gameId: string) {
   try {
     if (!gameId) throw new Error("Game not found");
+
     const data = (await db
       .select({
         fields: allScoreBoards.game_score_board,
@@ -137,7 +138,7 @@ export async function getEditingGameFields(gameId: string) {
 
     return {
       status: true,
-      data: { result: JSON.parse(data[0].fields), gameName: data[0].gameName },
+      data: { result: data[0].fields, gameName: data[0].gameName },
       message: "Game fields retrieved successfully",
     };
   } catch (e) {

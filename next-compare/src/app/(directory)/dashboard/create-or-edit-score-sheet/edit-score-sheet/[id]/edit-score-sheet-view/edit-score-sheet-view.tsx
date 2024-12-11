@@ -19,7 +19,6 @@ export default function EditScoreSheetView({ id }: { id: string }) {
     try {
       const res = await saveEditedGame(user?.id ?? "", data, id);
       if (!res.status) {
-        // TODO: create toast component
         toast({
           title: `Failed to edit game`,
           className: "bg-red-500 text-white",

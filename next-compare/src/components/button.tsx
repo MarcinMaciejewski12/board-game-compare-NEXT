@@ -15,6 +15,8 @@ const buttonVariants = cva("", {
         "border-2 shadow-xl text-black border-black rounded-md w-24 h-8",
       outline:
         "border border-border text-primary hover:bg-accent hover:text-accent-foreground inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none",
+      disabled:
+        "bg-gray-600 text-gray-500 opacity-50 rounded cursor-not-allowed",
     },
     size: {
       loginSize: "h-8 rounded-md px-8 shadow-xl",
@@ -43,9 +45,12 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, nameToDisplay, ...props }, ref) => {
     return (
       <button
+        disabled={props.disabled}
         className={cn(
           "shadow-xl",
-          buttonVariants({ variant, size, className }),
+          props.disabled
+            ? buttonVariants({ variant: "disabled", size, className })
+            : buttonVariants({ variant, size, className }),
         )}
         ref={ref}
         {...props}
