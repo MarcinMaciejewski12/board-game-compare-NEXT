@@ -28,6 +28,7 @@ export default async function RootLayout({
       <html lang="en">
         <body className={`${inter.className}`}>
           <UserContextProvider>
+            <Header />
             <SpeedInsights />
             {children}
           </UserContextProvider>

@@ -6,55 +6,40 @@ import { Button } from "./button";
 export default function Header() {
   const { isSignedIn } = useUser();
   return (
-    <>
-      <div className="hidden w-full sm:h-defaultHeaderHeight sm:flex items-center">
-        <div className="h-full w-defaultSidebarWidth" />
-        <div className="flex items-center justify-between w-full mr-[20px]">
-          <h1 className="hidden sm:block text-white text-xl tracking-wider font-medium">
-            <Link href={"/dashboard"}>BoardGameCompare.</Link>
-          </h1>
-          {isSignedIn ? (
-            <div className="hidden w-24 border border-white text-white rounded-2xl h-8 items-center justify-center sm:flex">
-              <SignOutButton />
-            </div>
-          ) : (
-            <div className="flex gap-4">
-              <Link href={"/login"}>
-                <Button
-                  className="w-24 border border-white text-white rounded-2xl h-8 flex items-center justify-center shadow-none"
-                  nameToDisplay="Log In"
-                />
-              </Link>
+    <div className="w-full h-16 bg-black flex items-center justify-between px-8">
+      <Link href={isSignedIn ? "/dashboard" : "/"}>
+        <h1 className="text-white">Board Game Compare.</h1>
+      </Link>
+      <div className="flex items-center gap-4">
+        <p className="text-white">Pricing</p>
+        <p className="text-white">About</p>
 
-              <Link href={"/register"}>
-                <Button
-                  nameToDisplay="Sign up"
-                  className="bg-buttonAndShadowColor shadow-xl h-8 flex items-center justify-center rounded-2xl px-4  text-white hover:bg-buttonAndShadowColor/90"
-                />
-              </Link>
-            </div>
-          )}
-        </div>
-      </div>
-      {/*    HERE IS HEADER FOR MOBILE DEVICES     */}
-      <div
-        className="sm:hidden lg:hidden h-defaultHeaderHeight bg-primary drop-shadow-lg shadow-2xl z-20 top-0 sticky flex items-center justify-around
-      "
-      >
-        <h1 className="text-white">BoardGameCompare.</h1>
-        {isSignedIn ? (
+        {!isSignedIn && (
+          <>
+            <Link href={"/login"}>
+              <Button
+                className="cursor-pointer text-sm rounded-md bg-[#F0D050] text-[#3F3A3A] w-24 border-[#3F3A3A] border-2 hover:bg-[#F0D050]/90"
+                size="sm"
+                variant="default"
+                nameToDisplay="Log in"
+              />
+            </Link>
+            <Link href={"/register"}>
+              <Button
+                nameToDisplay="Sign up"
+                variant="signup"
+                size="sm"
+                className="w-24 text-sm text-[#3F3A3A]"
+              />
+            </Link>
+          </>
+        )}
+        {isSignedIn && (
           <div className="w-24 border border-white text-white rounded-2xl h-8 items-center justify-center flex">
             <SignOutButton />
           </div>
-        ) : (
-          <Link href={"/login"}>
-            <Button
-              className="w-24 border border-white text-white rounded-2xl h-8 flex items-center justify-center shadow-none"
-              nameToDisplay="Log In"
-            />
-          </Link>
         )}
       </div>
-    </>
+    </div>
   );
 }
