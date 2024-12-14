@@ -1,72 +1,44 @@
-"use client";
-import mainPhoto from "@/assets/mainPhoto.jpg";
-import friendPlayingBoardgame from "@/assets/2ndMainPhoto.jpg";
-import Image from "next/image";
-import { useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import SvgWave from "./landing-page/svg-wave";
+import { Button } from "./ui/button";
+import HowItWorksSection from "./landing-page/lib/how-it-works-section";
+import AccordionSection from "./landing-page/lib/accordion-section";
+import CommanderSection from "./landing-page/lib/commander-section";
+import Footer from "./landing-page/lib/footer";
+
 export default function LandingPage() {
-  const { isSignedIn } = useUser();
-  const router = useRouter();
-
-  if (isSignedIn) {
-    router.push("/dashboard");
-  }
-
   return (
-    <div className="overflow-hidden">
-      <section className="min-w-full h-[80vh] flex">
-        <div className="w-1/2 h-full flex justify-center items-center">
-          <h1 className="text-center text-default font-poppins font-bold text-4xl">
-            Keep track scores <br />
-            and compete with friends
-          </h1>
-        </div>
-        <div className="w-1/2 h-full  flex justify-end">
-          <div className="bg-buttonAndShadowColor w-11/12 h-[100%] rounded-bl-[350px] rounded-tl-[400px] rounded-br-[300px] rounded-tr-[200px] -translate-y-10 translate-x-14 -rotate-6">
-            <div className="bg-white w-[90%] h-[90%] m-10 rounded-tl-[300px] rounded-bl-[250px] rounded-br-[200px]  rounded-tr-[120px] flex items-center justify-center rotate-6">
-              <div className="rounded-3xl w-[80%] -rotate-6">
-                <Image
-                  className="rounded-3xl rotate-6"
-                  width={mainPhoto.width}
-                  height={mainPhoto.height}
-                  src={mainPhoto}
-                  alt={"asd"}
-                />
-              </div>
-            </div>
+    <div className="w-full h-screen">
+      <div className="h-2/3 text-6xl text-white flex items-end ml-40">
+        <div>
+          <h1>Board</h1>
+          <h2>Game</h2>
+          <h3>Compare.</h3>
+
+          <h4 className="text-[#3F3A3A] text-4xl py-4">
+            Keep track Your score
+          </h4>
+          <h5 className="text-[#3F3A3A] text-2xl py-4">
+            Show them... who set the rules.
+          </h5>
+          <div className="flex gap-7">
+            <Button variant="signup" size="default">
+              Sign up
+            </Button>
+            <Button
+              className="cursor-pointer rounded-md bg-[#F0D050] text-[#3F3A3A] w-32 border-[#3F3A3A] border-2 hover:bg-[#F0D050]/90"
+              size="default"
+              variant="default"
+            >
+              Log in
+            </Button>
           </div>
-        </div>
-      </section>
-      <section>
-        <div className="min-w-full h-[80vh] max-w-11/12 flex">
-          <div className="w-1/2 h-full">
-            <div className=" bg-buttonAndShadowColor w-full  flex items-center h-[110%] rounded-tr-[500px] rounded-br-[400px] rounded-bl-[300px] rounded-tl-[350px] transform -translate-y-10 -translate-x-32 -rotate-12">
-              <div className=" bg-white w-[90%] h-[95%] m-10 rounded-tl-[350px] rounded-bl-[250px] rounded-br-[400px] rounded-tr-[500px] flex items-center justify-center rotate-6">
-                <div className="rounded-3xl w-[70%]">
-                  <Image
-                    className="rounded-3xl rotate-6"
-                    width={mainPhoto.width}
-                    height={mainPhoto.height}
-                    src={friendPlayingBoardgame}
-                    alt={"asd"}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="w-1/2 h-full flex justify-center items-center">
-            <h1 className="text-center text-default font-poppins font-bold text-4xl">
-              Share moments with <br />
-              your community!
-            </h1>
-          </div>
-        </div>
-      </section>
-      <div className="bg-buttonAndShadowColor w-full h-[50vh] rounded-tr-[1900px]">
-        <div className="bg-white h-full translate-y-12 rounded-tr-[1900px] flex items-center justify-center">
-          <h1>TO BE CONTINUED</h1>
         </div>
       </div>
+      <SvgWave />
+      <HowItWorksSection />
+      <AccordionSection />
+      <CommanderSection />
+      <Footer />
     </div>
   );
 }

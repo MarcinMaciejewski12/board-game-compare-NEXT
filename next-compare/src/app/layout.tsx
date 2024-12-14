@@ -26,35 +26,10 @@ export default async function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${inter.className} overflow-hidden`}>
+        <body className={`${inter.className}`}>
           <UserContextProvider>
-            <Header />
-            <div className="flex w-full h-full">
-              <div
-                className="min-w-[4.375rem] sticky top-0 w-defaultSidebarWidth hidden sm:flex"
-                style={{ height: "calc(100vh - var(--default-header-height))" }}
-              >
-                <Sidebar />
-              </div>
-
-              <div
-                style={{ height: "calc(100vh - var(--default-header-height))" }}
-                className={cn(
-                  "sm:max-w-[calc(100vw-90px)] overflow-auto bg-secondary h-full w-full sm:rounded-tl-[1rem] sm:rounded-tr-sm",
-                )}
-              >
-                <div>
-                  <HeaderArrow />
-                </div>
-                <SpeedInsights />
-                {children}
-              </div>
-              <div className="hidden sm:block min-w-[20px]" />
-            </div>
-            <div className="w-full fixed bottom-0 z-20 bg-primary h-defaultHeaderHeight sm:hidden">
-              <MobileBottomNavigation />
-            </div>
-            <Toaster />
+            <SpeedInsights />
+            {children}
           </UserContextProvider>
         </body>
       </html>

@@ -5,6 +5,8 @@ import React, { forwardRef } from "react";
 const buttonVariants = cva("", {
   variants: {
     variant: {
+      signup:
+        "cursor-pointer rounded-md bg-[#DF6F1F] text-[#3F3A3A] w-32 border-[#3F3A3A] border-2",
       default:
         "bg-buttonAndShadowColor cursor-pointer rounded-md text-white hover:bg-buttonAndShadowColor/90",
       withoutBackground:
