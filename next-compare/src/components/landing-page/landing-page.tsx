@@ -1,14 +1,14 @@
-import SvgWave from "./landing-page/svg-wave";
-import { Button } from "./ui/button";
-import HowItWorksSection from "./landing-page/lib/how-it-works-section";
-import AccordionSection from "./landing-page/lib/accordion-section";
-import CommanderSection from "./landing-page/lib/commander-section";
-import Footer from "./landing-page/lib/footer";
+import { Button } from "../ui/button";
+import AccordionSection from "./lib/accordion-section";
+import CommanderSection from "./lib/commander-section";
+import Footer from "./lib/footer";
+import HowItWorksSection from "./lib/how-it-works-section";
+import SvgWave from "./svg-wave";
 
 export default function LandingPage() {
   return (
     <div className="w-full h-screen">
-      <div className="h-2/3 text-6xl text-white flex items-end ml-40">
+      <div className="h-[55vh] text-6xl text-white flex items-end ml-40">
         <div>
           <h1>Board</h1>
           <h2>Game</h2>

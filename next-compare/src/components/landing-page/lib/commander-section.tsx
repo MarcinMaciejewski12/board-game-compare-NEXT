@@ -28,7 +28,7 @@ export default function CommanderSection() {
       <div className="w-full h-[80%] justify-between flex">
         {commanderCards.map((card, index) => (
           <Fragment key={index}>
-            <div className="bg-white h-[60vh] p-10 w-96 rounded border-b-4 border-black border-2">
+            <div className="bg-white h-[60vh] p-10 w-96 rounded-xl border-b-4 border-black border-2">
               <div className="w-full h-[50%] bg-[#F0D050] rounded-tl-2xl rounded-tr-2xl flex items-center justify-center">
                 {card.svg}
               </div>

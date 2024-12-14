@@ -18,7 +18,7 @@ export default function Header() {
           <>
             <Link href={"/login"}>
               <Button
-                className="cursor-pointer text-sm rounded-md bg-[#F0D050] text-[#3F3A3A] w-24 border-[#3F3A3A] border-2 hover:bg-[#F0D050]/90"
+                className="cursor-pointer text-sm rounded-md w-24 border-white border-2 hover:bg-white/20"
                 size="sm"
                 variant="default"
                 nameToDisplay="Log in"

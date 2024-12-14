@@ -8,7 +8,7 @@ const buttonVariants = cva("", {
       signup:
         "cursor-pointer rounded-md bg-[#DF6F1F] text-[#3F3A3A] w-32 border-[#3F3A3A] border-2",
       default:
-        "bg-buttonAndShadowColor cursor-pointer rounded-md text-white hover:bg-buttonAndShadowColor/90",
+        "cursor-pointer rounded-md text-white hover:bg-buttonAndShadowColor/90",
       withoutBackground:
         "border-2 shadow-xl text-black border-black cursor-pointer rounded-md ",
       dialogDelete:
