@@ -4,7 +4,7 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="w-full h-full flex items-center justify-center">
+    <div className="w-full h-[calc(100vh-4rem)] flex items-center justify-center">
       {children}
     </div>
   );

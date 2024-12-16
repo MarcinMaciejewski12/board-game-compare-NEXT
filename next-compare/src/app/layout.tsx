@@ -21,8 +21,14 @@ export const metadata: Metadata = {
   description: "Compare with friends",
 };
 
-function AuthDependentLayout({ children }: { children: React.ReactNode }) {
-  const { userId } = auth(); // useAuth działa wewnątrz ClerkProvider
+function AuthDependentLayout({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className: string;
+}) {
+  const { userId } = auth();
   return (
     <>
       <Header />
@@ -32,9 +38,7 @@ function AuthDependentLayout({ children }: { children: React.ReactNode }) {
           <SvgWave />
         </div>
       )}
-      <div className={`h-[calc(100vh-4rem)] ${userId ? "px-5" : ""}`}>
-        {children}
-      </div>
+      <div className={cn(className, userId && "px-5")}>{children}</div>
     </>
   );
 }
@@ -49,17 +53,9 @@ export default async function RootLayout({
       <html lang="en">
         <body className={`${inter.className}`}>
           <UserContextProvider>
-            {/* <Header />
-            <SpeedInsights />
-            {userId && (
-              <div className="fixed w-full z-[-1] bottom-0">
-                <SvgWave />
-              </div>
-            )}
-            <div className={cn("h-[calc(100vh-4rem)]", userId && "px-5")}>
+            <AuthDependentLayout className="h-[calc(100vh-4rem)]">
               {children}
-            </div> */}
-            <AuthDependentLayout>{children}</AuthDependentLayout>
+            </AuthDependentLayout>
           </UserContextProvider>
         </body>
       </html>
