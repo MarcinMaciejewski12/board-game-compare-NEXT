@@ -35,7 +35,11 @@ const config = {
           "0 0 0 1px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(0, 0, 0, 0.1)",
       },
       colors: {
-        buttonAndShadowColor: "#1C5253",
+        defaultPink: "#FF8BEA",
+        defaultYellow: "#F0D050",
+        brightBlack: "#3F3A3A",
+        defaultButton: "#DF6F1F",
+        // buttonAndShadowColor: "#1C5253",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

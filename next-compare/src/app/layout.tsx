@@ -8,8 +8,11 @@ import Sidebar from "@/components/sidebars/sidebar";
 import HeaderArrow from "@/components/header-arrow";
 import { Toaster } from "@/components/ui/toaster";
 import MobileBottomNavigation from "@/components/mobile-bottom-navigation";
-import { cn } from "@/lib/utils";
+
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { auth } from "@clerk/nextjs/server";
+import SvgWave from "@/components/landing-page/svg-wave";
+import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,6 +20,8 @@ export const metadata: Metadata = {
   title: "Boardgame compare",
   description: "Compare with friends",
 };
+// TODO: here is problem with auth(out of scope)
+const { userId } = auth();
 
 export default async function RootLayout({
   children,
@@ -30,7 +35,14 @@ export default async function RootLayout({
           <UserContextProvider>
             <Header />
             <SpeedInsights />
-            {children}
+            {userId && (
+              <div className="fixed w-full z-[-1] bottom-0">
+                <SvgWave />
+              </div>
+            )}
+            <div className={cn("h-[calc(100vh-4rem)]", userId && "px-5")}>
+              {children}
+            </div>
           </UserContextProvider>
         </body>
       </html>

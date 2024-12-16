@@ -47,6 +47,7 @@ export default function ScoreboardView({
   gameId,
   userId,
 }: ScoreboardViewProps) {
+  // TODO: refactor this to one state(reducer maybe?)
   const [playerCount, setPlayerCount] = useState<number>(0);
   const [inputFields, setInputFields] = useState<InputFields[] | undefined>(
     undefined,

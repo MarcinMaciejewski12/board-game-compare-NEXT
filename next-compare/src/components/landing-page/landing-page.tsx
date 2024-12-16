@@ -17,7 +17,7 @@ export default function LandingPage() {
           <h4 className="text-[#3F3A3A] text-4xl py-4">
             Keep track Your score
           </h4>
-          <h5 className="text-[#3F3A3A] text-2xl py-4">
+          <h5 className="text-[#3F3A3A] text-2xl py-21 py-4">
             Show them... who set the rules.
           </h5>
           <div className="flex gap-7">
@@ -34,7 +34,9 @@ export default function LandingPage() {
           </div>
         </div>
       </div>
-      <SvgWave />
+      <div className="translate-y-0.5">
+        <SvgWave />
+      </div>
       <HowItWorksSection />
       <AccordionSection />
       <CommanderSection />
