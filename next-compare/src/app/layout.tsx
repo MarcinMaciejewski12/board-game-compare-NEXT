@@ -20,8 +20,24 @@ export const metadata: Metadata = {
   title: "Boardgame compare",
   description: "Compare with friends",
 };
-// TODO: here is problem with auth(out of scope)
-const { userId } = auth();
+
+function AuthDependentLayout({ children }: { children: React.ReactNode }) {
+  const { userId } = auth(); // useAuth działa wewnątrz ClerkProvider
+  return (
+    <>
+      <Header />
+      <SpeedInsights />
+      {userId && (
+        <div className="fixed w-full z-[-1] bottom-0">
+          <SvgWave />
+        </div>
+      )}
+      <div className={`h-[calc(100vh-4rem)] ${userId ? "px-5" : ""}`}>
+        {children}
+      </div>
+    </>
+  );
+}
 
 export default async function RootLayout({
   children,
@@ -33,7 +49,7 @@ export default async function RootLayout({
       <html lang="en">
         <body className={`${inter.className}`}>
           <UserContextProvider>
-            <Header />
+            {/* <Header />
             <SpeedInsights />
             {userId && (
               <div className="fixed w-full z-[-1] bottom-0">
@@ -42,7 +58,8 @@ export default async function RootLayout({
             )}
             <div className={cn("h-[calc(100vh-4rem)]", userId && "px-5")}>
               {children}
-            </div>
+            </div> */}
+            <AuthDependentLayout>{children}</AuthDependentLayout>
           </UserContextProvider>
         </body>
       </html>

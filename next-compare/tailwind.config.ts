@@ -1,9 +1,5 @@
 import type { Config } from "tailwindcss";
-// const config = {
-// 	defaultPink: "#FF8BEA",
-// 	defaultYellow: "#F0D050",
-// 	brightBlack: "#3F3A3A",
-//   };
+
 const config = {
   darkMode: ["class"],
   content: [
@@ -99,26 +95,8 @@ const config = {
             height: "0",
           },
         },
-        "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
-        },
-        "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
-        },
       },
       animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
