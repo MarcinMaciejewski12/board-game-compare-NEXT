@@ -8,8 +8,11 @@ import Sidebar from "@/components/sidebars/sidebar";
 import HeaderArrow from "@/components/header-arrow";
 import { Toaster } from "@/components/ui/toaster";
 import MobileBottomNavigation from "@/components/mobile-bottom-navigation";
-import { cn } from "@/lib/utils";
+
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { auth } from "@clerk/nextjs/server";
+import SvgWave from "@/components/landing-page/svg-wave";
+import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,6 +20,24 @@ export const metadata: Metadata = {
   title: "Boardgame compare",
   description: "Compare with friends",
 };
+
+function AuthDependentLayout({ children }: { children: React.ReactNode }) {
+  const { userId } = auth(); // useAuth działa wewnątrz ClerkProvider
+  return (
+    <>
+      <Header />
+      <SpeedInsights />
+      {userId && (
+        <div className="fixed w-full z-[-1] bottom-0">
+          <SvgWave />
+        </div>
+      )}
+      <div className={`h-[calc(100vh-4rem)] ${userId ? "px-5" : ""}`}>
+        {children}
+      </div>
+    </>
+  );
+}
 
 export default async function RootLayout({
   children,
@@ -26,35 +47,19 @@ export default async function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${inter.className} overflow-hidden`}>
+        <body className={`${inter.className}`}>
           <UserContextProvider>
-            <Header />
-            <div className="flex w-full h-full">
-              <div
-                className="min-w-[4.375rem] sticky top-0 w-defaultSidebarWidth hidden sm:flex"
-                style={{ height: "calc(100vh - var(--default-header-height))" }}
-              >
-                <Sidebar />
+            {/* <Header />
+            <SpeedInsights />
+            {userId && (
+              <div className="fixed w-full z-[-1] bottom-0">
+                <SvgWave />
               </div>
-
-              <div
-                style={{ height: "calc(100vh - var(--default-header-height))" }}
-                className={cn(
-                  "sm:max-w-[calc(100vw-90px)] overflow-auto bg-secondary h-full w-full sm:rounded-tl-[1rem] sm:rounded-tr-sm",
-                )}
-              >
-                <div>
-                  <HeaderArrow />
-                </div>
-                <SpeedInsights />
-                {children}
-              </div>
-              <div className="hidden sm:block min-w-[20px]" />
-            </div>
-            <div className="w-full fixed bottom-0 z-20 bg-primary h-defaultHeaderHeight sm:hidden">
-              <MobileBottomNavigation />
-            </div>
-            <Toaster />
+            )}
+            <div className={cn("h-[calc(100vh-4rem)]", userId && "px-5")}>
+              {children}
+            </div> */}
+            <AuthDependentLayout>{children}</AuthDependentLayout>
           </UserContextProvider>
         </body>
       </html>

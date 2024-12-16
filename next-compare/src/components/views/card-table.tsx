@@ -60,7 +60,7 @@ export default React.memo(function CardTable<T extends Games>({
 
   return (
     <div className="w-full h-full">
-      <div className="w-full  justify-center sm:justify-between max-h-16 flex items-center mb-2">
+      <div className="w-full justify-center sm:justify-between max-h-16 flex items-center mb-2">
         <Input
           className="h-12"
           variant="searchbar"

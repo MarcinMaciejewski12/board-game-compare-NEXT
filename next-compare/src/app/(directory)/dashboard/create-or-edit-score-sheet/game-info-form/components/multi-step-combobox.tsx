@@ -81,7 +81,7 @@ export default function MultiStepCombobox<T extends Label>({
 
   return (
     <div>
-      <p className="text-sm font-bold text-default">
+      <p className="text-sm font-bold text-brightBlack">
         {comboboxLabel}
         {required && "*"}
       </p>
@@ -92,7 +92,7 @@ export default function MultiStepCombobox<T extends Label>({
             role="combobox"
             aria-expanded={open}
             className={cn(
-              "w-[200px] truncate justify-between text-default",
+              "w-[200px] bg-white truncate justify-between text-brightBlack",
               className,
             )}
           >
@@ -103,7 +103,7 @@ export default function MultiStepCombobox<T extends Label>({
           </Button>
         </PopoverTrigger>
         {suffixText && (
-          <span className="text-xl ml-2 text-default font-medium">
+          <span className="text-xl ml-2 text-brightBlack font-medium">
             {suffixText}
           </span>
         )}

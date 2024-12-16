@@ -6,7 +6,7 @@ import { displayColor } from "./lib/helpers";
 import { Button } from "@/components/button";
 import { toast } from "@/hooks/use-toast";
 import { saveResults } from "../actions";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 interface PointsSummaryProps {
   points: { [key: string]: string }[];

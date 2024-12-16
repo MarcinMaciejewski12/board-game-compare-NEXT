@@ -24,14 +24,18 @@ const config = {
         poppins: ["Poppins", "sans-serif"],
       },
       textColor: {
-        default: "#1C5253",
+        defaultTextColor: "#3F3A3A",
       },
       boxShadow: {
         colorPicker:
           "0 0 0 1px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(0, 0, 0, 0.1)",
       },
       colors: {
-        buttonAndShadowColor: "#1C5253",
+        defaultPink: "#FF8BEA",
+        defaultYellow: "#F0D050",
+        brightBlack: "#3F3A3A",
+        defaultButton: "#DF6F1F",
+        // buttonAndShadowColor: "#1C5253",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -76,12 +80,20 @@ const config = {
       },
       keyframes: {
         "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
+          from: {
+            height: "0",
+          },
+          to: {
+            height: "var(--radix-accordion-content-height)",
+          },
         },
         "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
+          from: {
+            height: "var(--radix-accordion-content-height)",
+          },
+          to: {
+            height: "0",
+          },
         },
       },
       animation: {

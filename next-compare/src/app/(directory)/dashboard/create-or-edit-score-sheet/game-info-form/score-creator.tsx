@@ -66,7 +66,7 @@ export default function ScoreCreator({
   };
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full py-20">
       {/*DISPLAY GAME NAME IN EDIT MODE*/}
       <div className="w-full flex justify-center">
         {editedScoreSheetId && (
