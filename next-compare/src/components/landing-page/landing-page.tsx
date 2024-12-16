@@ -1,11 +1,20 @@
+"use client";
+import { useAuth } from "@clerk/nextjs";
 import { Button } from "../ui/button";
 import AccordionSection from "./lib/accordion-section";
 import CommanderSection from "./lib/commander-section";
 import Footer from "./lib/footer";
 import HowItWorksSection from "./lib/how-it-works-section";
 import SvgWave from "./svg-wave";
+import { useRouter } from "next/navigation";
 
 export default function LandingPage() {
+  const { isSignedIn } = useAuth();
+  const router = useRouter();
+  if (isSignedIn) {
+    router.push("/dashboard");
+  }
+
   return (
     <div className="w-full h-screen">
       <div className="h-[55vh] text-6xl text-white flex items-end ml-40">
