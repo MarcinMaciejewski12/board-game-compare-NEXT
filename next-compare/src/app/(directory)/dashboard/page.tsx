@@ -19,7 +19,8 @@ export default async function Dashboard() {
   return (
     <UserContextProvider>
       <h1 className="text-brightBlack text-[2rem] font-bold p-2">Your shelf</h1>
-
+      {/* TODO: create many to many table for shared games(one user can add to shelf many games, 
+      but one games can be added to shelf many times) */}
       <CardTable isDashboard={true} data={games.data ?? []} />
     </UserContextProvider>
   );

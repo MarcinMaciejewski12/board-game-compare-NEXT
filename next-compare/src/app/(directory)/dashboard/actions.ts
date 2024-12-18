@@ -12,21 +12,16 @@ import { revalidatePath } from "next/cache";
 
 export async function getUserGames(id: string) {
   try {
-    const getUserBoardGames = await db
-      .select({ games: users.board_games })
-      .from(users)
-      .where(eq(users.user_id, id));
+    if (!id) {
+      throw new Error("Unauthorized access");
+    }
 
-    const userGames: string[] = Array.isArray(getUserBoardGames[0].games)
-      ? getUserBoardGames[0].games
-      : [];
-
-    const games = await db
+    const getUserGamesByCLERK = await db
       .select()
       .from(allScoreBoards)
-      .where(inArray(allScoreBoards.unique_board_id, userGames));
+      .where(eq(allScoreBoards.user_id, id));
 
-    const mappedData: Games[] = games.map((game) => ({
+    const mappedData: Games[] = getUserGamesByCLERK.map((game) => ({
       difficulty: game.difficulty ?? 0,
       createdAt: game.created_at ? game.created_at.toISOString() : "",
       gameName: game.game_name ?? "",
