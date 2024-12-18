@@ -53,7 +53,7 @@ export default async function RootLayout({
       <html lang="en">
         <body className={`${inter.className}`}>
           <UserContextProvider>
-            <AuthDependentLayout className="h-[calc(100vh-4rem)]">
+            <AuthDependentLayout className="h-[calc(100vh-4rem)] mx-auto lg:max-w-[1440px]">
               {children}
             </AuthDependentLayout>
           </UserContextProvider>

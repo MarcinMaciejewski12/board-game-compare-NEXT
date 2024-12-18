@@ -4,7 +4,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -53,6 +53,13 @@ export default function MultiStepCombobox<T extends Label>({
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<string | string[]>("");
   const { setGameInfo, gameInfo } = useScoreSheetMultiContext();
+
+  useEffect(() => {
+    setGameInfo((prevState) => ({
+      ...prevState,
+      [gameInfoName]: value,
+    }));
+  }, [value, setGameInfo, gameInfoName]);
 
   function selectValuesHandler(currentValue: string, value: string | string[]) {
     if (multipleChoices) {
@@ -123,17 +130,9 @@ export default function MultiStepCombobox<T extends Label>({
                     value={String(label.name)}
                     onSelect={(currentValue) => {
                       !multipleChoices && setOpen(false);
-                      setValue((prevValue) => {
-                        const newValue = selectValuesHandler(
-                          currentValue,
-                          prevValue,
-                        );
-                        setGameInfo((prevState) => ({
-                          ...prevState,
-                          [gameInfoName]: newValue,
-                        }));
-                        return newValue;
-                      });
+                      setValue((prevValue) =>
+                        selectValuesHandler(currentValue, prevValue),
+                      );
                     }}
                   >
                     {label.name}
