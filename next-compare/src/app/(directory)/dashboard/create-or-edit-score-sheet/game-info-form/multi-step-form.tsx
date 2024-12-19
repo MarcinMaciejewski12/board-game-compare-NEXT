@@ -71,8 +71,6 @@ export default function MultiStepForm() {
         addGamePromise,
       ]);
 
-      console.log("img:", img, "game:", game);
-
       if ((img as { error: any }).error || game?.status === false) {
         throw new Error("Failed to upload image or add game");
       }

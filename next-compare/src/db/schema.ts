@@ -9,7 +9,6 @@ import {
   jsonb,
 } from "drizzle-orm/pg-core";
 import { timestamp } from "drizzle-orm/pg-core/columns/timestamp";
-import { InferModel } from "drizzle-orm";
 
 export const users = pgTable("users", {
   user_id: text("user_id"),
@@ -30,7 +29,7 @@ export const playedGames = pgTable("played_games", {
 
 export const allScoreBoards = pgTable("all_score_boards", {
   id: serial("id").primaryKey(),
-  created_at: timestamp("created_at"),
+  created_at: timestamp("created_at", { withTimezone: true }),
   user_id: text("user_id"),
   unique_board_id: varchar("unique_board_id").primaryKey(),
   game_name: text("game_name"),
@@ -45,3 +44,29 @@ export const allScoreBoards = pgTable("all_score_boards", {
   labels: jsonb("labels"),
   horizontal: boolean("horizontal"),
 });
+
+export const playerScoreSheets = pgTable("player_score_sheets", {
+  id: serial("id").primaryKey(),
+  created_at: timestamp("created_at", { withTimezone: true }).notNull(),
+  user_id: varchar("user_id"),
+  game_id: varchar("game_id")
+    .notNull()
+    .references(() => allScoreBoards.unique_board_id),
+});
+
+// export const allScoreBoardsRelations = relations(
+//   allScoreBoards,
+//   ({ many }) => ({
+//     playerScoreSheets: many(playerScoreSheets),
+//   }),
+// );
+
+// export const playerScoreSheetsRelations = relations(
+//   playerScoreSheets,
+//   ({ one }) => ({
+//     board: one(allScoreBoards, {
+//       fields: [playerScoreSheets.game_id],
+//       references: [allScoreBoards.unique_board_id],
+//     }),
+//   }),
+// );
