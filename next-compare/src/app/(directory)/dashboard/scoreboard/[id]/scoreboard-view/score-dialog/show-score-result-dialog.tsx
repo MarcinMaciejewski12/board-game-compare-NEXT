@@ -64,7 +64,7 @@ export default function ShowScoreResult({
         />
       </DialogTrigger>
 
-      <DialogContent className="min-w-[80vw] h-[70vh] bg-primary">
+      <DialogContent className="min-w-[80vw] h-[70vh] bg-defaultPink">
         <motion.div
           variants={animationVariants}
           initial="hidden"
