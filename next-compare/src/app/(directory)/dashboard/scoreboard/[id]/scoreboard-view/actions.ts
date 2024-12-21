@@ -2,6 +2,7 @@
 
 import { db } from "@/db";
 import { playedGames } from "@/db/schema";
+import { HttpStatusCode } from "axios";
 
 export async function saveResults(
   userId: string,
@@ -24,6 +25,7 @@ export async function saveResults(
     });
 
     return {
+      HttpStatusCode: HttpStatusCode.Ok,
       status: true,
       data: result[0],
       message: "Game results saved",
@@ -31,6 +33,7 @@ export async function saveResults(
   } catch (e) {
     console.error(e);
     return {
+      HttpStatusCode: HttpStatusCode.NotFound,
       status: false,
       data: undefined,
       message: "Error saving game results",

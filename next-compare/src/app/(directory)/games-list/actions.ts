@@ -1,9 +1,10 @@
 "use server";
 import { db } from "@/db";
-import { allScoreBoards, users } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { allScoreBoards, playerScoreSheets, users } from "@/db/schema";
+import { and, eq } from "drizzle-orm";
 import { Games } from "@/app/(directory)/dashboard/lib/dashboard-types";
 import { revalidatePath } from "next/cache";
+import { HttpStatusCode } from "axios";
 
 export async function getSharedGames() {
   try {
@@ -39,6 +40,7 @@ export async function getSharedGames() {
   } catch (e) {
     console.error(e);
     return {
+      HttpStatusCode: 200,
       status: false,
       data: null,
       message: "Failed to get shared games",
@@ -48,37 +50,45 @@ export async function getSharedGames() {
 
 export async function addToShelf(userId: string, gameId: string) {
   try {
-    const userGames = (await db
-      .select({ games: users.board_games })
-      .from(users)
-      .where(eq(users.user_id, userId))) as { games: string[] }[];
-    const games = userGames[0].games;
+    const isGameAlreadyAdded = await db
+      .select()
+      .from(playerScoreSheets)
+      .where(
+        and(
+          eq(playerScoreSheets.user_id, userId),
+          eq(playerScoreSheets.game_id, gameId),
+        ),
+      );
 
-    if (games.includes(gameId)) {
+    if (isGameAlreadyAdded.length > 0) {
       return {
+        HttpStatusCode: 201,
         status: true,
         data: null,
-        message: "Game already is on your shelf",
+        message: "Game already added to shelf",
+      };
+    } else {
+      const data = await db
+        .insert(playerScoreSheets)
+        .values({
+          user_id: userId,
+          game_id: gameId,
+          created_at: new Date(),
+        })
+        .execute();
+
+      revalidatePath("/dashboard");
+      return {
+        HttpStatusCode: 200,
+        status: true,
+        data: data,
+        message: "Added game to shelf successfully!",
       };
     }
-
-    const addGameToUserAccount = games ? [...games, gameId] : [gameId];
-
-    const data = await db
-      .update(users)
-      .set({ board_games: addGameToUserAccount })
-      .where(eq(users.user_id, userId))
-      .returning();
-
-    revalidatePath("/dashboard");
-    return {
-      status: true,
-      data: data,
-      message: "Added game to shelf successfully!",
-    };
   } catch (e) {
     console.error(e);
     return {
+      HttpStatusCode: 404,
       status: false,
       data: undefined,
       message: "Something went wrong with adding the game",
