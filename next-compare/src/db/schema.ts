@@ -53,20 +53,3 @@ export const playerScoreSheets = pgTable("player_score_sheets", {
     .notNull()
     .references(() => allScoreBoards.unique_board_id),
 });
-
-// export const allScoreBoardsRelations = relations(
-//   allScoreBoards,
-//   ({ many }) => ({
-//     playerScoreSheets: many(playerScoreSheets),
-//   }),
-// );
-
-// export const playerScoreSheetsRelations = relations(
-//   playerScoreSheets,
-//   ({ one }) => ({
-//     board: one(allScoreBoards, {
-//       fields: [playerScoreSheets.game_id],
-//       references: [allScoreBoards.unique_board_id],
-//     }),
-//   }),
-// );
