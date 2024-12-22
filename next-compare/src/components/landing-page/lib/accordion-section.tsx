@@ -8,7 +8,7 @@ import {
 export default function AccordionSection() {
   return (
     <div className="h-[90vh] bg-[#F0D050] border-b-4 border-black flex items-center justify-center px-40">
-      <div className="bg-white p-20 h-4/6 wf-full rounded-xl border-2 border-b-4 border-black flex items-center w-full justify-center">
+      <div className="bg-white p-20 h-4/6 wf-full rounded-xl border-2 border-b-4 border-black flex items-center w-full  2xl:max-w-[1440px] justify-center">
         <Accordion type="single" collapsible className="w-full">
           <AccordionItem value="item-1">
             <AccordionTrigger className="text-5xl text-[#3F3A3A] font-extrabold">

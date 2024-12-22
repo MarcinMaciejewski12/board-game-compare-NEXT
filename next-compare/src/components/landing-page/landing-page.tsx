@@ -17,7 +17,7 @@ export default function LandingPage() {
 
   return (
     <div className="w-full h-screen">
-      <div className="h-[55vh] text-6xl text-white flex items-end ml-40">
+      <div className="h-[55vh] text-6xl text-white flex items-end ml-40 2xl:max-w-[1440px]">
         <div>
           <h1>Board</h1>
           <h2>Game</h2>
@@ -46,6 +46,7 @@ export default function LandingPage() {
       <div className="translate-y-0.5">
         <SvgWave />
       </div>
+
       <HowItWorksSection />
       <AccordionSection />
       <CommanderSection />

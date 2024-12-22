@@ -4,7 +4,7 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="h-full relative">
+    <div className="h-full relative 2xl:max-w-[1440px]">
       <div>{children}</div>
     </div>
   );

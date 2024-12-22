@@ -34,7 +34,7 @@ function AuthDependentLayout({
       <Header />
       <SpeedInsights />
       {userId && (
-        <div className="fixed w-full z-[-1] bottom-0">
+        <div className="w-full z-[-1] bottom-0">
           <SvgWave />
         </div>
       )}
@@ -53,7 +53,8 @@ export default async function RootLayout({
       <html lang="en">
         <body className={`${inter.className}`}>
           <UserContextProvider>
-            <AuthDependentLayout className="h-[calc(100vh-4rem)] 2xl:max-w-[1440px]">
+            {/* TODO: create layout for 2xl!! */}
+            <AuthDependentLayout className={"h-[calc(100vh-4rem)]"}>
               {children}
             </AuthDependentLayout>
           </UserContextProvider>
