@@ -34,7 +34,7 @@ function AuthDependentLayout({
       <Header />
       <SpeedInsights />
       {userId && (
-        <div className="w-full z-[-1] bottom-0">
+        <div className="w-full fixed z-[-1] bottom-0">
           <SvgWave />
         </div>
       )}
