@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 import { useScoreSheetMultiContext } from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";
+import { UseFormSetValue } from "react-hook-form";
+import { FormFields } from "../game-info-form";
 
 interface MultiStepComboboxProps<T> {
   commandEmpty: string;
@@ -30,6 +32,7 @@ interface MultiStepComboboxProps<T> {
   suffixText?: string;
   className?: string;
   searchDisabled?: boolean;
+  valueSetter?: UseFormSetValue<FormFields>;
 }
 
 interface Label {
@@ -49,10 +52,11 @@ export default function MultiStepCombobox<T extends Label>({
   suffixText = "",
   className = "",
   searchDisabled = false,
+  valueSetter,
 }: MultiStepComboboxProps<T>) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<string | string[]>("");
-  const { setGameInfo, gameInfo } = useScoreSheetMultiContext();
+  const { setGameInfo } = useScoreSheetMultiContext();
 
   useEffect(() => {
     setGameInfo((prevState) => ({
@@ -130,6 +134,12 @@ export default function MultiStepCombobox<T extends Label>({
                     value={String(label.name)}
                     onSelect={(currentValue) => {
                       !multipleChoices && setOpen(false);
+                      if (valueSetter) {
+                        valueSetter(
+                          gameInfoName as keyof FormFields,
+                          currentValue,
+                        );
+                      }
                       setValue((prevValue) =>
                         selectValuesHandler(currentValue, prevValue),
                       );

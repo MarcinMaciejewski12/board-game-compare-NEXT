@@ -29,6 +29,7 @@ function AuthDependentLayout({
   className: string;
 }) {
   const { userId } = auth();
+  console.log(userId);
   return (
     <>
       <Header />

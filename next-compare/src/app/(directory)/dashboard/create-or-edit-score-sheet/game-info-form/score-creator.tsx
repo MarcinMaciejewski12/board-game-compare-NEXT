@@ -8,9 +8,11 @@ import ReorderItem from "@/app/(directory)/dashboard/create-or-edit-score-sheet/
 import { cn } from "@/lib/utils";
 import { MoveHorizontal } from "lucide-react";
 import { getEditingGameFields } from "@/app/(directory)/dashboard/create-or-edit-score-sheet/actions";
+import { SubmitHandler } from "react-hook-form";
+import { FormFields } from "./game-info-form";
 
 interface ScoreCreatorProps {
-  submitStep: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
+  submitStep: SubmitHandler<FormFields>;
   prevStep?: () => void;
   editedScoreSheetId?: string;
 }
@@ -115,7 +117,9 @@ export default function ScoreCreator({
           nameToDisplay={editedScoreSheetId ? "Save changes" : "Save new board"}
           variant="default"
           size="lg"
-          onClick={submitStep}
+          onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+            submitStep(e as unknown as FormFields)
+          }
         />
       </div>
     </div>
