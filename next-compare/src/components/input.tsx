@@ -2,6 +2,8 @@ import React, { forwardRef, InputHTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 import { cva, VariantProps } from "class-variance-authority";
 import { X } from "lucide-react";
+import FormError from "./form-error";
+import { error } from "console";
 
 const inputVariants = cva("", {
   variants: {
@@ -51,7 +53,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         </div>
 
         {errorMessage && (
-          <span className="text-red-500 text-sm">{errorMessage}</span>
+          <FormError message={errorMessage} showError={!!errorMessage} />
         )}
       </div>
     );

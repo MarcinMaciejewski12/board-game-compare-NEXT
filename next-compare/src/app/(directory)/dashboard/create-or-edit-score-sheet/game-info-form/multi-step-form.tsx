@@ -36,9 +36,9 @@ export default function MultiStepForm() {
   const prevStep = () => setStep((prevStep) => prevStep - 1);
 
   const onSubmit: SubmitHandler<FormFields> = async (e: FormFields) => {
-    const fileExt = (image as File)?.name.split(".").pop();
+    const fileExt = e.gamePhoto?.[0]?.name.split(".").pop();
     const filePath = fileExt ? `${uuidv4()}.${fileExt}` : "";
-    console.log(e);
+
     const data = {
       max_player: e.max_player,
       min_player: e.min_player,
@@ -52,8 +52,7 @@ export default function MultiStepForm() {
       labels: labelTable,
       gameFields: reorderValues,
     };
-    console.log("data", data);
-    return;
+    // TODO: change data values in addGamePromise
     try {
       const uploadImagePromise = image
         ? supabase.storage.from("bgc_test").upload(filePath, image as File, {
@@ -88,7 +87,7 @@ export default function MultiStepForm() {
   };
 
   return (
-    // TODO: create a multistep path view(currently step and what is currently form is up to)
+    // TODO: create a multistep path view(currently step and what step user actually is)
     <form onSubmit={handleSubmit(onSubmit)}>
       {step === 1 && (
         <GameInfoForm
