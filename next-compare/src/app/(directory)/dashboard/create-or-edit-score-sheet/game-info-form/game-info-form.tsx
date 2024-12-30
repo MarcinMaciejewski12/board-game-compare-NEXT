@@ -14,87 +14,42 @@ import {
   playTime,
 } from "@/app/(directory)/dashboard/lib/labels";
 import {
+  FieldErrors,
   FormProvider,
   SubmitHandler,
   useForm,
   UseFormRegister,
   UseFormSetValue,
+  UseFormTrigger,
 } from "react-hook-form";
 import MultiStepCombobox from "@/app/(directory)/dashboard/create-or-edit-score-sheet/game-info-form/components/multi-step-combobox";
 import { Info } from "lucide-react";
+import { error } from "console";
 
 type GameInfoFormProps = {
   nextStep(): void;
   register: UseFormRegister<FormFields>;
   registerSetValue?: UseFormSetValue<FormFields>;
+  errors: FieldErrors<FormFields>;
+  trigger: UseFormTrigger<FormFields>;
 };
 
 export default function GameInfoForm({
   nextStep,
   register,
   registerSetValue,
+  trigger,
+  errors,
 }: GameInfoFormProps) {
   // const formRef = useRef<HTMLFormElement>(null);
 
-  const nextStepValidation = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const nextStepValidation = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-
-    nextStep();
-    // if (formRef.current?.checkValidity()) {
-
-    // } else {
-    //   const formElements = formRef.current?.elements;
-    //   const newErrorMessages: { [key: string]: string } = {};
-
-    //   Array.from(formElements as unknown as HTMLFormElement).forEach(
-    //     (element) => {
-    //       if (
-    //         element instanceof HTMLInputElement ||
-    //         element instanceof HTMLTextAreaElement
-    //       ) {
-    //         if (element.required && !element.value) {
-    //           newErrorMessages[element.name] = "This field is required.";
-    //         }
-    //       }
-    //     },
-    //   );
-
-    //   setErrorMessage(newErrorMessages);
-    // }
+    const isValid = await trigger();
+    if (isValid) {
+      nextStep();
+    }
   };
-
-  // const gameNameInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const value = e.target.value;
-  //   setGameName(value);
-  //   handleBlur(e as React.FocusEvent<HTMLInputElement>);
-  // };
-
-  // const dialogHandler = (
-  //   e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  // ) => {
-  //   const { name, value, type, checked, files } = e.target as HTMLInputElement;
-  //   if (files?.[0]) {
-  //     setImage(files?.[0]);
-  //   }
-  //   setGameInfo((prevState) => ({
-  //     ...prevState,
-  //     [name]: type === "checkbox" ? checked : value,
-  //   }));
-
-  //   handleBlur(e as React.FocusEvent<HTMLInputElement>);
-  // };
-
-  // const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-  //   const { name, value } = e.target;
-  //   if (!value) {
-  //     setErrorMessage((prev) => ({
-  //       ...prev,
-  //       [name]: "This field is required.",
-  //     }));
-  //   } else {
-  //     setErrorMessage((prev) => ({ ...prev, [name]: "" }));
-  //   }
-  // };
 
   return (
     <div className="bg-white h-[70vh] w-[70vw] rounded p-4">
@@ -104,7 +59,8 @@ export default function GameInfoForm({
         </h1>
       </div>
       <div className="flex w-full h-[70%]">
-        <FormFields
+        <DisplayFormFields
+          errors={errors}
           registerSetValue={registerSetValue}
           inputRegister={register}
         />
@@ -138,17 +94,22 @@ export type FormFields = {
   description: string;
 };
 
-const FormFields = ({
+const DisplayFormFields = ({
   inputRegister,
   registerSetValue,
+  errors,
 }: {
   inputRegister: UseFormRegister<FormFields>;
   registerSetValue?: UseFormSetValue<FormFields>;
+  errors: FieldErrors<FormFields>;
 }) => {
   return (
     <div className="w-full h-[70%]">
       <div className="w-1/2 bg-defaultYellow rounded h-full p-4 flex flex-col gap-4">
         <Input
+          {...inputRegister("gameName", {
+            required: "This field is required",
+          })}
           label="Game Name"
           placeholder="Game name"
           variant="default"
@@ -156,9 +117,13 @@ const FormFields = ({
           required
           className="w-full"
         />
+        {/* TODO: animate this errors and create component for this error messages */}
+        {errors.gameName && <span>{errors.gameName.message}</span>}
         <div className="flex flex-col w-full gap-2 justify-between md:items-end md:flex-row">
           <Input
-            {...inputRegister("min_player")}
+            {...inputRegister("min_player", {
+              required: "This field is required",
+            })}
             className="w-full md:w-[45%]"
             name="min_player"
             label="Players"
@@ -169,8 +134,11 @@ const FormFields = ({
             max={15}
             required
           />
+          {errors.min_player && <span>{errors.min_player.message}</span>}
           <Input
-            {...inputRegister("max_player")}
+            {...inputRegister("max_player", {
+              required: "This field is required",
+            })}
             className="w-full md:w-[45%]"
             name="max_player"
             placeholder="Max players"
@@ -180,6 +148,7 @@ const FormFields = ({
             type="number"
             required
           />
+          {errors.max_player && <span>{errors.max_player.message}</span>}
         </div>
         <div className="flex justify-between">
           <MultiStepCombobox<LabelType>
@@ -194,6 +163,7 @@ const FormFields = ({
             suffixText="/10"
             className="w-[150px]"
             searchDisabled={true}
+            validate={true}
           />
           <MultiStepCombobox
             valueSetter={registerSetValue}
@@ -207,6 +177,7 @@ const FormFields = ({
             comboboxLabel={"Playtime"}
             searchDisabled={true}
             required
+            validate={true}
           />
         </div>
         <MultiStepCombobox<LabelType>
@@ -218,6 +189,7 @@ const FormFields = ({
           commandEmpty={"labels"}
           comboboxLabel={"Labels"}
           multipleChoices
+          validate={false}
         />
         <div className="flex gap-2 justify-center items-center font-medium">
           <input

@@ -12,13 +12,13 @@ import { SubmitHandler } from "react-hook-form";
 import { FormFields } from "./game-info-form";
 
 interface ScoreCreatorProps {
-  submitStep: SubmitHandler<FormFields>;
+  // submitStep: SubmitHandler<FormFields>;
   prevStep?: () => void;
   editedScoreSheetId?: string;
 }
 
 export default function ScoreCreator({
-  submitStep,
+  // submitStep,
   editedScoreSheetId,
   prevStep,
 }: ScoreCreatorProps) {
@@ -117,9 +117,10 @@ export default function ScoreCreator({
           nameToDisplay={editedScoreSheetId ? "Save changes" : "Save new board"}
           variant="default"
           size="lg"
-          onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
-            submitStep(e as unknown as FormFields)
-          }
+          type="submit"
+          // onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+          //   submitStep(e as unknown as FormFields)
+          // }
         />
       </div>
     </div>

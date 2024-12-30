@@ -33,6 +33,7 @@ interface MultiStepComboboxProps<T> {
   className?: string;
   searchDisabled?: boolean;
   valueSetter?: UseFormSetValue<FormFields>;
+  validate: boolean;
 }
 
 interface Label {
@@ -53,6 +54,7 @@ export default function MultiStepCombobox<T extends Label>({
   className = "",
   searchDisabled = false,
   valueSetter,
+  validate,
 }: MultiStepComboboxProps<T>) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<string | string[]>("");
@@ -138,6 +140,9 @@ export default function MultiStepCombobox<T extends Label>({
                         valueSetter(
                           gameInfoName as keyof FormFields,
                           currentValue,
+                          {
+                            shouldValidate: validate,
+                          },
                         );
                       }
                       setValue((prevValue) =>

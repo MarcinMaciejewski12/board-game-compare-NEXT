@@ -24,15 +24,21 @@ export default function MultiStepForm() {
     useScoreSheetMultiContext();
   const { user } = useUser();
   const router = useRouter();
-  const { register, handleSubmit, setValue } = useForm<FormFields>();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    trigger,
+    formState: { errors },
+  } = useForm<FormFields>();
 
   const nextStep = () => setStep((prevStep) => prevStep + 1);
   const prevStep = () => setStep((prevStep) => prevStep - 1);
 
   const onSubmit: SubmitHandler<FormFields> = async (e: FormFields) => {
     const fileExt = (image as File)?.name.split(".").pop();
-    const filePath = `${uuidv4()}.${fileExt}`;
-
+    const filePath = fileExt ? `${uuidv4()}.${fileExt}` : "";
+    console.log(e);
     const data = {
       max_player: e.max_player,
       min_player: e.min_player,
@@ -81,29 +87,19 @@ export default function MultiStepForm() {
     }
   };
 
-  switch (step) {
-    case 1:
-      return (
+  return (
+    // TODO: create a multistep path view(currently step and what is currently form is up to)
+    <form onSubmit={handleSubmit(onSubmit)}>
+      {step === 1 && (
         <GameInfoForm
           nextStep={nextStep}
           registerSetValue={setValue}
           register={register}
+          errors={errors}
+          trigger={trigger}
         />
-      );
-    case 2:
-      return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <ScoreCreator prevStep={prevStep} submitStep={onSubmit} />;
-        </form>
-      );
-
-    default:
-      return (
-        <GameInfoForm
-          register={register}
-          registerSetValue={setValue}
-          nextStep={nextStep}
-        />
-      );
-  }
+      )}
+      {step === 2 && <ScoreCreator prevStep={prevStep} />}
+    </form>
+  );
 }
