@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/button";
 import { Trash } from "lucide-react";
 import { deleteGameFromUserAccount } from "@/app/(directory)/dashboard/actions";
+import { toast } from "../hooks/use-toast";
 
 interface DeleteGameDialogProps {
   uniqueBoardId: string;
@@ -23,6 +24,22 @@ export default function DeleteGameDialog({
   userId,
   gameName,
 }: DeleteGameDialogProps) {
+  const gameDelete = async () => {
+    try {
+      const res = await deleteGameFromUserAccount(uniqueBoardId, userId);
+
+      if (res.status) {
+        toast({
+          title: res.message,
+          className: "bg-white",
+        });
+      }
+    } catch (e) {
+      console.error(e);
+      throw new Error("Failed to delete game");
+    }
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -47,7 +64,7 @@ export default function DeleteGameDialog({
             />
           </DialogClose>
           <Button
-            onClick={() => deleteGameFromUserAccount(uniqueBoardId, userId)}
+            onClick={gameDelete}
             className="w-24 h-8"
             type="submit"
             variant="dialogDelete"

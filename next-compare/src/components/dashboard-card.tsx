@@ -180,7 +180,7 @@ function CardBackSide({
           <Link
             href={`/dashboard/create-or-edit-score-sheet/edit-score-sheet/${uniqueBoardId}`}
           >
-            <div className="w-8 h-8 rounded bg-buttonAndShadowColor flex justify-center items-center">
+            <div className="w-8 h-8 rounded bg-defaultButton flex justify-center items-center">
               <Pencil className="w-5 h-5 text-white" />
             </div>
           </Link>

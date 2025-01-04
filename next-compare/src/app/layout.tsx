@@ -40,6 +40,7 @@ function AuthDependentLayout({
         </div>
       )}
       <div className={cn(className, userId && "px-5")}>{children}</div>
+      <Toaster />
     </>
   );
 }

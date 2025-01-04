@@ -69,10 +69,6 @@ export default function MultiStepForm() {
         addGamePromise,
       ]);
 
-      if ((img as { error: any }).error || game?.status === false) {
-        throw new Error("Failed to upload image or add game");
-      }
-
       toast({
         title: `Added ${e.gameName} to your inventory!`,
         className: "bg-white",

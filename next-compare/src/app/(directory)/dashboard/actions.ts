@@ -132,15 +132,15 @@ export async function deleteGameFromUserAccount(
       HttpStatusCode: HttpStatusCode.Ok,
       status: true,
       data: undefined,
-      message: "Game deleted successfully",
+      message: "Game deleted successfully!",
     };
   } catch (e) {
     console.error(e);
     return {
-      HttpStatusCode: HttpStatusCode.Ok,
+      HttpStatusCode: HttpStatusCode.InternalServerError,
       status: false,
       data: undefined,
-      message: "Something went wrong with deleting the game",
+      message: "Something went wrong with deleting the game!",
     };
   }
 }
