@@ -21,10 +21,10 @@ import {
   UseFormRegister,
   UseFormSetValue,
   UseFormTrigger,
+  UseFormWatch,
 } from "react-hook-form";
 import MultiStepCombobox from "@/app/(directory)/dashboard/create-or-edit-score-sheet/game-info-form/components/multi-step-combobox";
 import { Info } from "lucide-react";
-import { error } from "console";
 
 export type FormFields = {
   gameName: string;
@@ -47,6 +47,7 @@ type GameInfoFormProps = {
   registerSetValue?: UseFormSetValue<FormFields>;
   errors: FieldErrors<FormFields>;
   trigger: UseFormTrigger<FormFields>;
+  watch: UseFormWatch<FormFields>;
 };
 
 export default function GameInfoForm({
@@ -55,6 +56,7 @@ export default function GameInfoForm({
   registerSetValue,
   trigger,
   errors,
+  watch,
 }: GameInfoFormProps) {
   const nextStepValidation = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -66,7 +68,7 @@ export default function GameInfoForm({
 
   return (
     <div className="bg-white h-[70vh] w-[70vw] rounded p-4 flex flex-col justify-center">
-      <header className="w-full h-16 bg-red-50 flex items-center justify-center">
+      <header className="w-full h-16 flex items-center justify-center">
         <h1 className="text-brightBlack font-bold text-xl">
           Basic game information
         </h1>
@@ -76,9 +78,10 @@ export default function GameInfoForm({
           errors={errors}
           registerSetValue={registerSetValue}
           inputRegister={register}
+          watch={watch}
         />
         <div className="w-1/2 h-full">
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 p-1">
             <Textarea
               {...register("description")}
               placeholder="Write a short description of the game"
@@ -96,7 +99,7 @@ export default function GameInfoForm({
           </div>
         </div>
       </div>
-      <div className="w-full h-16 bg-red-50 flex items-center justify-center">
+      <div className="w-full h-16 flex items-center justify-center">
         <Button
           nameToDisplay={"Go to creator"}
           size="lg"
@@ -113,17 +116,22 @@ const DisplayFormFields = ({
   inputRegister,
   registerSetValue,
   errors,
+  watch,
 }: {
   inputRegister: UseFormRegister<FormFields>;
   registerSetValue?: UseFormSetValue<FormFields>;
   errors: FieldErrors<FormFields>;
+  watch: UseFormWatch<FormFields>;
 }) => {
+  const minPlayer = watch("min_player");
+  const maxPlayer = watch("max_player");
   return (
-    <div className="w-1/2 h-full">
+    <div className="w-1/2 h-full p-1">
       <div className="bg-defaultYellow rounded h-full p-4 justify-center flex flex-col gap-4">
         <Input
           {...inputRegister("gameName", {
             required: "Game name field is required",
+            maxLength: 256 || "Game name cannot be more than 256 characters",
           })}
           label="Game Name"
           placeholder="Game name"
@@ -137,6 +145,14 @@ const DisplayFormFields = ({
           <Input
             {...inputRegister("min_player", {
               required: "Min player field is required",
+              validate: (value) =>
+                !maxPlayer ||
+                value <= maxPlayer ||
+                "Min player cannot be greater than max player",
+              min: {
+                value: 1,
+                message: "Minimum players must be at least 1",
+              },
             })}
             className="w-full md:w-[45%]"
             name="min_player"
@@ -152,6 +168,14 @@ const DisplayFormFields = ({
           <Input
             {...inputRegister("max_player", {
               required: "Max player field is required",
+              min: {
+                value: 1,
+                message: "Maximum players must be at least 1",
+              },
+              validate: (value) =>
+                !minPlayer ||
+                value >= minPlayer ||
+                "Max player cannot be less than min player",
             })}
             className="w-full md:w-[45%]"
             name="max_player"
@@ -165,7 +189,7 @@ const DisplayFormFields = ({
           />
         </div>
         <div className="flex justify-between">
-          <MultiStepCombobox<LabelType>
+          <MultiStepCombobox
             valueSetter={registerSetValue}
             gameInfoName="difficulty"
             commandEmpty="difficulty"
@@ -173,11 +197,10 @@ const DisplayFormFields = ({
             values={difficultyLevels}
             buttonChildren={"Select difficulty..."}
             comboboxLabel={"Difficulty"}
-            required
             suffixText="/10"
             className="w-[150px]"
             searchDisabled={true}
-            validate={true}
+            errorMessage={errors.difficulty?.message}
           />
           <MultiStepCombobox
             valueSetter={registerSetValue}
@@ -187,11 +210,10 @@ const DisplayFormFields = ({
             inputPlaceholder={"Select playtime..."}
             buttonChildren={"Select playtime..."}
             suffixText={"min"}
-            className={"w-[150px]"}
+            className="w-[150px]"
             comboboxLabel={"Playtime"}
             searchDisabled={true}
-            required
-            validate={true}
+            errorMessage={errors.playtime?.message}
           />
         </div>
         <MultiStepCombobox<LabelType>

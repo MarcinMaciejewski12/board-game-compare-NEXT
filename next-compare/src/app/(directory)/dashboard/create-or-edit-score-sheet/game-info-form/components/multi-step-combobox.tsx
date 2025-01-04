@@ -32,8 +32,9 @@ interface MultiStepComboboxProps<T> {
   suffixText?: string;
   className?: string;
   searchDisabled?: boolean;
+  errorMessage?: string;
   valueSetter?: UseFormSetValue<FormFields>;
-  validate: boolean;
+  validate?: boolean;
 }
 
 interface Label {
@@ -55,6 +56,7 @@ export default function MultiStepCombobox<T extends Label>({
   searchDisabled = false,
   valueSetter,
   validate,
+  errorMessage,
 }: MultiStepComboboxProps<T>) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<string | string[]>("");
@@ -159,6 +161,7 @@ export default function MultiStepCombobox<T extends Label>({
           </Command>
         </PopoverContent>
       </Popover>
+      {errorMessage && errorMessage}
     </div>
   );
 }

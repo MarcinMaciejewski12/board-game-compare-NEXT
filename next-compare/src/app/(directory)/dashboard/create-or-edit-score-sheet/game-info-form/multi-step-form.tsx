@@ -20,8 +20,9 @@ export default function MultiStepForm() {
   const [step, setStep] = useState(1);
   const { toast } = useToast();
 
-  const { reorderValues, labelTable, horizontalView, image } =
+  const { reorderValues, labelTable, horizontalView } =
     useScoreSheetMultiContext();
+
   const { user } = useUser();
   const router = useRouter();
   const {
@@ -29,6 +30,7 @@ export default function MultiStepForm() {
     handleSubmit,
     setValue,
     trigger,
+    watch,
     formState: { errors },
   } = useForm<FormFields>();
 
@@ -38,7 +40,6 @@ export default function MultiStepForm() {
   const onSubmit: SubmitHandler<FormFields> = async (e: FormFields) => {
     const fileExt = e.gamePhoto?.[0]?.name.split(".").pop();
     const filePath = fileExt ? `${uuidv4()}.${fileExt}` : "";
-
     const data = {
       max_player: e.max_player,
       min_player: e.min_player,
@@ -52,14 +53,15 @@ export default function MultiStepForm() {
       labels: labelTable,
       gameFields: reorderValues,
     };
-    // TODO: change data values in addGamePromise
+
     try {
-      const uploadImagePromise = image
-        ? supabase.storage.from("bgc_test").upload(filePath, image as File, {
-            contentType: "image/png",
-            upsert: false,
-          })
-        : Promise.resolve();
+      const uploadImagePromise =
+        e.gamePhoto && e.gamePhoto[0]
+          ? supabase.storage.from("bgc_test").upload(filePath, e.gamePhoto[0], {
+              contentType: "image/png",
+              upsert: false,
+            })
+          : Promise.resolve();
 
       const addGamePromise = addGame(user?.id ?? "", data);
       const [img, game] = await Promise.all([
@@ -96,6 +98,7 @@ export default function MultiStepForm() {
           register={register}
           errors={errors}
           trigger={trigger}
+          watch={watch}
         />
       )}
       {step === 2 && <ScoreCreator prevStep={prevStep} />}
