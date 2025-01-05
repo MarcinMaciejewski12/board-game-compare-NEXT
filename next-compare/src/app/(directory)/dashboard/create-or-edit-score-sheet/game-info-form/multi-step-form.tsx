@@ -17,7 +17,7 @@ import supabase from "@/lib/supabaseClient";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 export default function MultiStepForm() {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(2);
   const { toast } = useToast();
 
   const { reorderValues, labelTable, horizontalView } =
@@ -43,7 +43,7 @@ export default function MultiStepForm() {
     const data = {
       max_player: e.max_player,
       min_player: e.min_player,
-      difficulty: e.difficulty,
+      difficulty: Number(e.difficulty),
       description: e.description,
       playtime: e.playtime,
       isSharedToCommunity: e.isSharedToCommunity,

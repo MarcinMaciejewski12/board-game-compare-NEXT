@@ -20,7 +20,6 @@ export default function ScoreCreator({
   editedScoreSheetId,
   prevStep,
 }: ScoreCreatorProps) {
-  const popover = useRef<HTMLDivElement>(null);
   const {
     reorderValues,
     setReorderValues,
@@ -108,7 +107,7 @@ export default function ScoreCreator({
             : "flex-col max-h-96 overflow-y-auto",
         )}
       >
-        <ReorderItem id={editedScoreSheetId} popover={popover} />
+        <ReorderItem id={editedScoreSheetId} />
       </Reorder.Group>
       <div className="flex items-center justify-center mt-2">
         <Button

@@ -12,10 +12,11 @@ import { createPortal } from "react-dom";
 
 interface ReorderValuesProps {
   id: string | undefined;
-  popover: React.RefObject<HTMLDivElement>;
 }
 
-export default function ReorderItem({ id, popover }: ReorderValuesProps) {
+export default function ReorderItem({ id }: ReorderValuesProps) {
+  const paletteRef = useRef<(HTMLDivElement | null)[]>([]);
+  const [popoverPalette, setPopoverPalette] = useState({ top: 0, left: 0 });
   const {
     openIndex,
     setOpenIndex,
@@ -26,10 +27,14 @@ export default function ReorderItem({ id, popover }: ReorderValuesProps) {
     horizontalView,
   } = useScoreSheetMultiContext();
 
-  const [popoverStyle, setPopoverStyle] = useState({ top: 0, left: 0 });
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (popover.current && !popover.current.contains(event.target as Node)) {
+      if (
+        paletteRef.current &&
+        paletteRef.current.every(
+          (el) => el && !el.contains(event.target as Node),
+        )
+      ) {
         setOpenIndex(null);
       }
     };
@@ -38,7 +43,7 @@ export default function ReorderItem({ id, popover }: ReorderValuesProps) {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [openIndex]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -56,14 +61,19 @@ export default function ReorderItem({ id, popover }: ReorderValuesProps) {
     if (openIndex === index) {
       setOpenIndex(null);
     } else {
-      setColor(reorderValues[index].color);
-      setOpenIndex(index);
-      if (popover.current) {
-        const rect = popover.current.getBoundingClientRect();
-        setPopoverStyle({ top: rect.bottom, left: rect.left });
+      const currentRef = paletteRef.current[index];
+      if (currentRef) {
+        const paletteRect = currentRef.getBoundingClientRect();
+        setPopoverPalette({
+          top: paletteRect.bottom + window.scrollY,
+          left: paletteRect.left + window.scrollX,
+        });
+        setColor(reorderValues[index].color);
+        setOpenIndex(index);
       }
     }
   };
+
   const handleColorChange = (color: string) => {
     setColor(color);
     if (openIndex !== null) {
@@ -107,7 +117,13 @@ export default function ReorderItem({ id, popover }: ReorderValuesProps) {
             onClick={() => removeReorderItem(reorder.id)}
           />
           <div className="relative">
-            <div className="flex gap-3 items-center">
+            <div
+              className="flex gap-3 items-center"
+              id={String(reorder.id)}
+              ref={(el: HTMLDivElement | null) => {
+                paletteRef.current[index] = el;
+              }}
+            >
               <Palette
                 className="cursor-pointer"
                 onClick={() => {
@@ -115,17 +131,25 @@ export default function ReorderItem({ id, popover }: ReorderValuesProps) {
                 }}
               />
             </div>
-            {openIndex === index && (
-              <div
-                className="absolute right-0 md:left-0 rounded-[9px] shadow-colorPicker z-50"
-                ref={popover}
-              >
-                <HexColorPicker color={color} onChange={handleColorChange} />
-              </div>
-            )}
           </div>
         </div>
       </div>
+      {createPortal(
+        <div
+          className={cn(
+            "rounded-[9px] shadow-colorPicker z-50",
+            openIndex === index ? "block" : "hidden",
+          )}
+          style={{
+            position: "absolute",
+            top: popoverPalette.top,
+            left: popoverPalette.left,
+          }}
+        >
+          <HexColorPicker color={color} onChange={handleColorChange} />
+        </div>,
+        document.body,
+      )}
     </Reorder.Item>
   ));
 }
