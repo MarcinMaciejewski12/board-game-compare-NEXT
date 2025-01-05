@@ -17,7 +17,7 @@ import supabase from "@/lib/supabaseClient";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 export default function MultiStepForm() {
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(1);
   const { toast } = useToast();
 
   const { reorderValues, labelTable, horizontalView } =
