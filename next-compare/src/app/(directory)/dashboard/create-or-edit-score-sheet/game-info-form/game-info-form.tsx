@@ -83,18 +83,18 @@ export default function GameInfoForm({
         <div className="w-1/2 h-full">
           <div className="flex flex-col gap-4 p-1">
             <Textarea
-              {...register("description")}
+              {...(register("description"),
+              {
+                maxLength:
+                  500 || "Game image cannot be more than 500 characters",
+              })}
               placeholder="Write a short description of the game"
               name="description"
               className="bg-white outline-none resize-none min-h-[26vh] w-full"
             />
             <Input
-              {...(register("gamePhoto"),
-              {
-                maxLength:
-                  500 || "Game image cannot be more than 500 characters",
-              })}
               label="Game image"
+              {...register("gamePhoto")}
               type="file"
               name="gamePhoto"
               accept="image/*"

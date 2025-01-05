@@ -16,7 +16,7 @@ export default function NavLink({
 }: NavActiveProps) {
   const pathname = usePathname();
   const isActive = href === pathname;
-  console.log(isActive);
+
   return (
     <Link href={href}>
       <div className={isActive ? "text-defaultButton" : "text-white"}>

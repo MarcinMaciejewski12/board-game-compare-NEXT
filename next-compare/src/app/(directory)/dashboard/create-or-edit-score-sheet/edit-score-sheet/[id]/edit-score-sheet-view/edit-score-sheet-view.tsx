@@ -6,15 +6,16 @@ import { useUser } from "@clerk/nextjs";
 import { useToast } from "@/components/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { saveEditedGame } from "@/app/(directory)/dashboard/create-or-edit-score-sheet/actions";
+import { FormFields } from "../../../game-info-form/game-info-form";
+import { SubmitHandler } from "react-hook-form";
 
 export default function EditScoreSheetView({ id }: { id: string }) {
   const { gameName, reorderValues } = useScoreSheetMultiContext();
   const { user } = useUser();
   const { toast } = useToast();
   const router = useRouter();
-  const onSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
 
+  const onSubmit: SubmitHandler<FormFields> = async (e: FormFields) => {
     const data = { gameFields: reorderValues };
     try {
       const res = await saveEditedGame(user?.id ?? "", data, id);
@@ -37,5 +38,5 @@ export default function EditScoreSheetView({ id }: { id: string }) {
     }
   };
 
-  return <ScoreCreator submitStep={onSubmit} editedScoreSheetId={id} />;
+  return <ScoreCreator editedScoreSheetId={id} />;
 }

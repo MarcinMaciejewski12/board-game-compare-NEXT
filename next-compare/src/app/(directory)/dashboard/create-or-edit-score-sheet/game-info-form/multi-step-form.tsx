@@ -6,7 +6,7 @@ import {
   useScoreSheetMultiContext,
 } from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";
 import { useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useToast } from "@/components/hooks/use-toast";
 import { addGame } from "@/app/(directory)/dashboard/create-or-edit-score-sheet/actions";
 import GameInfoForm, {
@@ -25,6 +25,7 @@ export default function MultiStepForm() {
 
   const { user } = useUser();
   const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -53,7 +54,7 @@ export default function MultiStepForm() {
       labels: labelTable,
       gameFields: reorderValues,
     };
-
+    console.log(filePath);
     try {
       const uploadImagePromise =
         e.gamePhoto && e.gamePhoto[0]

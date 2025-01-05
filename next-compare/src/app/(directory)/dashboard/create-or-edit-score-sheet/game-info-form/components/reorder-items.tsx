@@ -16,34 +16,30 @@ interface ReorderValuesProps {
 
 export default function ReorderItem({ id }: ReorderValuesProps) {
   const paletteRef = useRef<(HTMLDivElement | null)[]>([]);
+  const portalRef = useRef<HTMLDivElement | null>(null);
   const [popoverPalette, setPopoverPalette] = useState({ top: 0, left: 0 });
-  const {
-    openIndex,
-    setOpenIndex,
-    color,
-    setColor,
-    reorderValues,
-    setReorderValues,
-    horizontalView,
-  } = useScoreSheetMultiContext();
+  const [openPaletteIndex, setOpenPaletteIndex] = useState<number | null>(null);
+  const { color, setColor, reorderValues, setReorderValues, horizontalView } =
+    useScoreSheetMultiContext();
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        paletteRef.current &&
-        paletteRef.current.every(
-          (el) => el && !el.contains(event.target as Node),
-        )
-      ) {
-        setOpenIndex(null);
-      }
-    };
+  // TODO: create turnoff palette modal functionality.
+  // useEffect(() => {
+  //   const handleClickOutSide = (e: MouseEvent) => {
+  //     if (portalRef.current && !portalRef.current.contains(e.target as Node)) {
+  //       console.log("Kliknięcie poza portalem:", portalRef.current);
+  //     } else {
+  //       console.log(
+  //         "Kliknięcie w portalu lub niezwiązane elementy:",
+  //         portalRef.current,
+  //       );
+  //     }
+  //   };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [openIndex]);
+  //   document.addEventListener("mousedown", handleClickOutSide);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutSide);
+  //   };
+  // }, [portalRef]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -58,8 +54,8 @@ export default function ReorderItem({ id }: ReorderValuesProps) {
   };
 
   const handleToggle = (index: number) => {
-    if (openIndex === index) {
-      setOpenIndex(null);
+    if (openPaletteIndex === index) {
+      setOpenPaletteIndex(null);
     } else {
       const currentRef = paletteRef.current[index];
       if (currentRef) {
@@ -69,17 +65,18 @@ export default function ReorderItem({ id }: ReorderValuesProps) {
           left: paletteRect.left + window.scrollX,
         });
         setColor(reorderValues[index].color);
-        setOpenIndex(index);
+        setOpenPaletteIndex(index);
       }
     }
   };
 
   const handleColorChange = (color: string) => {
     setColor(color);
-    if (openIndex !== null) {
+    if (openPaletteIndex !== null) {
+      // console.log("handle color changes", portalRef.current);
       setReorderValues((prevState) =>
         prevState.map((item, idx) =>
-          idx === openIndex ? { ...item, color } : item,
+          idx === openPaletteIndex ? { ...item, color } : item,
         ),
       );
     }
@@ -97,7 +94,7 @@ export default function ReorderItem({ id }: ReorderValuesProps) {
       value={reorder}
       key={reorder.id}
       className={cn(horizontalView ? "cursor-ew-resize" : "cursor-ns-resize")}
-      dragListener={!(openIndex === index)}
+      dragListener={!(openPaletteIndex === index)}
     >
       <div
         style={{ backgroundColor: reorder.color }}
@@ -116,35 +113,35 @@ export default function ReorderItem({ id }: ReorderValuesProps) {
             className="h-5 w-5 cursor-pointer"
             onClick={() => removeReorderItem(reorder.id)}
           />
-          <div className="relative">
-            <div
-              className="flex gap-3 items-center"
-              id={String(reorder.id)}
-              ref={(el: HTMLDivElement | null) => {
-                paletteRef.current[index] = el;
+
+          <div
+            className="flex gap-3 items-center"
+            id={String(reorder.id)}
+            ref={(el) => {
+              paletteRef.current[index] = el;
+            }}
+          >
+            <Palette
+              className="cursor-pointer"
+              onClick={() => {
+                handleToggle(index);
               }}
-            >
-              <Palette
-                className="cursor-pointer"
-                onClick={() => {
-                  handleToggle(index);
-                }}
-              />
-            </div>
+            />
           </div>
         </div>
       </div>
       {createPortal(
         <div
           className={cn(
-            "rounded-[9px] shadow-colorPicker z-50",
-            openIndex === index ? "block" : "hidden",
+            "rounded-[9px] shadow-colorPicker",
+            openPaletteIndex === index ? "block" : "hidden",
           )}
           style={{
             position: "absolute",
             top: popoverPalette.top,
             left: popoverPalette.left,
           }}
+          ref={portalRef}
         >
           <HexColorPicker color={color} onChange={handleColorChange} />
         </div>,
