@@ -13,6 +13,11 @@ export default function Header() {
       </Link>
       <div className="flex  items-center gap-4">
         {isSignedIn && (
+          <NavLink href={"/dashboard"}>
+            <p className="cursor-pointer">Dashboard</p>
+          </NavLink>
+        )}
+        {isSignedIn && (
           <NavLink href={"/games-list"}>
             <p className="cursor-pointer">Community games</p>
           </NavLink>

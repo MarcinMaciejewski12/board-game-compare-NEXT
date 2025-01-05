@@ -25,26 +25,28 @@ export default function CommanderSection() {
       <div className=" w-full flex items-center justify-center h-[20%]">
         <h6 className="text-4xl text-white font-bold">Command corner</h6>
       </div>
-      <div className="w-full h-[80%] justify-between flex">
-        {commanderCards.map((card, index) => (
-          <Fragment key={index}>
-            <div className="bg-white h-[60vh] p-10 w-96 xl:w-[650px] rounded-xl border-b-4 border-black border-2">
-              <div className="w-full h-[50%] bg-[#F0D050] rounded-tl-2xl rounded-tr-2xl flex items-center justify-center">
-                {card.svg}
+      <div className="w-full h-[80%]">
+        <div className="flex 2xl:mx-auto 2xl:max-w-[1440px]">
+          {commanderCards.map((card, index) => (
+            <Fragment key={index}>
+              <div className="bg-white h-[60vh] p-10 w-96 xl:w-[650px] rounded-xl border-b-4 border-black border-2">
+                <div className="w-full h-[50%] bg-[#F0D050] rounded-tl-2xl rounded-tr-2xl flex items-center justify-center">
+                  {card.svg}
+                </div>
+                <div className="w-full flex gap-2 items-center justify-center h-16">
+                  <StarSVG />
+                  <StarSVG />
+                  <StarSVG />
+                  <StarSVG />
+                  <StarSVG />
+                </div>
+                <div className="w-full h-[40] text-center font-medium">
+                  {card.description}
+                </div>
               </div>
-              <div className="w-full flex gap-2 items-center justify-center h-16">
-                <StarSVG />
-                <StarSVG />
-                <StarSVG />
-                <StarSVG />
-                <StarSVG />
-              </div>
-              <div className="w-full h-[40] text-center font-medium">
-                {card.description}
-              </div>
-            </div>
-          </Fragment>
-        ))}
+            </Fragment>
+          ))}
+        </div>
       </div>
     </div>
   );

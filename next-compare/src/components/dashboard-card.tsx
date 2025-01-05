@@ -180,15 +180,16 @@ function CardBackSide({
           <Link
             href={`/dashboard/create-or-edit-score-sheet/edit-score-sheet/${uniqueBoardId}`}
           >
-            <div className="w-8 h-8 rounded bg-buttonAndShadowColor flex justify-center items-center">
+            <div className="w-8 h-8 rounded bg-defaultButton flex justify-center items-center">
               <Pencil className="w-5 h-5 text-white" />
             </div>
           </Link>
-          <Link href={`/dashboard/history/${uniqueBoardId}`}>
+          {/* UNCOMMENT WHEN HISTORY FEATURE WILL BE READY */}
+          {/* <Link href={`/dashboard/history/${uniqueBoardId}`}>
             <div className="w-8 h-8 border rounded flex items-center justify-center">
               <History className="cursor-pointer h-6 w-6 text-default " />
             </div>
-          </Link>
+          </Link> */}
         </div>
       )}
     </div>

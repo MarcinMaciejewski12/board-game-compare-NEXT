@@ -19,7 +19,6 @@ export default async function Dashboard() {
   return (
     <UserContextProvider>
       <h1 className="text-brightBlack text-[2rem] font-bold p-2">Your shelf</h1>
-
       <CardTable isDashboard={true} data={games.data ?? []} />
     </UserContextProvider>
   );

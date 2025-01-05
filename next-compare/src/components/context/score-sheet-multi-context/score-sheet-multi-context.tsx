@@ -69,6 +69,7 @@ export function ScoreSheetMultiFormContextProvider({ children }: ContextProps) {
     description: "",
     isSharedToCommunity: false,
   });
+
   const [gameName, setGameName] = useState("");
   const [reorderValues, setReorderValues] = useState<ReorderValue[]>([]);
   const [openIndex, setOpenIndex] = useState<number | null>(null);

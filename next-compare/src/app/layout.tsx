@@ -29,16 +29,18 @@ function AuthDependentLayout({
   className: string;
 }) {
   const { userId } = auth();
+  console.log(userId);
   return (
     <>
       <Header />
       <SpeedInsights />
       {userId && (
-        <div className="fixed w-full z-[-1] bottom-0">
+        <div className="w-full fixed z-[-1] bottom-0">
           <SvgWave />
         </div>
       )}
       <div className={cn(className, userId && "px-5")}>{children}</div>
+      <Toaster />
     </>
   );
 }
@@ -53,7 +55,8 @@ export default async function RootLayout({
       <html lang="en">
         <body className={`${inter.className}`}>
           <UserContextProvider>
-            <AuthDependentLayout className="h-[calc(100vh-4rem)]">
+            {/* TODO: create layout for 2xl!! */}
+            <AuthDependentLayout className={"h-[calc(100vh-4rem)]"}>
               {children}
             </AuthDependentLayout>
           </UserContextProvider>

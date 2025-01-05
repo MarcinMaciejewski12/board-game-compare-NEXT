@@ -70,7 +70,7 @@ export default function PointsSummary({
       <div className="w-[70vw] h-[55vh] overflow-auto max-w-[70vw] items-end flex gap-2">
         {pointsSum.map((pointAndPlayer, idx) => {
           const { name, points } = pointAndPlayer;
-
+          console.log("idx", idx);
           function getCardHeight(id: number) {
             if (id === 0) {
               return 100;
@@ -82,7 +82,7 @@ export default function PointsSummary({
               return 70;
             }
           }
-
+          //  TODO: fix function, because it's not working properly
           return (
             <Fragment key={name}>
               <div

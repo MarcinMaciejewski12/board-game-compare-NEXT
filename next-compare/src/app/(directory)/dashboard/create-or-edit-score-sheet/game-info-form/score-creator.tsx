@@ -8,19 +8,18 @@ import ReorderItem from "@/app/(directory)/dashboard/create-or-edit-score-sheet/
 import { cn } from "@/lib/utils";
 import { MoveHorizontal } from "lucide-react";
 import { getEditingGameFields } from "@/app/(directory)/dashboard/create-or-edit-score-sheet/actions";
+import { SubmitHandler } from "react-hook-form";
+import { FormFields } from "./game-info-form";
 
 interface ScoreCreatorProps {
-  submitStep: (e: React.MouseEvent<HTMLButtonElement>) => Promise<void>;
   prevStep?: () => void;
   editedScoreSheetId?: string;
 }
 
 export default function ScoreCreator({
-  submitStep,
   editedScoreSheetId,
   prevStep,
 }: ScoreCreatorProps) {
-  const popover = useRef<HTMLDivElement>(null);
   const {
     reorderValues,
     setReorderValues,
@@ -108,14 +107,14 @@ export default function ScoreCreator({
             : "flex-col max-h-96 overflow-y-auto",
         )}
       >
-        <ReorderItem id={editedScoreSheetId} popover={popover} />
+        <ReorderItem id={editedScoreSheetId} />
       </Reorder.Group>
       <div className="flex items-center justify-center mt-2">
         <Button
           nameToDisplay={editedScoreSheetId ? "Save changes" : "Save new board"}
           variant="default"
           size="lg"
-          onClick={submitStep}
+          type="submit"
         />
       </div>
     </div>

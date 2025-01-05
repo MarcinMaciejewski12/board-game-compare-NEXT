@@ -4,7 +4,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/command";
 import { cn } from "@/lib/utils";
 import { useScoreSheetMultiContext } from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";
+import { UseFormSetValue } from "react-hook-form";
+import { FormFields } from "../game-info-form";
 
 interface MultiStepComboboxProps<T> {
   commandEmpty: string;
@@ -30,6 +32,9 @@ interface MultiStepComboboxProps<T> {
   suffixText?: string;
   className?: string;
   searchDisabled?: boolean;
+  errorMessage?: string;
+  valueSetter?: UseFormSetValue<FormFields>;
+  validate?: boolean;
 }
 
 interface Label {
@@ -49,10 +54,20 @@ export default function MultiStepCombobox<T extends Label>({
   suffixText = "",
   className = "",
   searchDisabled = false,
+  valueSetter,
+  validate,
+  errorMessage,
 }: MultiStepComboboxProps<T>) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<string | string[]>("");
-  const { setGameInfo, gameInfo } = useScoreSheetMultiContext();
+  const { setGameInfo } = useScoreSheetMultiContext();
+
+  useEffect(() => {
+    setGameInfo((prevState) => ({
+      ...prevState,
+      [gameInfoName]: value,
+    }));
+  }, [value, setGameInfo, gameInfoName]);
 
   function selectValuesHandler(currentValue: string, value: string | string[]) {
     if (multipleChoices) {
@@ -123,17 +138,18 @@ export default function MultiStepCombobox<T extends Label>({
                     value={String(label.name)}
                     onSelect={(currentValue) => {
                       !multipleChoices && setOpen(false);
-                      setValue((prevValue) => {
-                        const newValue = selectValuesHandler(
+                      if (valueSetter) {
+                        valueSetter(
+                          gameInfoName as keyof FormFields,
                           currentValue,
-                          prevValue,
+                          {
+                            shouldValidate: validate,
+                          },
                         );
-                        setGameInfo((prevState) => ({
-                          ...prevState,
-                          [gameInfoName]: newValue,
-                        }));
-                        return newValue;
-                      });
+                      }
+                      setValue((prevValue) =>
+                        selectValuesHandler(currentValue, prevValue),
+                      );
                     }}
                   >
                     {label.name}
@@ -145,6 +161,7 @@ export default function MultiStepCombobox<T extends Label>({
           </Command>
         </PopoverContent>
       </Popover>
+      {errorMessage && errorMessage}
     </div>
   );
 }

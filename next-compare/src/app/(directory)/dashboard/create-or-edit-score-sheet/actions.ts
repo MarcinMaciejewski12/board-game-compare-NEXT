@@ -1,6 +1,6 @@
 "use server";
 import { db } from "@/db";
-import { allScoreBoards, users } from "@/db/schema";
+import { allScoreBoards, playerScoreSheets } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 import { v4 as uuidv4 } from "uuid";
 import { ReorderValue } from "@/components/context/score-sheet-multi-context/score-sheet-multi-context";
@@ -24,50 +24,39 @@ export async function addGame(userId: string, game: Game) {
   if (!userId) return;
 
   try {
-    const newGame = await db
-      .insert(allScoreBoards)
-      .values({
-        user_id: userId,
-        unique_board_id: uuidv4(),
+    const gameData = {
+      user_id: userId,
+      unique_board_id: uuidv4(),
+      game_name: game.gameName,
+      min_players: Number(game.min_player),
+      max_players: Number(game.max_player),
+      difficulty: Number(game.difficulty),
+      playtime: game.playtime,
+      photo: game.photo,
+      description: game.description,
+      is_shared_to_community: game.isSharedToCommunity,
+      game_score_board: game.gameFields,
+      labels: game.labels,
+      horizontal: game.horizontalView,
+    };
+
+    const boardGame = await db.transaction(async (tx) => {
+      await tx.insert(allScoreBoards).values({
+        ...gameData,
         created_at: new Date(),
-        game_name: game.gameName,
-        min_players: Number(game.min_player),
-        max_players: Number(game.max_player),
-        difficulty: Number(game.difficulty),
-        playtime: game.playtime,
-        photo: game.photo,
-        description: game.description,
-        is_shared_to_community: game.isSharedToCommunity,
-        game_score_board: game.gameFields,
-        labels: game.labels,
-        horizontal: game.horizontalView,
-      })
-      .returning();
+      });
 
-    if (!newGame[0].unique_board_id) {
-      throw new Error("Failed to create game");
-    }
-
-    const userGame = (await db
-      .select({ gamesIds: users.board_games })
-      .from(users)
-      .where(eq(users.user_id, userId))) as { gamesIds: string[] }[];
-
-    const updateUserGames = [
-      ...(userGame[0].gamesIds ?? []),
-      newGame[0].unique_board_id,
-    ];
-
-    const saveNewGameToUser = await db
-      .update(users)
-      .set({ board_games: updateUserGames })
-      .where(eq(users.user_id, userId))
-      .returning();
+      await tx.insert(playerScoreSheets).values({
+        user_id: gameData.user_id,
+        game_id: gameData.unique_board_id,
+        created_at: new Date(),
+      });
+    });
 
     revalidatePath("/dashboard");
     return {
       status: true,
-      data: saveNewGameToUser,
+      data: boardGame,
       message: "Game added successfully",
     };
   } catch (e) {
