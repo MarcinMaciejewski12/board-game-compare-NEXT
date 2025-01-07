@@ -54,7 +54,7 @@ export default function MultiStepForm() {
       labels: labelTable,
       gameFields: reorderValues,
     };
-    console.log(filePath);
+
     try {
       const uploadImagePromise =
         e.gamePhoto && e.gamePhoto[0]

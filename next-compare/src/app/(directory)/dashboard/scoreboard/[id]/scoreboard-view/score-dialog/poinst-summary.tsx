@@ -8,12 +8,6 @@ import { toast } from "@/hooks/use-toast";
 import { saveResults } from "../actions";
 import { useRouter } from "next/navigation";
 
-interface PointsSummaryProps {
-  points: { [key: string]: string }[];
-  gameId: string;
-  userId: string;
-}
-
 export default function PointsSummary({
   points,
   gameId,
@@ -44,7 +38,7 @@ export default function PointsSummary({
     const newPoints = calculatePoints();
     setPointsSum(newPoints.sort((a, b) => b.points - a.points));
   }, [points]);
-
+  console.log(pointsSum);
   async function saveResultsHandler() {
     try {
       const res = await saveResults(userId, gameId, points);
@@ -70,18 +64,7 @@ export default function PointsSummary({
       <div className="w-[70vw] h-[55vh] overflow-auto max-w-[70vw] items-end flex gap-2">
         {pointsSum.map((pointAndPlayer, idx) => {
           const { name, points } = pointAndPlayer;
-          console.log("idx", idx);
-          function getCardHeight(id: number) {
-            if (id === 0) {
-              return 100;
-            } else if (id === 1) {
-              return 90;
-            } else if (id === 2) {
-              return 80;
-            } else {
-              return 70;
-            }
-          }
+
           //  TODO: fix function, because it's not working properly
           return (
             <Fragment key={name}>
@@ -96,7 +79,14 @@ export default function PointsSummary({
                   <div className="w-full h-[50%] flex items-center justify-center">
                     <div className="flex flex-col items-center">
                       {idx === 0 && <Crown color="gold" size={50} />}
-                      <p className="text-4xl font-bold text-white">{name}</p>
+                      <p
+                        className={cn(
+                          "text-4xl font-bold text-white",
+                          idx > 2 && "text-black",
+                        )}
+                      >
+                        {name}
+                      </p>
                     </div>
                   </div>
                   <div className="w-full h-[50%] flex items-center justify-center">
@@ -117,4 +107,23 @@ export default function PointsSummary({
       />
     </div>
   );
+}
+
+interface PointsSummaryProps {
+  points: { [key: string]: string }[];
+  gameId: string;
+  userId: string;
+}
+
+function getCardHeight(id: number) {
+  console.log(id);
+  if (id === 0) {
+    return 100;
+  } else if (id === 1) {
+    return 80;
+  } else if (id === 2) {
+    return 70;
+  } else {
+    return 60;
+  }
 }
