@@ -38,7 +38,7 @@ export default function PointsSummary({
     const newPoints = calculatePoints();
     setPointsSum(newPoints.sort((a, b) => b.points - a.points));
   }, [points]);
-  console.log(pointsSum);
+
   async function saveResultsHandler() {
     try {
       const res = await saveResults(userId, gameId, points);
@@ -65,9 +65,8 @@ export default function PointsSummary({
         {pointsSum.map((pointAndPlayer, idx) => {
           const { name, points } = pointAndPlayer;
 
-          //  TODO: fix function, because it's not working properly
           return (
-            <Fragment key={name}>
+            <Fragment key={idx}>
               <div
                 className={cn(
                   "w-64 border-2 rounded  border-black",
@@ -116,7 +115,6 @@ interface PointsSummaryProps {
 }
 
 function getCardHeight(id: number) {
-  console.log(id);
   if (id === 0) {
     return 100;
   } else if (id === 1) {
