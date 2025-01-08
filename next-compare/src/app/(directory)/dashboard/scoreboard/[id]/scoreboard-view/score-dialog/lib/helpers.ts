@@ -1,5 +1,5 @@
 export const displayColor = [
-  "bg-buttonAndShadowColor",
+  "bg-defaultYellow",
   "bg-[#cfcfcf]",
   "bg-[#e6c3a3]",
 ];
