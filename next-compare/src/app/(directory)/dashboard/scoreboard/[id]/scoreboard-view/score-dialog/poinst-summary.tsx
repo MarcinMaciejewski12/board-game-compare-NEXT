@@ -73,7 +73,9 @@ export default function PointsSummary({
               <div key={pointAndPlayer.name} className="w-64 h-full rounded">
                 <div className="w-full h-[50%] flex items-center justify-center">
                   <div className="flex flex-col items-center">
-                    {idx === 0 && <Crown color="gold" size={50} />}
+                    {idx === 0 && (
+                      <Crown className="text-defaultButton" size={50} />
+                    )}
                     <p
                       className={cn(
                         "text-4xl font-bold text-white",

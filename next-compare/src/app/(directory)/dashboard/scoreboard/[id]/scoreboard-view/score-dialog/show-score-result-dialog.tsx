@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Dice1, Dice2, Dice3 } from "lucide-react";
 import PointsSummary from "@/app/(directory)/dashboard/scoreboard/[id]/scoreboard-view/score-dialog/poinst-summary";
+import { DialogTitle } from "@radix-ui/react-dialog";
 
 const animationVariants = {
   hidden: {
@@ -79,7 +80,7 @@ export default function ShowScoreResult({
               exit={{ opacity: 0, scale: 0.8 }}
               className="absolute"
             >
-              <Dice1 className="w-28 h-28" />
+              <Dice1 className="w-28 h-28 text-brightBlack" />
             </motion.div>
           )}
           {currentStep === 2 && (
@@ -89,7 +90,7 @@ export default function ShowScoreResult({
               exit={{ opacity: 0, scale: 0.8 }}
               className="absolute"
             >
-              <Dice2 className="w-28 h-28" />
+              <Dice2 className="w-28 h-28 text-defaultYellow" />
             </motion.div>
           )}
           {currentStep === 3 && (
@@ -99,7 +100,7 @@ export default function ShowScoreResult({
               exit={{ opacity: 0, scale: 0.8 }}
               className="absolute"
             >
-              <Dice3 className="w-28 h-28" />
+              <Dice3 className="w-28 h-28 text-defaultButton" />
             </motion.div>
           )}
           {currentStep === 4 && (
