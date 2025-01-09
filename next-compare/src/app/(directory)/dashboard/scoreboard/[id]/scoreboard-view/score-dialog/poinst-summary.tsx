@@ -62,40 +62,37 @@ export default function PointsSummary({
   return (
     <div className="flex flex-col gap-2 items-center justify-center">
       <div className="w-[70vw] h-[55vh] overflow-auto max-w-[70vw] items-end flex gap-2">
-        {pointsSum.map((pointAndPlayer, idx) => {
-          const { name, points } = pointAndPlayer;
-
-          return (
-            <Fragment key={idx}>
-              <div
-                className={cn(
-                  "w-64 border-2 rounded  border-black",
-                  `h-[${getCardHeight(idx)}%]`,
-                  idx > 2 ? "bg-white" : displayColor[idx],
-                )}
-              >
-                <div key={name} className="w-64 h-full rounded">
-                  <div className="w-full h-[50%] flex items-center justify-center">
-                    <div className="flex flex-col items-center">
-                      {idx === 0 && <Crown color="gold" size={50} />}
-                      <p
-                        className={cn(
-                          "text-4xl font-bold text-white",
-                          idx > 2 && "text-black",
-                        )}
-                      >
-                        {name}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="w-full h-[50%] flex items-center justify-center">
-                    <p className="text-4xl font-bold  text-white">{points}</p>
+        {pointsSum.map((pointAndPlayer, idx) => (
+          <Fragment key={idx}>
+            <div
+              className={cn(
+                `w-64 border-2 rounded  border-black h-[${getCardHeight(idx)}%]`,
+                idx > 2 ? "bg-white" : displayColor[idx],
+              )}
+            >
+              <div key={pointAndPlayer.name} className="w-64 h-full rounded">
+                <div className="w-full h-[50%] flex items-center justify-center">
+                  <div className="flex flex-col items-center">
+                    {idx === 0 && <Crown color="gold" size={50} />}
+                    <p
+                      className={cn(
+                        "text-4xl font-bold text-white",
+                        idx > 2 && "text-black",
+                      )}
+                    >
+                      {pointAndPlayer.name}
+                    </p>
                   </div>
                 </div>
+                <div className="w-full h-[50%] flex items-center justify-center">
+                  <p className="text-4xl font-bold  text-white">
+                    {pointAndPlayer.points}
+                  </p>
+                </div>
               </div>
-            </Fragment>
-          );
-        })}
+            </div>
+          </Fragment>
+        ))}
       </div>
       <Button
         nameToDisplay="Save results"

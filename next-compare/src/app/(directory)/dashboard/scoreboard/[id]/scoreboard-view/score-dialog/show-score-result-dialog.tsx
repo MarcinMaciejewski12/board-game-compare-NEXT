@@ -33,7 +33,7 @@ export default function ShowScoreResult({
   const [currentStep, setCurrentStep] = useState(0);
   const [open, setOpen] = useState(false);
   const [shouldAnimate, setShouldAnimate] = useState(false);
-  console.log("user adsd", userId);
+
   useEffect(() => {
     if (open) {
       setShouldAnimate(true);

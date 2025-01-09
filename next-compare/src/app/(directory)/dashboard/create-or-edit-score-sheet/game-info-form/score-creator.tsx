@@ -13,11 +13,13 @@ import { FormFields } from "./game-info-form";
 
 interface ScoreCreatorProps {
   prevStep?: () => void;
+  onEdit?: React.MouseEventHandler<HTMLButtonElement>;
   editedScoreSheetId?: string;
 }
 
 export default function ScoreCreator({
   editedScoreSheetId,
+  onEdit,
   prevStep,
 }: ScoreCreatorProps) {
   const {
@@ -110,12 +112,22 @@ export default function ScoreCreator({
         <ReorderItem id={editedScoreSheetId} />
       </Reorder.Group>
       <div className="flex items-center justify-center mt-2">
-        <Button
-          nameToDisplay={editedScoreSheetId ? "Save changes" : "Save new board"}
-          variant="default"
-          size="lg"
-          type="submit"
-        />
+        {onEdit ? (
+          <Button
+            nameToDisplay={"Save changes"}
+            variant="default"
+            size="lg"
+            type="submit"
+            onClick={(e) => onEdit(e)}
+          />
+        ) : (
+          <Button
+            nameToDisplay={"Save new board"}
+            variant="default"
+            size="lg"
+            type="submit"
+          />
+        )}
       </div>
     </div>
   );
