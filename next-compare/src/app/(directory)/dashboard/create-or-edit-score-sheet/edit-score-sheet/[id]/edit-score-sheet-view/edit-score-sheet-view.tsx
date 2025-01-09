@@ -15,7 +15,7 @@ export default function EditScoreSheetView({ id }: { id: string }) {
   const { toast } = useToast();
   const router = useRouter();
 
-  const onSubmit: SubmitHandler<FormFields> = async (e: FormFields) => {
+  const onSubmit = async (e: React.MouseEvent) => {
     const data = { gameFields: reorderValues };
     try {
       const res = await saveEditedGame(user?.id ?? "", data, id);
@@ -38,5 +38,5 @@ export default function EditScoreSheetView({ id }: { id: string }) {
     }
   };
 
-  return <ScoreCreator editedScoreSheetId={id} />;
+  return <ScoreCreator onEdit={onSubmit} editedScoreSheetId={id} />;
 }
